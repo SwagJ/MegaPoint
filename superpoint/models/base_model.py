@@ -153,7 +153,7 @@ class BaseModel(metaclass=ABCMeta):
             device_setter = tf.compat.v1.train.replica_device_setter(
                     worker_device=worker, ps_device='/cpu:0', ps_tasks=1)
             with tf.name_scope('{}_tower{}'.format(mode, i)) as scope:
-                with tf.device(device_setter):
+                with tf.compat.v1.device(device_setter):
                     net_outputs = self._model(shards[i], mode, **self.config)
                     if mode == Mode.TRAIN:
                         loss = self._loss(net_outputs, shards[i], **self.config)
@@ -274,10 +274,10 @@ class BaseModel(metaclass=ABCMeta):
         self._pred_graph(self.pred_in)
 
         # Start session
-        sess_config = tf.ConfigProto(device_count={'GPU': self.n_gpus},
+        sess_config = tf.compat.v1.ConfigProto(device_count={'GPU': self.n_gpus},
                                      allow_soft_placement=True)
         sess_config.gpu_options.allow_growth = True
-        self.sess = tf.Session(config=sess_config)
+        self.sess = tf.compat.v1.Session(config=sess_config)
 
         # Register tf dataset handles
         if self.datasets:
@@ -285,8 +285,8 @@ class BaseModel(metaclass=ABCMeta):
             for n, i in self.dataset_iterators.items():
                 self.dataset_handles[n] = self.sess.run(i.string_handle())
 
-        self.sess.run([tf.global_variables_initializer(),
-                       tf.local_variables_initializer()])
+        self.sess.run([tf.compat.v1.global_variables_initializer(),
+                       tf.compat.v1.local_variables_initializer()])
 
     def train(self, iterations, validation_interval=100, output_dir=None, profile=False,
               save_interval=None, checkpoint_path=None, keep_checkpoints=1):
@@ -390,8 +390,9 @@ class BaseModel(metaclass=ABCMeta):
 
     def load(self, checkpoint_path):
         with tf.device('/cpu:0'):
-            saver = tf.train.Saver(save_relative_paths=True)
-        if tf.gfile.IsDirectory(checkpoint_path):
+            saver = tf.compat.v1.train.Saver(save_relative_paths=True)
+        if tf.io.gfile.isdir(checkpoint_path):
+            print(checkpoint_path)
             checkpoint_path = tf.train.latest_checkpoint(checkpoint_path)
             if checkpoint_path is None:
                 raise ValueError('Checkpoint directory is empty.')

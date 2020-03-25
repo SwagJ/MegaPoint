@@ -1,4 +1,5 @@
 import tensorflow as tf
+import tensorflow_addons as tfa
 import cv2 as cv
 import numpy as np
 
@@ -22,7 +23,7 @@ def photometric_augmentation(data, **config):
 
         indices = tf.range(len(primitives))
         if config['random_order']:
-            indices = tf.random_shuffle(indices)
+            indices = tf.random.shuffle(indices)
 
         def step(i, image):
             fn_pairs = [(tf.equal(indices[i], j),
@@ -41,7 +42,7 @@ def homographic_augmentation(data, add_homography=False, **config):
     with tf.name_scope('homographic_augmentation'):
         image_shape = tf.shape(data['image'])[:2]
         homography = sample_homography(image_shape, **config['params'])[0]
-        warped_image = tf.contrib.image.transform(
+        warped_image = tfa.image.transform(
                 data['image'], homography, interpolation='BILINEAR')
         valid_mask = compute_valid_mask(image_shape, homography,
                                         config['valid_border_margin'])
@@ -65,7 +66,7 @@ def add_dummy_valid_mask(data):
 def add_keypoint_map(data):
     with tf.name_scope('add_keypoint_map'):
         image_shape = tf.shape(data['image'])[:2]
-        kp = tf.minimum(tf.to_int32(tf.round(data['keypoints'])), image_shape-1)
+        kp = tf.minimum(tf.compat.v1.to_int32(tf.round(data['keypoints'])), image_shape-1)
         kmap = tf.scatter_nd(
                 kp, tf.ones([tf.shape(kp)[0]], dtype=tf.int32), image_shape)
     return {**data, 'keypoint_map': kmap}

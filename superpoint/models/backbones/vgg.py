@@ -4,9 +4,9 @@ from tensorflow.compat.v1 import layers as tfl
 
 def vgg_block(inputs, filters, kernel_size, name, data_format, training=False,
               batch_normalization=True, kernel_reg=0., **params):
-    with tf.variable_scope(name, reuse=tf.AUTO_REUSE):
+    with tf.compat.v1.variable_scope(name, reuse=tf.compat.v1.AUTO_REUSE):
         x = tfl.conv2d(inputs, filters, kernel_size, name='conv',
-                       kernel_regularizer=tf.contrib.layers.l2_regularizer(kernel_reg),
+                       kernel_regularizer=tf.keras.regularizers.l2(kernel_reg),
                        data_format=data_format, **params)
         if batch_normalization:
             x = tfl.batch_normalization(
@@ -22,7 +22,7 @@ def vgg_backbone(inputs, **config):
                    'kernel_reg': config.get('kernel_reg', 0.)}
     params_pool = {'padding': 'SAME', 'data_format': config['data_format']}
 
-    with tf.variable_scope('vgg', reuse=tf.AUTO_REUSE):
+    with tf.compat.v1.variable_scope('vgg', reuse=tf.compat.v1.AUTO_REUSE):
         x = vgg_block(inputs, 64, 3, 'conv1_1', **params_conv)
         x = vgg_block(x, 64, 3, 'conv1_2', **params_conv)
         x = tfl.max_pooling2d(x, 2, 2, name='pool1', **params_pool)
