@@ -64,7 +64,7 @@ class Coco(BaseDataset):
         is_training = split_name == 'training'
 
         def _read_image(path):
-            image = tf.read_file(path)
+            image = tf.io.read_file(path)
             image = tf.image.decode_png(image, channels=3)
             return tf.cast(image, tf.float32)
 
@@ -130,7 +130,7 @@ class Coco(BaseDataset):
         if has_keypoints:
             data = data.map_parallel(pipeline.add_keypoint_map)
         data = data.map_parallel(
-            lambda d: {**d, 'image': tf.to_float(d['image']) / 255.})
+            lambda d: {**d, 'image': tf.compat.v1.to_float(d['image']) / 255.})
         if config['warped_pair']['enable']:
             data = data.map_parallel(
                 lambda d: {

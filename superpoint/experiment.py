@@ -51,7 +51,7 @@ def predict(config, output_dir, n_iter):
 
 
 def set_seed(seed):
-    tf.set_random_seed(seed)
+    tf.random.set_seed(seed)
     np.random.seed(seed)
 
 

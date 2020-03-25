@@ -1,4 +1,4 @@
 install:
-	pip3 install -r requirements.txt
-	pip3 install -e .
+	pip install -r requirements.txt
+	pip install -e .
 	sh setup.sh

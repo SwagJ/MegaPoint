@@ -1,8 +1,9 @@
-tensorflow-gpu==1.6
+tensorflow-gpu==2.1.0
+tensorflow-addons
 numpy
 scipy
-opencv-python==3.4.2.16
-opencv-contrib-python==3.4.2.16
+opencv-python
+opencv-contrib-python
 tqdm
 pyyaml
 flake8

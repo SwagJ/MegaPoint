@@ -102,7 +102,7 @@ class BaseModel(metaclass=ABCMeta):
         self.datasets = data
         self.data_shape = data_shape
         self.n_gpus = n_gpus
-        self.graph = tf.get_default_graph()
+        self.graph = tf.compat.v1.get_default_graph()
         self.name = self.__class__.__name__.lower()  # get child name
         self.trainable = getattr(self, 'trainable', True)
 
@@ -118,7 +118,7 @@ class BaseModel(metaclass=ABCMeta):
             'Unknown dataset name: {}'.format(set(self.datasets)-self.dataset_names)
         assert n_gpus > 0, 'TODO: CPU-only training is currently not supported.'
 
-        with tf.variable_scope(self.name, reuse=tf.AUTO_REUSE):
+        with tf.compat.v1.variable_scope(self.name, reuse=tf.compat.v1.AUTO_REUSE):
             self._build_graph()
 
     def _unstack_nested_dict(self, d, num):
@@ -150,7 +150,7 @@ class BaseModel(metaclass=ABCMeta):
         tower_metrics = []
         for i in range(self.n_gpus):
             worker = '/gpu:{}'.format(i)
-            device_setter = tf.train.replica_device_setter(
+            device_setter = tf.compat.v1.train.replica_device_setter(
                     worker_device=worker, ps_device='/cpu:0', ps_tasks=1)
             with tf.name_scope('{}_tower{}'.format(mode, i)) as scope:
                 with tf.device(device_setter):
@@ -266,9 +266,10 @@ class BaseModel(metaclass=ABCMeta):
             self.summaries = tf.summary.merge_all()
 
         # Prediction network with feed_dict
+        tf.compat.v1.disable_eager_execution()
         if self.data_shape is None:
             self.data_shape = {i: spec['shape'] for i, spec in self.input_spec.items()}
-        self.pred_in = {i: tf.placeholder(spec['type'], shape=self.data_shape[i], name=i)
+        self.pred_in = {i: tf.compat.v1.placeholder(spec['type'], shape=self.data_shape[i], name=i)
                         for i, spec in self.input_spec.items()}
         self._pred_graph(self.pred_in)
 

@@ -1,5 +1,5 @@
 import tensorflow as tf
-from tensorflow import layers as tfl
+from tensorflow.compat.v1 import layers as tfl
 
 
 def vgg_block(inputs, filters, kernel_size, name, data_format, training=False,
