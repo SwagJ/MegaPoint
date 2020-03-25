@@ -229,7 +229,7 @@ class BaseModel(metaclass=ABCMeta):
             self.dataset_iterators = {}
             with tf.device('/cpu:0'):
                 for n, d in self.datasets.items():
-                    output_shapes = d.output_shapes
+                    output_shapes = tf.compat.v1.data.get_output_shapes(d)
                     if n == 'training':
                         train_batch = self.config['batch_size']*self.n_gpus
                         d = d.repeat().padded_batch(
@@ -239,8 +239,8 @@ class BaseModel(metaclass=ABCMeta):
                         d = d.padded_batch(self.config['eval_batch_size']*self.n_gpus,
                                            output_shapes)
                         self.dataset_iterators[n] = d.make_initializable_iterator()
-                    output_types = d.output_types
-                    output_shapes = d.output_shapes
+                    output_types = tf.compat.v1.data.get_output_types(d)
+                    output_shapes = tf.compat.v1.data.get_output_shapes(d)
                     self.datasets[n] = d
 
                     # Perform compatibility checks with the inputs of the child model
