@@ -17,7 +17,6 @@ class Mode:
 
 class BaseModel(metaclass=ABCMeta):
     """Base model class.
-
     Arguments:
         data: A dictionary of `tf.data.Dataset` objects, can include the keys
             `"training"`, `"validation"`, and `"test"`.
@@ -27,7 +26,6 @@ class BaseModel(metaclass=ABCMeta):
             empty or `None`.
         config: A dictionary containing the configuration parameters.
             Entries `"batch_size"` and `"learning_rate"` are required.
-
     Models should inherit from this class and implement the following methods:
         `_model`, `_loss`, and `_metrics`.
     Additionally, the following static attributes should be defined:
@@ -45,12 +43,10 @@ class BaseModel(metaclass=ABCMeta):
     @abstractmethod
     def _model(self, inputs, mode, **config):
         """Implements the graph of the model.
-
         This method is called three times: for training, evaluation and prediction (see
         the `mode` argument) and can return different tensors depending on the mode.
         It is a good practice to support both NCHW (channels first) and NHWC (channels
         last) data formats using a dedicated configuration entry.
-
         Arguments:
             inputs: A dictionary of input features, where the keys are their names
                 (e.g. `"image"`) and the values of type `tf.Tensor`. Same keys as in the
@@ -58,7 +54,6 @@ class BaseModel(metaclass=ABCMeta):
             mode: An attribute of the `Mode` class, either `Mode.TRAIN`, `Mode.EVAL` or
                 `Mode.PRED`.
             config: A configuration dictionary, given during the object instantiantion.
-
         Returns:
             A dictionary of outputs, where the keys are their names (e.g. `"logits"`) and
             the values are the corresponding `tf.Tensor`.
@@ -68,14 +63,11 @@ class BaseModel(metaclass=ABCMeta):
     @abstractmethod
     def _loss(self, outputs, inputs, **config):
         """Implements the sub-graph computing the training loss.
-
         This method is called on the outputs of the `_model` method in training mode.
-
         Arguments:
             outputs: A dictionary, as retuned by `_model` called with `mode=Mode.TRAIN`.
             inputs: A dictionary of input features (see same as for `_model`).
             config: A configuration dictionary.
-
         Returns:
             A tensor corresponding to the loss to be minimized during training.
         """
@@ -84,14 +76,11 @@ class BaseModel(metaclass=ABCMeta):
     @abstractmethod
     def _metrics(self, outputs, inputs, **config):
         """Implements the sub-graph computing the evaluation metrics.
-
         This method is called on the outputs of the `_model` method in evaluation mode.
-
         Arguments:
             outputs: A dictionary, as retuned by `_model` called with `mode=Mode.EVAL`.
             inputs: A dictionary of input features (see same as for `_model`).
             config: A configuration dictionary.
-
         Returns:
             A dictionary of metrics, where the keys are their names (e.g. "`accuracy`")
             and the values are the corresponding `tf.Tensor`.
@@ -236,7 +225,6 @@ class BaseModel(metaclass=ABCMeta):
                                 train_batch, output_shapes).prefetch(train_batch)
                         self.dataset_iterators[n] = tf.compat.v1.data.make_one_shot_iterator(d)
                     else:
-                        #tf.compat.v1.disable_eager_execution()
                         d = d.padded_batch(self.config['eval_batch_size']*self.n_gpus,
                                            output_shapes)
                         self.dataset_iterators[n] = tf.compat.v1.data.make_initializable_iterator(d)
