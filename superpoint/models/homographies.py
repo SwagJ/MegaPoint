@@ -65,10 +65,10 @@ def homography_adaptation(image, net, config):
                 cv.MORPH_ELLIPSE, (config['valid_border_margin'] * 2,) * 2)
             with tf.device('/cpu:0'):
                 count = tf.nn.erosion2d(
-                    count, tf.compat.v1.to_float(tf.constant(kernel)[..., tf.newaxis]),
+                    count, tf.cast(tf.constant(kernel)[..., tf.newaxis], tf.float32),
                     [1, 1, 1, 1], 'SAME','NHWC',[1, 1, 1, 1])[..., 0] + 1.
                 mask = tf.nn.erosion2d(
-                    mask, tf.compat.v1.to_float(tf.constant(kernel)[..., tf.newaxis]),
+                    mask, tf.cast(tf.constant(kernel)[..., tf.newaxis], tf.float32),
                     [1, 1, 1, 1], 'SAME','NHWC',[1, 1, 1, 1])[..., 0] + 1.
 
         # Predict detection probabilities
@@ -215,7 +215,7 @@ def sample_homography(
         pts2 = rotated[idx]
 
     # Rescale to actual size
-    shape = tf.compat.v1.to_float(shape[::-1])  # different convention [y, x]
+    shape = tf.cast(shape[::-1], tf.float32)  # different convention [y, x]
     pts1 *= tf.expand_dims(shape, axis=0)
     pts2 *= tf.expand_dims(shape, axis=0)
 
@@ -272,7 +272,7 @@ def compute_valid_mask(image_shape, homography, erosion_radius=0):
         kernel = cv.getStructuringElement(cv.MORPH_ELLIPSE, (erosion_radius*2,)*2)
         mask = tf.nn.erosion2d(
                 mask[tf.newaxis, ..., tf.newaxis],
-                tf.compat.v1.to_float(tf.constant(kernel)[..., tf.newaxis]),
+                tf.cast(tf.constant(kernel)[..., tf.newaxis], tf.float32),
                 [1, 1, 1, 1], 'SAME','NHWC',[1, 1, 1, 1])[0, ..., 0] + 1.
     return tf.compat.v1.to_int32(mask)
 
@@ -307,7 +307,7 @@ def warp_points(points, homography):
 
 def filter_points(points, shape):
     with tf.name_scope('filter_points'):
-        mask = (points >= 0) & (points <= tf.compat.v1.to_float(shape-1))
+        mask = (points >= 0) & (points <= tf.cast(shape-1, tf.float32))
         return tf.boolean_mask(points, tf.reduce_all(mask, -1))
 
 

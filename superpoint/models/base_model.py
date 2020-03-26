@@ -92,7 +92,8 @@ class BaseModel(metaclass=ABCMeta):
         print(config)
         self.datasets = data
         self.data_shape = data_shape
-        self.n_gpus = n_gpus
+        # self.n_gpus = n_gpus
+        self.n_gpus = 1
         self.graph = tf.compat.v1.get_default_graph()
         self.name = self.__class__.__name__.lower()  # get child name
         self.trainable = getattr(self, 'trainable', True)
@@ -107,7 +108,7 @@ class BaseModel(metaclass=ABCMeta):
             assert r in self.config, 'Required configuration entry: \'{}\''.format(r)
         assert set(self.datasets) <= self.dataset_names, \
             'Unknown dataset name: {}'.format(set(self.datasets)-self.dataset_names)
-        assert n_gpus > 0, 'TODO: CPU-only training is currently not supported.'
+        # assert n_gpus > 0, 'TODO: CPU-only training is currently not supported.'
 
         with tf.compat.v1.variable_scope(self.name, reuse=tf.compat.v1.AUTO_REUSE):
             self._build_graph()
@@ -214,27 +215,27 @@ class BaseModel(metaclass=ABCMeta):
         self.pred_out = {n: tf.identity(p, name=n) for n, p in pred_out.items()}
 
     def _build_graph(self):
+        tf.compat.v1.enable_eager_execution()
         # Training and evaluation network, if tf datasets provided
-        tf.compat.v1.disable_eager_execution()
         if self.datasets:
             # Generate iterators for the given tf datasets
             self.dataset_iterators = {}
             with tf.device('/cpu:0'):
                 for n, d in self.datasets.items():
+                    print(d)
                     output_shapes = tf.compat.v1.data.get_output_shapes(d)
+                    numpy_output_shapes = {k:v.as_list() for k,v in output_shapes.items()}
                     if n == 'training':
                         train_batch = self.config['batch_size']*self.n_gpus
-                        d = d.repeat().padded_batch(
+                        d2 = d.repeat().padded_batch(
                                 train_batch, output_shapes).prefetch(train_batch)
-                        self.dataset_iterators[n] = tf.compat.v1.data.make_one_shot_iterator(d)
+                        self.dataset_iterators[n] = tf.compat.v1.data.make_one_shot_iterator(d2)
                     else:
-                        d = d.padded_batch(self.config['eval_batch_size']*self.n_gpus,
-                                           output_shapes)
-                        self.dataset_iterators[n] = tf.compat.v1.data.make_initializable_iterator(d)
-                    output_types = tf.compat.v1.data.get_output_types(d)
-                    output_shapes = tf.compat.v1.data.get_output_shapes(d)
-                    self.datasets[n] = d
-
+                        d2 = d.padded_batch(self.config['eval_batch_size']*self.n_gpus, padded_shapes=numpy_output_shapes)
+                        self.dataset_iterators[n] = tf.compat.v1.data.make_one_shot_iterator(d2)
+                    output_types = tf.compat.v1.data.get_output_types(d2)
+                    output_shapes = tf.compat.v1.data.get_output_shapes(d2)
+                    self.datasets[n] = lambda: d2
                     # Perform compatibility checks with the inputs of the child model
                     for i, spec in self.input_spec.items():
                         assert i in output_shapes

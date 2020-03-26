@@ -130,7 +130,7 @@ class Coco(BaseDataset):
         if has_keypoints:
             data = data.map_parallel(pipeline.add_keypoint_map)
         data = data.map_parallel(
-            lambda d: {**d, 'image': tf.compat.v1.to_float(d['image']) / 255.})
+            lambda d: {**d, 'image': tf.cast(d['image'], tf.float32) / 255.})
         if config['warped_pair']['enable']:
             data = data.map_parallel(
                 lambda d: {
