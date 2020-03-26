@@ -99,6 +99,8 @@ class BaseModel(metaclass=ABCMeta):
         raise NotImplementedError
 
     def __init__(self, data={}, n_gpus=1, data_shape=None, **config):
+        print(data)
+        print(config)
         self.datasets = data
         self.data_shape = data_shape
         self.n_gpus = n_gpus
@@ -224,6 +226,7 @@ class BaseModel(metaclass=ABCMeta):
 
     def _build_graph(self):
         # Training and evaluation network, if tf datasets provided
+        tf.compat.v1.disable_eager_execution()
         if self.datasets:
             # Generate iterators for the given tf datasets
             self.dataset_iterators = {}
@@ -266,7 +269,7 @@ class BaseModel(metaclass=ABCMeta):
             self.summaries = tf.summary.merge_all()
 
         # Prediction network with feed_dict
-        tf.compat.v1.disable_eager_execution()
+        
         if self.data_shape is None:
             self.data_shape = {i: spec['shape'] for i, spec in self.input_spec.items()}
         self.pred_in = {i: tf.compat.v1.placeholder(spec['type'], shape=self.data_shape[i], name=i)
