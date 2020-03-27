@@ -245,10 +245,10 @@ class BaseModel(metaclass=ABCMeta):
                 # Used for input shapes of the prediction network
                 if self.data_shape is None:
                     self.data_shape = output_shapes
-
+                tf.compat.v1.disable_eager_execution()
                 # Handle for the feedable iterator
-                self.handle = tf.placeholder(tf.string, shape=[])
-                iterator = tf.data.Iterator.from_string_handle(
+                self.handle = tf.compat.v1.placeholder(tf.string, shape=[])
+                iterator = tf.compat.v1.data.Iterator.from_string_handle(
                         self.handle, output_types, output_shapes)
                 data = iterator.get_next()
 
