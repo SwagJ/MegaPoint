@@ -1,3 +1,4 @@
+import tensorflow as tf
 import numpy as np
 import tensorflow as tf
 import cv2 as cv
@@ -10,6 +11,7 @@ from superpoint.models.homographies import (sample_homography, flat2mat,
                                             invert_homography)
 from superpoint.settings import DATA_PATH
 
+tf.compat.v1.disable_eager_execution()
 
 seed = None
 

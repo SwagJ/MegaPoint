@@ -54,20 +54,20 @@ def descriptor_head(inputs, **config):
 def detector_loss(keypoint_map, logits, valid_mask=None, **config):
     # Convert the boolean labels to indices including the "no interest point" dustbin
     labels = tf.cast(keypoint_map[..., tf.newaxis], tf.float32)  # for GPU
-    labels = tf.space_to_depth(labels, config['grid_size'])
+    labels = tf.nn.space_to_depth(labels, config['grid_size'])
     shape = tf.concat([tf.shape(labels)[:3], [1]], axis=0)
     labels = tf.concat([2*labels, tf.ones(shape)], 3)
     # multiply by a small random matrix to randomly break ties in argmax
-    labels = tf.argmax(labels * tf.random_uniform(tf.shape(labels), 0, 0.1),
+    labels = tf.argmax(labels * tf.compat.v1.random_uniform(tf.shape(labels), 0, 0.1),
                        axis=3)
 
     # Mask the pixels if bordering artifacts appear
     valid_mask = tf.ones_like(keypoint_map) if valid_mask is None else valid_mask
     valid_mask = tf.cast(valid_mask[..., tf.newaxis], tf.float32)  # for GPU
-    valid_mask = tf.space_to_depth(valid_mask, config['grid_size'])
+    valid_mask = tf.nn.space_to_depth(valid_mask, config['grid_size'])
     valid_mask = tf.reduce_prod(valid_mask, axis=3)  # AND along the channel dim
 
-    loss = tf.losses.sparse_softmax_cross_entropy(
+    loss = tf.compat.v1.losses.sparse_softmax_cross_entropy(
             labels=labels, logits=logits, weights=valid_mask)
     return loss
 
@@ -129,7 +129,7 @@ def descriptor_loss(descriptors, warped_descriptors, homographies,
                           Wc * config['grid_size']], tf.float32)\
         if valid_mask is None else valid_mask
     valid_mask = tf.cast(valid_mask[..., tf.newaxis], tf.float32)  # for GPU
-    valid_mask = tf.space_to_depth(valid_mask, config['grid_size'])
+    valid_mask = tf.nn.space_to_depth(valid_mask, config['grid_size'])
     valid_mask = tf.reduce_prod(valid_mask, axis=3)  # AND along the channel dim
     valid_mask = tf.reshape(valid_mask, [batch_size, 1, 1, Hc, Wc])
 

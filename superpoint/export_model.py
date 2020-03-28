@@ -1,3 +1,4 @@
+import tensorflow as tf
 import yaml
 import argparse
 import logging
@@ -11,6 +12,7 @@ import tensorflow as tf  # noqa: E402
 from superpoint.models import get_model  # noqa: E402
 from superpoint.settings import EXPER_PATH  # noqa: E402
 
+tf.compat.v1.disable_eager_execution()
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()

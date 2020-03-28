@@ -1,3 +1,4 @@
+import tensorflow as tf
 import argparse
 from pathlib import Path
 
@@ -7,6 +8,7 @@ import tensorflow as tf  # noqa: E402
 
 from superpoint.settings import EXPER_PATH  # noqa: E402
 
+tf.compat.v1.disable_eager_execution()
 
 def extract_SIFT_keypoints_and_descriptors(img):
     gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)

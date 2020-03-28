@@ -1,3 +1,4 @@
+import tensorflow as tf
 import numpy as np
 import os
 import argparse
@@ -7,7 +8,7 @@ from tqdm import tqdm
 
 import experiment
 from superpoint.settings import EXPER_PATH
-
+tf.compat.v1.disable_eager_execution()
 
 if __name__ == '__main__':
 

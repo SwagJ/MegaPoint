@@ -35,7 +35,7 @@ class SimpleClassifier(BaseModel):
 
     def _loss(self, outputs, inputs, **config):
         with tf.name_scope('loss'):
-            loss = tf.reduce_mean(tf.losses.sparse_softmax_cross_entropy(
+            loss = tf.reduce_mean(tf.compat.v1.losses.sparse_softmax_cross_entropy(
                     labels=inputs['label'], logits=outputs['logits']))
         return loss
 

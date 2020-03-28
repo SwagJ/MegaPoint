@@ -15,6 +15,7 @@ logging.basicConfig(format='[%(asctime)s %(levelname)s] %(message)s',
                     datefmt='%m/%d/%Y %H:%M:%S', level=logging.INFO)
 import tensorflow as tf  # noqa: E402
 
+tf.compat.v1.disable_eager_execution()
 
 def train(config, n_iter, output_dir, checkpoint_name='model.ckpt'):
     checkpoint_path = os.path.join(output_dir, checkpoint_name)
@@ -56,8 +57,10 @@ def set_seed(seed):
 
 
 def get_num_gpus():
-    # return len(os.environ['CUDA_VISIBLE_DEVICES'].split(','))
-    return 0
+    if( 'CUDA_VISIBLE_DEVICES' in os.environ.keys()):
+        return len(os.environ['CUDA_VISIBLE_DEVICES'].split(','))
+    else:
+        return 0
 
 @contextmanager
 def _init_graph(config, with_dataset=False):
