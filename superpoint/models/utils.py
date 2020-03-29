@@ -43,7 +43,7 @@ def descriptor_head(inputs, **config):
                       activation=None, **params_conv)
 
         desc = tf.transpose(x, [0, 2, 3, 1]) if cfirst else x
-        desc = tf.image.resize_bilinear(
+        desc = tf.image.resize(
             desc, config['grid_size'] * tf.shape(desc)[1:3])
         desc = tf.transpose(desc, [0, 3, 1, 2]) if cfirst else desc
         desc = tf.nn.l2_normalize(desc, cindex)

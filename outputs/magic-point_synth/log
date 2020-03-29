@@ -1723,3 +1723,409 @@ coreClock: 1.83GHz coreCount: 34 deviceMemorySize: 7.79GiB deviceMemoryBandwidth
 2020-03-25 19:16:18.910855: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
 2020-03-25 19:16:18.911144: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
 2020-03-25 19:16:18.911393: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1241] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 7489 MB memory) -> physical GPU (device: 0, name: GeForce RTX 2060 SUPER, pci bus id: 0000:01:00.0, compute capability: 7.5)
+[03/28/2020 23:43:45 INFO] Running command TRAIN
+[03/28/2020 23:43:45 INFO] Number of GPUs detected: 0
+[03/28/2020 23:43:59 INFO] Running command TRAIN
+[03/28/2020 23:43:59 INFO] Number of GPUs detected: 0
+[03/28/2020 23:44:19 WARNING] AutoGraph could not transform <function SyntheticShapes._get_data.<locals>.<lambda> at 0x7fd3ceab63b0> and will run it as-is.
+Cause: could not parse the source code:
+
+                    lambda image, points:
+
+This error may be avoided by creating the lambda in a standalone statement.
+
+[03/28/2020 23:44:19 WARNING] From /home/hashswan/Desktop/SuperPoint/superpoint/datasets/synthetic_shapes.py:189: py_func (from tensorflow.python.ops.script_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+tf.py_func is deprecated in TF V2. Instead, there are two
+    options available in V2.
+    - tf.py_function takes a python function which manipulates tf eager
+    tensors instead of numpy arrays. It's easy to convert a tf eager tensor to
+    an ndarray (just call tensor.numpy()) but having access to eager tensors
+    means `tf.py_function`s can use accelerators such as GPUs as well as
+    being differentiable using a gradient tape.
+    - tf.numpy_function maintains the semantics of the deprecated tf.py_func
+    (it is not differentiable, and manipulates numpy arrays). It drops the
+    stateful argument making all functions stateful.
+    
+[03/28/2020 23:44:19 WARNING] From /home/hashswan/Desktop/SuperPoint/superpoint/datasets/utils/pipeline.py:69: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.cast` instead.
+[03/28/2020 23:44:20 WARNING] AutoGraph could not transform <function SyntheticShapes._get_data.<locals>.<lambda> at 0x7fd3cdcf4cb0> and will run it as-is.
+Cause: could not parse the source code:
+
+                    lambda image, points:
+
+This error may be avoided by creating the lambda in a standalone statement.
+
+[03/28/2020 23:44:20 WARNING] AutoGraph could not transform <function SyntheticShapes._get_data.<locals>.<lambda> at 0x7fd3cd7d2cb0> and will run it as-is.
+Cause: could not parse the source code:
+
+                    lambda image, points:
+
+This error may be avoided by creating the lambda in a standalone statement.
+
+2020-03-28 23:44:20.125607: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcuda.so.1
+2020-03-28 23:44:20.779359: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-03-28 23:44:20.780308: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1555] Found device 0 with properties: 
+pciBusID: 0000:01:00.0 name: GeForce RTX 2060 SUPER computeCapability: 7.5
+coreClock: 1.83GHz coreCount: 34 deviceMemorySize: 7.79GiB deviceMemoryBandwidth: 417.29GiB/s
+2020-03-28 23:44:20.781466: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudart.so.10.1
+2020-03-28 23:44:20.798142: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcublas.so.10
+2020-03-28 23:44:20.805459: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcufft.so.10
+2020-03-28 23:44:20.807725: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcurand.so.10
+2020-03-28 23:44:20.824549: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusolver.so.10
+2020-03-28 23:44:20.835946: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusparse.so.10
+2020-03-28 23:44:20.867368: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudnn.so.7
+2020-03-28 23:44:20.867514: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-03-28 23:44:20.867866: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-03-28 23:44:20.868139: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1697] Adding visible gpu devices: 0
+2020-03-28 23:44:20.880090: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+2020-03-28 23:44:20.994463: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 3199980000 Hz
+2020-03-28 23:44:21.005662: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x5575f61a0ce0 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+2020-03-28 23:44:21.005684: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+2020-03-28 23:44:21.062841: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-03-28 23:44:21.063223: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x5575f61449e0 initialized for platform CUDA (this does not guarantee that XLA will be used). Devices:
+2020-03-28 23:44:21.063235: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): GeForce RTX 2060 SUPER, Compute Capability 7.5
+2020-03-28 23:44:21.063390: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-03-28 23:44:21.063675: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1555] Found device 0 with properties: 
+pciBusID: 0000:01:00.0 name: GeForce RTX 2060 SUPER computeCapability: 7.5
+coreClock: 1.83GHz coreCount: 34 deviceMemorySize: 7.79GiB deviceMemoryBandwidth: 417.29GiB/s
+2020-03-28 23:44:21.063702: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudart.so.10.1
+2020-03-28 23:44:21.063712: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcublas.so.10
+2020-03-28 23:44:21.063740: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcufft.so.10
+2020-03-28 23:44:21.063748: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcurand.so.10
+2020-03-28 23:44:21.063756: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusolver.so.10
+2020-03-28 23:44:21.063765: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusparse.so.10
+2020-03-28 23:44:21.063789: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudnn.so.7
+2020-03-28 23:44:21.063856: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-03-28 23:44:21.064151: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-03-28 23:44:21.064416: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1697] Adding visible gpu devices: 0
+2020-03-28 23:44:21.071438: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudart.so.10.1
+2020-03-28 23:44:21.072349: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1096] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-03-28 23:44:21.072359: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1102]      0 
+2020-03-28 23:44:21.072363: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1115] 0:   N 
+2020-03-28 23:44:21.073385: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-03-28 23:44:21.073705: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-03-28 23:44:21.074018: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1241] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 7489 MB memory) -> physical GPU (device: 0, name: GeForce RTX 2060 SUPER, pci bus id: 0000:01:00.0, compute capability: 7.5)
+{'training': <ParallelMapDataset shapes: {image: (None, None, 1), keypoints: (None, 2), valid_mask: (None, None), keypoint_map: (None, None)}, types: {image: tf.float32, keypoints: tf.float32, valid_mask: tf.int32, keypoint_map: tf.int32}>, 'validation': <ParallelMapDataset shapes: {image: (None, None, 1), keypoints: (None, 2), valid_mask: (None, None), keypoint_map: (None, None)}, types: {image: tf.float32, keypoints: tf.float32, valid_mask: tf.int32, keypoint_map: tf.int32}>, 'test': <ParallelMapDataset shapes: {image: (None, None, 1), keypoints: (None, 2), valid_mask: (None, None), keypoint_map: (None, None)}, types: {image: tf.float32, keypoints: tf.float32, valid_mask: tf.int32, keypoint_map: tf.int32}>}
+{'name': 'magic_point', 'batch_size': 64, 'eval_batch_size': 50, 'learning_rate': 0.001, 'kernel_reg': 0.0, 'detection_threshold': 0.001, 'nms': 4}
+<ParallelMapDataset shapes: {image: (None, None, 1), keypoints: (None, 2), valid_mask: (None, None), keypoint_map: (None, None)}, types: {image: tf.float32, keypoints: tf.float32, valid_mask: tf.int32, keypoint_map: tf.int32}>
+<ParallelMapDataset shapes: {image: (None, None, 1), keypoints: (None, 2), valid_mask: (None, None), keypoint_map: (None, None)}, types: {image: tf.float32, keypoints: tf.float32, valid_mask: tf.int32, keypoint_map: tf.int32}>
+<ParallelMapDataset shapes: {image: (None, None, 1), keypoints: (None, 2), valid_mask: (None, None), keypoint_map: (None, None)}, types: {image: tf.float32, keypoints: tf.float32, valid_mask: tf.int32, keypoint_map: tf.int32}>
+[03/28/2020 23:44:21 WARNING] From /home/hashswan/.local/lib/python3.7/site-packages/tensorflow_core/python/data/ops/iterator_ops.py:347: Iterator.output_types (from tensorflow.python.data.ops.iterator_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.compat.v1.data.get_output_types(iterator)`.
+[03/28/2020 23:44:21 WARNING] From /home/hashswan/.local/lib/python3.7/site-packages/tensorflow_core/python/data/ops/iterator_ops.py:348: Iterator.output_shapes (from tensorflow.python.data.ops.iterator_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.compat.v1.data.get_output_shapes(iterator)`.
+[03/28/2020 23:44:21 WARNING] From /home/hashswan/.local/lib/python3.7/site-packages/tensorflow_core/python/data/ops/iterator_ops.py:350: Iterator.output_classes (from tensorflow.python.data.ops.iterator_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.compat.v1.data.get_output_classes(iterator)`.
+[03/28/2020 23:44:21 WARNING] From /home/hashswan/Desktop/SuperPoint/superpoint/models/backbones/vgg.py:10: conv2d (from tensorflow.python.layers.convolutional) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.keras.layers.Conv2D` instead.
+[03/28/2020 23:44:21 WARNING] From /home/hashswan/.local/lib/python3.7/site-packages/tensorflow_core/python/layers/convolutional.py:424: Layer.apply (from tensorflow.python.keras.engine.base_layer) is deprecated and will be removed in a future version.
+Instructions for updating:
+Please use `layer.__call__` method instead.
+[03/28/2020 23:44:21 WARNING] From /home/hashswan/.local/lib/python3.7/site-packages/tensorflow_core/python/ops/resource_variable_ops.py:1635: calling BaseResourceVariable.__init__ (from tensorflow.python.ops.resource_variable_ops) with constraint is deprecated and will be removed in a future version.
+Instructions for updating:
+If using Keras pass *_constraint arguments to layers.
+[03/28/2020 23:44:21 WARNING] From /home/hashswan/Desktop/SuperPoint/superpoint/models/backbones/vgg.py:14: batch_normalization (from tensorflow.python.layers.normalization) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use keras.layers.BatchNormalization instead.  In particular, `tf.control_dependencies(tf.GraphKeys.UPDATE_OPS)` should not be used (consult the `tf.keras.layers.BatchNormalization` documentation).
+[03/28/2020 23:44:21 WARNING] From /home/hashswan/Desktop/SuperPoint/superpoint/models/backbones/vgg.py:28: max_pooling2d (from tensorflow.python.layers.pooling) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use keras.layers.MaxPooling2D instead.
+2020-03-28 23:44:22.575349: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-03-28 23:44:22.575700: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1555] Found device 0 with properties: 
+pciBusID: 0000:01:00.0 name: GeForce RTX 2060 SUPER computeCapability: 7.5
+coreClock: 1.83GHz coreCount: 34 deviceMemorySize: 7.79GiB deviceMemoryBandwidth: 417.29GiB/s
+2020-03-28 23:44:22.575768: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudart.so.10.1
+2020-03-28 23:44:22.575795: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcublas.so.10
+2020-03-28 23:44:22.575824: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcufft.so.10
+2020-03-28 23:44:22.575848: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcurand.so.10
+2020-03-28 23:44:22.575877: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusolver.so.10
+2020-03-28 23:44:22.575884: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusparse.so.10
+2020-03-28 23:44:22.575893: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudnn.so.7
+2020-03-28 23:44:22.575954: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-03-28 23:44:22.576296: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-03-28 23:44:22.576593: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1697] Adding visible gpu devices: 0
+2020-03-28 23:44:22.576627: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1096] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-03-28 23:44:22.576632: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1102]      0 
+2020-03-28 23:44:22.576654: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1115] 0:   N 
+2020-03-28 23:44:22.576785: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-03-28 23:44:22.577114: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-03-28 23:44:22.577398: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1241] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 7489 MB memory) -> physical GPU (device: 0, name: GeForce RTX 2060 SUPER, pci bus id: 0000:01:00.0, compute capability: 7.5)
+[03/28/2020 23:44:25 INFO] Start training
+2020-03-28 23:44:26.330592: E tensorflow/core/common_runtime/executor.cc:654] Executor failed to create kernel. Invalid argument: Default MaxPoolingOp only supports NHWC on device type CPU
+	 [[{{node magicpoint/train_tower0/vgg/pool1/MaxPool}}]]
+[03/28/2020 23:46:53 INFO] Running command TRAIN
+[03/28/2020 23:46:53 INFO] Number of GPUs detected: 1
+[03/28/2020 23:47:14 WARNING] AutoGraph could not transform <function SyntheticShapes._get_data.<locals>.<lambda> at 0x7f285c5b83b0> and will run it as-is.
+Cause: could not parse the source code:
+
+                    lambda image, points:
+
+This error may be avoided by creating the lambda in a standalone statement.
+
+[03/28/2020 23:47:14 WARNING] From /home/hashswan/Desktop/SuperPoint/superpoint/datasets/synthetic_shapes.py:189: py_func (from tensorflow.python.ops.script_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+tf.py_func is deprecated in TF V2. Instead, there are two
+    options available in V2.
+    - tf.py_function takes a python function which manipulates tf eager
+    tensors instead of numpy arrays. It's easy to convert a tf eager tensor to
+    an ndarray (just call tensor.numpy()) but having access to eager tensors
+    means `tf.py_function`s can use accelerators such as GPUs as well as
+    being differentiable using a gradient tape.
+    - tf.numpy_function maintains the semantics of the deprecated tf.py_func
+    (it is not differentiable, and manipulates numpy arrays). It drops the
+    stateful argument making all functions stateful.
+    
+[03/28/2020 23:47:15 WARNING] From /home/hashswan/Desktop/SuperPoint/superpoint/datasets/utils/pipeline.py:69: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.cast` instead.
+[03/28/2020 23:47:15 WARNING] AutoGraph could not transform <function SyntheticShapes._get_data.<locals>.<lambda> at 0x7f2854cf1cb0> and will run it as-is.
+Cause: could not parse the source code:
+
+                    lambda image, points:
+
+This error may be avoided by creating the lambda in a standalone statement.
+
+[03/28/2020 23:47:15 WARNING] AutoGraph could not transform <function SyntheticShapes._get_data.<locals>.<lambda> at 0x7f28547d6cb0> and will run it as-is.
+Cause: could not parse the source code:
+
+                    lambda image, points:
+
+This error may be avoided by creating the lambda in a standalone statement.
+
+2020-03-28 23:47:15.374785: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcuda.so.1
+2020-03-28 23:47:15.831691: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-03-28 23:47:15.832028: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1555] Found device 0 with properties: 
+pciBusID: 0000:01:00.0 name: GeForce RTX 2060 SUPER computeCapability: 7.5
+coreClock: 1.83GHz coreCount: 34 deviceMemorySize: 7.79GiB deviceMemoryBandwidth: 417.29GiB/s
+2020-03-28 23:47:15.832234: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudart.so.10.1
+2020-03-28 23:47:15.833238: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcublas.so.10
+2020-03-28 23:47:15.833957: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcufft.so.10
+2020-03-28 23:47:15.834160: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcurand.so.10
+2020-03-28 23:47:15.835089: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusolver.so.10
+2020-03-28 23:47:15.835772: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusparse.so.10
+2020-03-28 23:47:15.837857: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudnn.so.7
+2020-03-28 23:47:15.837979: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-03-28 23:47:15.838390: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-03-28 23:47:15.838692: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1697] Adding visible gpu devices: 0
+2020-03-28 23:47:15.838980: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+2020-03-28 23:47:15.862494: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 3199980000 Hz
+2020-03-28 23:47:15.862881: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x55f91247a7b0 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+2020-03-28 23:47:15.862891: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+2020-03-28 23:47:15.917676: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-03-28 23:47:15.918021: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x55f91246f9e0 initialized for platform CUDA (this does not guarantee that XLA will be used). Devices:
+2020-03-28 23:47:15.918034: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): GeForce RTX 2060 SUPER, Compute Capability 7.5
+2020-03-28 23:47:15.918152: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-03-28 23:47:15.918422: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1555] Found device 0 with properties: 
+pciBusID: 0000:01:00.0 name: GeForce RTX 2060 SUPER computeCapability: 7.5
+coreClock: 1.83GHz coreCount: 34 deviceMemorySize: 7.79GiB deviceMemoryBandwidth: 417.29GiB/s
+2020-03-28 23:47:15.918451: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudart.so.10.1
+2020-03-28 23:47:15.918462: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcublas.so.10
+2020-03-28 23:47:15.918470: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcufft.so.10
+2020-03-28 23:47:15.918479: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcurand.so.10
+2020-03-28 23:47:15.918488: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusolver.so.10
+2020-03-28 23:47:15.918496: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusparse.so.10
+2020-03-28 23:47:15.918505: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudnn.so.7
+2020-03-28 23:47:15.918540: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-03-28 23:47:15.918803: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-03-28 23:47:15.919039: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1697] Adding visible gpu devices: 0
+2020-03-28 23:47:15.919064: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudart.so.10.1
+2020-03-28 23:47:15.919628: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1096] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-03-28 23:47:15.919637: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1102]      0 
+2020-03-28 23:47:15.919641: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1115] 0:   N 
+2020-03-28 23:47:15.919698: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-03-28 23:47:15.919967: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-03-28 23:47:15.920223: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1241] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 7489 MB memory) -> physical GPU (device: 0, name: GeForce RTX 2060 SUPER, pci bus id: 0000:01:00.0, compute capability: 7.5)
+{'training': <ParallelMapDataset shapes: {image: (None, None, 1), keypoints: (None, 2), valid_mask: (None, None), keypoint_map: (None, None)}, types: {image: tf.float32, keypoints: tf.float32, valid_mask: tf.int32, keypoint_map: tf.int32}>, 'validation': <ParallelMapDataset shapes: {image: (None, None, 1), keypoints: (None, 2), valid_mask: (None, None), keypoint_map: (None, None)}, types: {image: tf.float32, keypoints: tf.float32, valid_mask: tf.int32, keypoint_map: tf.int32}>, 'test': <ParallelMapDataset shapes: {image: (None, None, 1), keypoints: (None, 2), valid_mask: (None, None), keypoint_map: (None, None)}, types: {image: tf.float32, keypoints: tf.float32, valid_mask: tf.int32, keypoint_map: tf.int32}>}
+{'name': 'magic_point', 'batch_size': 64, 'eval_batch_size': 50, 'learning_rate': 0.001, 'kernel_reg': 0.0, 'detection_threshold': 0.001, 'nms': 4}
+<ParallelMapDataset shapes: {image: (None, None, 1), keypoints: (None, 2), valid_mask: (None, None), keypoint_map: (None, None)}, types: {image: tf.float32, keypoints: tf.float32, valid_mask: tf.int32, keypoint_map: tf.int32}>
+<ParallelMapDataset shapes: {image: (None, None, 1), keypoints: (None, 2), valid_mask: (None, None), keypoint_map: (None, None)}, types: {image: tf.float32, keypoints: tf.float32, valid_mask: tf.int32, keypoint_map: tf.int32}>
+<ParallelMapDataset shapes: {image: (None, None, 1), keypoints: (None, 2), valid_mask: (None, None), keypoint_map: (None, None)}, types: {image: tf.float32, keypoints: tf.float32, valid_mask: tf.int32, keypoint_map: tf.int32}>
+[03/28/2020 23:47:16 WARNING] From /home/hashswan/.local/lib/python3.7/site-packages/tensorflow_core/python/data/ops/iterator_ops.py:347: Iterator.output_types (from tensorflow.python.data.ops.iterator_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.compat.v1.data.get_output_types(iterator)`.
+[03/28/2020 23:47:16 WARNING] From /home/hashswan/.local/lib/python3.7/site-packages/tensorflow_core/python/data/ops/iterator_ops.py:348: Iterator.output_shapes (from tensorflow.python.data.ops.iterator_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.compat.v1.data.get_output_shapes(iterator)`.
+[03/28/2020 23:47:16 WARNING] From /home/hashswan/.local/lib/python3.7/site-packages/tensorflow_core/python/data/ops/iterator_ops.py:350: Iterator.output_classes (from tensorflow.python.data.ops.iterator_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.compat.v1.data.get_output_classes(iterator)`.
+[03/28/2020 23:47:16 WARNING] From /home/hashswan/Desktop/SuperPoint/superpoint/models/backbones/vgg.py:10: conv2d (from tensorflow.python.layers.convolutional) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.keras.layers.Conv2D` instead.
+[03/28/2020 23:47:16 WARNING] From /home/hashswan/.local/lib/python3.7/site-packages/tensorflow_core/python/layers/convolutional.py:424: Layer.apply (from tensorflow.python.keras.engine.base_layer) is deprecated and will be removed in a future version.
+Instructions for updating:
+Please use `layer.__call__` method instead.
+[03/28/2020 23:47:16 WARNING] From /home/hashswan/.local/lib/python3.7/site-packages/tensorflow_core/python/ops/resource_variable_ops.py:1635: calling BaseResourceVariable.__init__ (from tensorflow.python.ops.resource_variable_ops) with constraint is deprecated and will be removed in a future version.
+Instructions for updating:
+If using Keras pass *_constraint arguments to layers.
+[03/28/2020 23:47:16 WARNING] From /home/hashswan/Desktop/SuperPoint/superpoint/models/backbones/vgg.py:14: batch_normalization (from tensorflow.python.layers.normalization) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use keras.layers.BatchNormalization instead.  In particular, `tf.control_dependencies(tf.GraphKeys.UPDATE_OPS)` should not be used (consult the `tf.keras.layers.BatchNormalization` documentation).
+[03/28/2020 23:47:16 WARNING] From /home/hashswan/Desktop/SuperPoint/superpoint/models/backbones/vgg.py:28: max_pooling2d (from tensorflow.python.layers.pooling) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use keras.layers.MaxPooling2D instead.
+2020-03-28 23:47:17.204081: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-03-28 23:47:17.204437: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1555] Found device 0 with properties: 
+pciBusID: 0000:01:00.0 name: GeForce RTX 2060 SUPER computeCapability: 7.5
+coreClock: 1.83GHz coreCount: 34 deviceMemorySize: 7.79GiB deviceMemoryBandwidth: 417.29GiB/s
+2020-03-28 23:47:17.204508: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudart.so.10.1
+2020-03-28 23:47:17.204519: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcublas.so.10
+2020-03-28 23:47:17.204529: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcufft.so.10
+2020-03-28 23:47:17.204557: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcurand.so.10
+2020-03-28 23:47:17.204583: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusolver.so.10
+2020-03-28 23:47:17.204591: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusparse.so.10
+2020-03-28 23:47:17.204600: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudnn.so.7
+2020-03-28 23:47:17.204645: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-03-28 23:47:17.204975: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-03-28 23:47:17.205274: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1697] Adding visible gpu devices: 0
+2020-03-28 23:47:17.205308: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1096] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-03-28 23:47:17.205328: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1102]      0 
+2020-03-28 23:47:17.205331: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1115] 0:   N 
+2020-03-28 23:47:17.205380: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-03-28 23:47:17.205740: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-03-28 23:47:17.206043: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1241] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 7489 MB memory) -> physical GPU (device: 0, name: GeForce RTX 2060 SUPER, pci bus id: 0000:01:00.0, compute capability: 7.5)
+[03/28/2020 23:47:19 INFO] Start training
+2020-03-28 23:47:31.191117: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudnn.so.7
+2020-03-28 23:47:32.017630: E tensorflow/stream_executor/cuda/cuda_dnn.cc:329] Could not create cudnn handle: CUDNN_STATUS_INTERNAL_ERROR
+2020-03-28 23:47:32.020340: E tensorflow/stream_executor/cuda/cuda_dnn.cc:329] Could not create cudnn handle: CUDNN_STATUS_INTERNAL_ERROR
+[03/28/2020 23:49:37 INFO] Running command TRAIN
+[03/28/2020 23:49:37 INFO] Number of GPUs detected: 1
+[03/28/2020 23:49:59 WARNING] AutoGraph could not transform <function SyntheticShapes._get_data.<locals>.<lambda> at 0x7f85140243b0> and will run it as-is.
+Cause: could not parse the source code:
+
+                    lambda image, points:
+
+This error may be avoided by creating the lambda in a standalone statement.
+
+[03/28/2020 23:49:59 WARNING] From /home/hashswan/Desktop/SuperPoint/superpoint/datasets/synthetic_shapes.py:189: py_func (from tensorflow.python.ops.script_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+tf.py_func is deprecated in TF V2. Instead, there are two
+    options available in V2.
+    - tf.py_function takes a python function which manipulates tf eager
+    tensors instead of numpy arrays. It's easy to convert a tf eager tensor to
+    an ndarray (just call tensor.numpy()) but having access to eager tensors
+    means `tf.py_function`s can use accelerators such as GPUs as well as
+    being differentiable using a gradient tape.
+    - tf.numpy_function maintains the semantics of the deprecated tf.py_func
+    (it is not differentiable, and manipulates numpy arrays). It drops the
+    stateful argument making all functions stateful.
+    
+[03/28/2020 23:50:00 WARNING] From /home/hashswan/Desktop/SuperPoint/superpoint/datasets/utils/pipeline.py:69: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.cast` instead.
+[03/28/2020 23:50:00 WARNING] AutoGraph could not transform <function SyntheticShapes._get_data.<locals>.<lambda> at 0x7f850b681cb0> and will run it as-is.
+Cause: could not parse the source code:
+
+                    lambda image, points:
+
+This error may be avoided by creating the lambda in a standalone statement.
+
+[03/28/2020 23:50:00 WARNING] AutoGraph could not transform <function SyntheticShapes._get_data.<locals>.<lambda> at 0x7f850b15fcb0> and will run it as-is.
+Cause: could not parse the source code:
+
+                    lambda image, points:
+
+This error may be avoided by creating the lambda in a standalone statement.
+
+2020-03-28 23:50:00.445549: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcuda.so.1
+2020-03-28 23:50:00.904465: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-03-28 23:50:00.904805: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1555] Found device 0 with properties: 
+pciBusID: 0000:01:00.0 name: GeForce RTX 2060 SUPER computeCapability: 7.5
+coreClock: 1.83GHz coreCount: 34 deviceMemorySize: 7.79GiB deviceMemoryBandwidth: 417.29GiB/s
+2020-03-28 23:50:00.905013: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudart.so.10.1
+2020-03-28 23:50:00.906029: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcublas.so.10
+2020-03-28 23:50:00.906909: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcufft.so.10
+2020-03-28 23:50:00.907131: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcurand.so.10
+2020-03-28 23:50:00.908055: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusolver.so.10
+2020-03-28 23:50:00.908727: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusparse.so.10
+2020-03-28 23:50:00.910761: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudnn.so.7
+2020-03-28 23:50:00.910912: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-03-28 23:50:00.911470: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-03-28 23:50:00.911774: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1697] Adding visible gpu devices: 0
+2020-03-28 23:50:00.912067: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+2020-03-28 23:50:00.934467: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 3199980000 Hz
+2020-03-28 23:50:00.934993: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x557679782f10 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+2020-03-28 23:50:00.935026: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+2020-03-28 23:50:00.989993: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-03-28 23:50:00.990326: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x557679736890 initialized for platform CUDA (this does not guarantee that XLA will be used). Devices:
+2020-03-28 23:50:00.990337: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): GeForce RTX 2060 SUPER, Compute Capability 7.5
+2020-03-28 23:50:00.990446: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-03-28 23:50:00.990699: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1555] Found device 0 with properties: 
+pciBusID: 0000:01:00.0 name: GeForce RTX 2060 SUPER computeCapability: 7.5
+coreClock: 1.83GHz coreCount: 34 deviceMemorySize: 7.79GiB deviceMemoryBandwidth: 417.29GiB/s
+2020-03-28 23:50:00.990730: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudart.so.10.1
+2020-03-28 23:50:00.990741: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcublas.so.10
+2020-03-28 23:50:00.990752: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcufft.so.10
+2020-03-28 23:50:00.990763: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcurand.so.10
+2020-03-28 23:50:00.990772: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusolver.so.10
+2020-03-28 23:50:00.990781: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusparse.so.10
+2020-03-28 23:50:00.990790: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudnn.so.7
+2020-03-28 23:50:00.990823: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-03-28 23:50:00.991089: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-03-28 23:50:00.991327: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1697] Adding visible gpu devices: 0
+2020-03-28 23:50:00.991350: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudart.so.10.1
+2020-03-28 23:50:00.991914: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1096] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-03-28 23:50:00.991923: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1102]      0 
+2020-03-28 23:50:00.991926: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1115] 0:   N 
+2020-03-28 23:50:00.991985: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-03-28 23:50:00.992256: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-03-28 23:50:00.992519: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1241] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 7489 MB memory) -> physical GPU (device: 0, name: GeForce RTX 2060 SUPER, pci bus id: 0000:01:00.0, compute capability: 7.5)
+{'training': <ParallelMapDataset shapes: {image: (None, None, 1), keypoints: (None, 2), valid_mask: (None, None), keypoint_map: (None, None)}, types: {image: tf.float32, keypoints: tf.float32, valid_mask: tf.int32, keypoint_map: tf.int32}>, 'validation': <ParallelMapDataset shapes: {image: (None, None, 1), keypoints: (None, 2), valid_mask: (None, None), keypoint_map: (None, None)}, types: {image: tf.float32, keypoints: tf.float32, valid_mask: tf.int32, keypoint_map: tf.int32}>, 'test': <ParallelMapDataset shapes: {image: (None, None, 1), keypoints: (None, 2), valid_mask: (None, None), keypoint_map: (None, None)}, types: {image: tf.float32, keypoints: tf.float32, valid_mask: tf.int32, keypoint_map: tf.int32}>}
+{'name': 'magic_point', 'batch_size': 64, 'eval_batch_size': 50, 'learning_rate': 0.001, 'kernel_reg': 0.0, 'detection_threshold': 0.001, 'nms': 4}
+<ParallelMapDataset shapes: {image: (None, None, 1), keypoints: (None, 2), valid_mask: (None, None), keypoint_map: (None, None)}, types: {image: tf.float32, keypoints: tf.float32, valid_mask: tf.int32, keypoint_map: tf.int32}>
+<ParallelMapDataset shapes: {image: (None, None, 1), keypoints: (None, 2), valid_mask: (None, None), keypoint_map: (None, None)}, types: {image: tf.float32, keypoints: tf.float32, valid_mask: tf.int32, keypoint_map: tf.int32}>
+<ParallelMapDataset shapes: {image: (None, None, 1), keypoints: (None, 2), valid_mask: (None, None), keypoint_map: (None, None)}, types: {image: tf.float32, keypoints: tf.float32, valid_mask: tf.int32, keypoint_map: tf.int32}>
+[03/28/2020 23:50:01 WARNING] From /home/hashswan/.local/lib/python3.7/site-packages/tensorflow_core/python/data/ops/iterator_ops.py:347: Iterator.output_types (from tensorflow.python.data.ops.iterator_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.compat.v1.data.get_output_types(iterator)`.
+[03/28/2020 23:50:01 WARNING] From /home/hashswan/.local/lib/python3.7/site-packages/tensorflow_core/python/data/ops/iterator_ops.py:348: Iterator.output_shapes (from tensorflow.python.data.ops.iterator_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.compat.v1.data.get_output_shapes(iterator)`.
+[03/28/2020 23:50:01 WARNING] From /home/hashswan/.local/lib/python3.7/site-packages/tensorflow_core/python/data/ops/iterator_ops.py:350: Iterator.output_classes (from tensorflow.python.data.ops.iterator_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.compat.v1.data.get_output_classes(iterator)`.
+[03/28/2020 23:50:01 WARNING] From /home/hashswan/Desktop/SuperPoint/superpoint/models/backbones/vgg.py:10: conv2d (from tensorflow.python.layers.convolutional) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.keras.layers.Conv2D` instead.
+[03/28/2020 23:50:01 WARNING] From /home/hashswan/.local/lib/python3.7/site-packages/tensorflow_core/python/layers/convolutional.py:424: Layer.apply (from tensorflow.python.keras.engine.base_layer) is deprecated and will be removed in a future version.
+Instructions for updating:
+Please use `layer.__call__` method instead.
+[03/28/2020 23:50:01 WARNING] From /home/hashswan/.local/lib/python3.7/site-packages/tensorflow_core/python/ops/resource_variable_ops.py:1635: calling BaseResourceVariable.__init__ (from tensorflow.python.ops.resource_variable_ops) with constraint is deprecated and will be removed in a future version.
+Instructions for updating:
+If using Keras pass *_constraint arguments to layers.
+[03/28/2020 23:50:01 WARNING] From /home/hashswan/Desktop/SuperPoint/superpoint/models/backbones/vgg.py:14: batch_normalization (from tensorflow.python.layers.normalization) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use keras.layers.BatchNormalization instead.  In particular, `tf.control_dependencies(tf.GraphKeys.UPDATE_OPS)` should not be used (consult the `tf.keras.layers.BatchNormalization` documentation).
+[03/28/2020 23:50:01 WARNING] From /home/hashswan/Desktop/SuperPoint/superpoint/models/backbones/vgg.py:28: max_pooling2d (from tensorflow.python.layers.pooling) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use keras.layers.MaxPooling2D instead.
+2020-03-28 23:50:02.327473: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-03-28 23:50:02.327825: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1555] Found device 0 with properties: 
+pciBusID: 0000:01:00.0 name: GeForce RTX 2060 SUPER computeCapability: 7.5
+coreClock: 1.83GHz coreCount: 34 deviceMemorySize: 7.79GiB deviceMemoryBandwidth: 417.29GiB/s
+2020-03-28 23:50:02.327893: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudart.so.10.1
+2020-03-28 23:50:02.327904: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcublas.so.10
+2020-03-28 23:50:02.327928: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcufft.so.10
+2020-03-28 23:50:02.327954: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcurand.so.10
+2020-03-28 23:50:02.327978: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusolver.so.10
+2020-03-28 23:50:02.328002: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusparse.so.10
+2020-03-28 23:50:02.328012: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudnn.so.7
+2020-03-28 23:50:02.328090: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-03-28 23:50:02.328416: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-03-28 23:50:02.328711: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1697] Adding visible gpu devices: 0
+2020-03-28 23:50:02.328744: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1096] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-03-28 23:50:02.328765: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1102]      0 
+2020-03-28 23:50:02.328768: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1115] 0:   N 
+2020-03-28 23:50:02.328834: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-03-28 23:50:02.329162: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-03-28 23:50:02.329448: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1241] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 7489 MB memory) -> physical GPU (device: 0, name: GeForce RTX 2060 SUPER, pci bus id: 0000:01:00.0, compute capability: 7.5)
+[03/28/2020 23:50:04 INFO] Start training
+2020-03-28 23:50:06.037576: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudnn.so.7
+2020-03-28 23:50:06.881157: E tensorflow/stream_executor/cuda/cuda_dnn.cc:329] Could not create cudnn handle: CUDNN_STATUS_INTERNAL_ERROR
+2020-03-28 23:50:06.893649: E tensorflow/stream_executor/cuda/cuda_dnn.cc:329] Could not create cudnn handle: CUDNN_STATUS_INTERNAL_ERROR

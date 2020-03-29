@@ -18,6 +18,7 @@ import tensorflow as tf  # noqa: E402
 tf.compat.v1.disable_eager_execution()
 
 def train(config, n_iter, output_dir, checkpoint_name='model.ckpt'):
+    config.gpu_options.allow_growth = True
     checkpoint_path = os.path.join(output_dir, checkpoint_name)
     with _init_graph(config) as net:
         try:
