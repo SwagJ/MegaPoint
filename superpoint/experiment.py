@@ -18,7 +18,8 @@ import tensorflow as tf  # noqa: E402
 tf.compat.v1.disable_eager_execution()
 
 def train(config, n_iter, output_dir, checkpoint_name='model.ckpt'):
-    config.gpu_options.allow_growth = True
+    gpus= tf.config.experimental.list_physical_devices('GPU')
+    tf.config.experimental.set_memory_growth(gpus[0], True)
     checkpoint_path = os.path.join(output_dir, checkpoint_name)
     with _init_graph(config) as net:
         try:
@@ -79,7 +80,7 @@ def _init_graph(config, with_dataset=False):
     else:
         yield model
     model.__exit__()
-    tf.reset_default_graph()
+    tf.compat.v1.reset_default_graph()
 
 
 def _cli_train(config, output_dir, args):
