@@ -18,9 +18,9 @@ seed = None
 
 def _scale_preserving_resize(image):
     target_size = tf.convert_to_tensor(config['preprocessing']['resize'])
-    scales = tf.to_float(tf.divide(target_size, tf.shape(image)[:2]))
-    new_size = tf.to_float(tf.shape(image)[:2]) * tf.reduce_max(scales)
-    image = tf.image.resize_images(image, tf.to_int32(new_size),
+    scales = tf.cast(tf.divide(target_size, tf.shape(image)[:2]), dtype=tf.float32)
+    new_size = tf.cast(tf.shape(image)[:2]) * tf.reduce_max(scales, dtype=tf.float32)
+    image = tf.image.resize_images(image, tf.cast(new_size, dtype=tf.int32),
                                    method=tf.image.ResizeMethod.BILINEAR)
     return tf.image.resize_image_with_crop_or_pad(image, target_size[0],
                                                   target_size[1])
@@ -34,7 +34,7 @@ def _preprocess(image):
 
 
 if __name__ == '__main__':
-    tf.set_random_seed(seed)
+    tf.random.set_seed(seed)
 
     parser = argparse.ArgumentParser()
     parser.add_argument('config', type=str, default=None)
@@ -49,19 +49,19 @@ if __name__ == '__main__':
         os.makedirs(output_dir)
 
     # Create the ops to warp an image
-    tf_path = tf.placeholder(tf.string)
+    tf_path = tf.compat.v1.placeholder(tf.string)
     # Read the image
-    image = tf.read_file(tf_path)
+    image = tf.io.read_file(tf_path)
     image = tf.image.decode_jpeg(image, channels=3)
     image = _preprocess(image)
     shape = tf.shape(image)[:2]
 
     # Warp the image
     H = sample_homography(tf.shape(image)[:2], **config['homographies'])
-    warped_image = tf.contrib.image.transform(image, H, interpolation="BILINEAR")
+    warped_image = tf.image.resize(image, H, method=tf.ResizeMethod.BILINEAR)
     patch_ratio = config['homographies']['patch_ratio']
-    new_shape = tf.multiply(tf.cast(shape, tf.float32), patch_ratio)
-    new_shape = tf.cast(new_shape, tf.int32)
+    new_shape = tf.multiply(tf.cast(shape, dtype=tf.float32), patch_ratio)
+    new_shape = tf.cast(new_shape, dtype=tf.int32)
     warped_image = tf.image.resize_images(warped_image, new_shape)
     H = invert_homography(H)
     H = flat2mat(H)[0, :, :]
