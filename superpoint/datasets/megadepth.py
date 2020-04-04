@@ -41,14 +41,15 @@ class Megadepth(BaseDataset):
 
         image_paths = []
         for index in np.arange(9):
-            img_path = 'megadepth/MegaDepth_SfM_v1/000' + str(index) + '/images/'
-            base_path = Path(DATA_PATH, img_path)
-            image_paths = image_paths.append(list(base_path.iterdir()))
-            if config['truncate']:
-                image_paths = image_paths[:config['truncate']]
-            names = [p.stem for p in image_paths]
-            image_paths = [str(p) for p in image_paths]
-            files = {'image_paths': image_paths, 'names': names}
+            if index != 6:
+                img_path = 'megadepth/MegaDepth_SfM_v1/000' + str(index) + '/images/'
+                base_path = Path(DATA_PATH, img_path)
+                image_paths = image_paths.append(list(base_path.iterdir()))
+                if config['truncate']:
+                    image_paths = image_paths[:config['truncate']]
+                names = [p.stem for p in image_paths]
+                image_paths = [str(p) for p in image_paths]
+                files = {'image_paths': image_paths, 'names': names}
 
         if config['labels']:
             label_paths = []
