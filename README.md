@@ -114,6 +114,10 @@ Homography estimation on HPatches computed with a maximum of 1000 points detecte
 make install  # install the Python requirements and setup the paths
 ```
 Python 3.6.1 is required. You will be asked to provide a path to an experiment directory (containing the training and prediction outputs, referred as `$EXPER_DIR`) and a dataset directory (referred as `$DATA_DIR`). Create them wherever you wish and make sure to provide their absolute paths.
+To Submit Job on Leonhard Cluster, use the following command. For Details about command, please refer to [Leonhard Cluster Tutorial](https://scicomp.ethz.ch/wiki/Tutorials)
+```
+bsub -W 24:00 -n 8 -R "rusage[mem=4500,scratch=10000,ngpus_excl_p=1]" -R "select[gpu_model0==TeslaV100_SXM2_32GB]" ./train.sh bash
+```
 
 [MS-COCO 2014](http://cocodataset.org/#download) and [HPatches](http://icvl.ee.ic.ac.uk/vbalnt/hpatches/hpatches-sequences-release.tar.gz) should be downloaded into `$DATA_DIR`. The Synthetic Shapes dataset will also be generated there. The folder structure should look like:
 ```
