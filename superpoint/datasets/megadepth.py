@@ -43,10 +43,10 @@ class Megadepth(BaseDataset):
 
         base_path = Path(DATA_PATH, 'megadepth/phoenix/S6/zl548/MegaDepth_v1/')
         for sub_dir in list(base_path.iterdir()):
-            num_dir = base_path + sub_dir + '/'
+            num_dir = base_path / sub_dir
             for sub_dir2 in list(num_dir.iterdir()):
-                dense_dir = num_dir + sub_dir2 + '/'
-                imgs_path = dense_dir + 'imgs/'
+                dense_dir = num_dir / sub_dir2
+                imgs_path = dense_dir / 'imgs'
                 image_paths = image_paths.append(list(imgs_path.iterdir()))
 
         if config['truncate']:
