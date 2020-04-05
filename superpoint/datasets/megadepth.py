@@ -47,7 +47,7 @@ class Megadepth(BaseDataset):
             for sub_dir2 in list(num_dir.iterdir()):
                 dense_dir = num_dir / sub_dir2
                 imgs_path = dense_dir / 'imgs'
-                image_paths.append(imgs_path.iterdir())
+                image_paths.append(str(p) for p in imgs_path)
 
         if config['truncate']:
             image_paths = image_paths[:config['truncate']]
