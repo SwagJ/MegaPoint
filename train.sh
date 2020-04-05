@@ -3,12 +3,12 @@
 # On cluster environment
 export TMPDIR=/tmp/
 export USERNAME=$USER
-export DATA_PATH=/cluster/scratch/${USERNAME}/superpoint
-export EXPER_PATH=/cluster/scratch/${USERNAME}/SuperPoint/outputs
+export DATA_PATH=/cluster/scratch/${USERNAME}/
+export EXPER_PATH=/cluster/scratch/${USERNAME}/outputs
 
 #On local setup
-#export EXPER_PATH=/home/hashswan/Desktop/SuperPoint/outputs
-#export DATA_PATH=/home/hashswan/Desktop/superpoint
+#export EXPER_PATH=$HOME/Desktop/SuperPoint/outputs
+#export DATA_PATH=$HOME/Desktop/superpoint
 #export CUDA_VISIBLE_DEVICES=0
 
 
@@ -19,7 +19,7 @@ pip install -r requirements.txt
 pip install -e .
 
 #initial setup
-echo "DATA_PATH = '$DATA_PATH'" >> ./superpoint/settings.py
+echo "DATA_PATH = '$DATA_PATH'" > ./superpoint/settings.py
 echo "EXPER_PATH = '$EXPER_PATH'" >> ./superpoint/settings.py
 
 cd superpoint
