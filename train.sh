@@ -1,15 +1,16 @@
 #! /bin/bash
 
 # On cluster environment
-export TMPDIR=/tmp/
-export USERNAME=majing
-export DATA_PATH=/cluster/scratch/${USERNAME}/superpoint
-export EXPER_PATH=/cluster/scratch/${USERNAME}/SuperPoint/outputs
+#export TMPDIR=/tmp/
+#export USERNAME=majing
+#export DATA_PATH=/cluster/scratch/${USERNAME}/superpoint
+#export EXPER_PATH=/cluster/scratch/${USERNAME}/SuperPoint/outputs
 
 #On local setup
-#export EXPER_PATH=/home/hashswan/Desktop/SuperPoint/outputs
-#export DATA_PATH=/home/hashswan/Desktop/superpoint
-#export CUDA_VISIBLE_DEVICES=0
+export TMPDIR=/tmp/
+export EXPER_PATH=/home/hashswan/Desktop/SuperPoint/outputs
+export DATA_PATH=/disk_hdd/superpoint
+export CUDA_VISIBLE_DEVICES=0
 
 
 # load modules
@@ -29,8 +30,8 @@ cd superpoint
 
 
 #python experiment.py train configs/magic-point_shapes.yaml magic-point_synth
-python export_detections.py configs/magic-point_coco_export.yaml magic-point_synth \
-	   --pred_only --batch_size=5 --export_name=magic-point_coco-export1
+python export_detections.py configs/magic-point_megadepth_export.yaml magic-point_synth \
+	   --pred_only --batch_size=5 --export_name=magic-point_megadepth-export1
 #python experiment.py train configs/magic-point_coco_train.yaml magic-point_coco
 #python export_detections_repeatability.py configs/magic-point_repeatability.yaml \
 #	   magic-point_coco --export_name=magic-point_hpatches-repeatability-v
