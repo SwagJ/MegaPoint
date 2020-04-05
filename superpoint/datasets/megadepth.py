@@ -38,18 +38,21 @@ class Megadepth(BaseDataset):
     }
 
     def _init_dataset(self, **config):
-
         image_paths = []
-        for index in np.arange(9):
-            if index != 6:
-                img_path = 'megadepth/MegaDepth_SfM_v1/000' + str(index) + '/images/'
-                base_path = Path(DATA_PATH, img_path)
-                image_paths = image_paths.append(list(base_path.iterdir()))
-                if config['truncate']:
-                    image_paths = image_paths[:config['truncate']]
-                names = [p.stem for p in image_paths]
-                image_paths = [str(p) for p in image_paths]
-                files = {'image_paths': image_paths, 'names': names}
+        names = []
+        indices = [0,1,2,3,4,5,7,8] # 0..8 without 6
+        img_format_path = 'megadepth/MegaDepth_SfM_v1/000{}/images/'
+ 
+        for index in indices:
+            img_path = img_format_path.format(index)
+            base_path = Path(DATA_PATH, img_path)
+            _image_paths = list(base_path.iterdir())
+            if config['truncate']:
+                _image_paths = _image_paths[:config['truncate']]
+            image_paths.extend([str(p) for p in _image_paths])
+            names.extend([p.stem for p in _image_paths])
+
+        files = {'image_paths': image_paths, 'names': names}
 
         if config['labels']:
             label_paths = []
