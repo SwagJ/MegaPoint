@@ -38,22 +38,37 @@ class Coco(BaseDataset):
     }
 
     def _init_dataset(self, **config):
+        print(DATA_PATH)
         base_path = Path(DATA_PATH, 'COCO/train2017/')
         image_paths = list(base_path.iterdir())
         if config['truncate']:
             image_paths = image_paths[:config['truncate']]
         names = [p.stem for p in image_paths]
         image_paths = [str(p) for p in image_paths]
-        files = {'image_paths': image_paths, 'names': names}
+
+        files = {}
 
         if config['labels']:
+            indicesToRemove = []
             label_paths = []
-            for n in names:
+            for i,n in enumerate(names):
                 p = Path(EXPER_PATH, config['labels'], '{}.npz'.format(n))
-                assert p.exists(), 'Image {} has no corresponding label {}'.format(n, p)
-                label_paths.append(str(p))
+                # assert p.exists(), 'Image {} has no corresponding label {}'.format(n, p)
+                if p.exists():
+                    label_paths.append(str(p))
+                else:
+                    indicesToRemove.append(i)
+            indicesToRemove.sort(reverse=True)
+            print(indicesToRemove)
+            for i in indicesToRemove:
+                names.pop(i)
+                image_paths.pop(i)
             files['label_paths'] = label_paths
 
+        files['image_paths'] = image_paths
+        files['names'] = names
+        print(files)
+        
         tf.data.Dataset.map_parallel = lambda self, fn: self.map(
                 fn, num_parallel_calls=config['num_parallel_calls'])
 

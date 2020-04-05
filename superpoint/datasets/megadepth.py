@@ -38,20 +38,21 @@ class Megadepth(BaseDataset):
     }
 
     def _init_dataset(self, **config):
-        image_paths = []
-        names = []
-        indices = [0,1,2,3,4,5,7,8] # 0..8 without 6
-        img_format_path = 'megadepth/MegaDepth_SfM_v1/000{}/images/'
- 
-        for index in indices:
-            img_path = img_format_path.format(index)
-            base_path = Path(DATA_PATH, img_path)
-            _image_paths = list(base_path.iterdir())
-            if config['truncate']:
-                _image_paths = _image_paths[:config['truncate']]
-            image_paths.extend([str(p) for p in _image_paths])
-            names.extend([p.stem for p in _image_paths])
 
+        image_paths = []
+
+        base_path = Path(DATA_PATH, 'megadepth/phoenix/S6/zl548/MegaDepth_v1/')
+        for sub_dir in list(base_path.iterdir()):
+            num_dir = base_path / sub_dir
+            for sub_dir2 in list(num_dir.iterdir()):
+                dense_dir = num_dir / sub_dir2
+                imgs_path = dense_dir / 'imgs'
+                image_paths.extend(list(imgs_path.iterdir()))
+
+        if config['truncate']:
+            image_paths = image_paths[:config['truncate']]
+        names = map(lambda p: p.stem, image_paths)
+        image_paths = map(str, image_paths)
         files = {'image_paths': image_paths, 'names': names}
 
         if config['labels']:
