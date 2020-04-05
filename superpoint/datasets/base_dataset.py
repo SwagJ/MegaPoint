@@ -107,7 +107,6 @@ class BaseDataset(metaclass=ABCMeta):
             for n in self.split_names:
                 self.tf_splits[n] = self._get_data(self.dataset, n, **self.config)
                 self.tf_next[n] = tf.compat.v1.data.make_one_shot_iterator(self.tf_splits[n]).get_next()
-                print(self.tf_next[n])
         self.end_set = tf.errors.OutOfRangeError
         self.sess = tf.compat.v1.Session()
 

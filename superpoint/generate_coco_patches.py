@@ -1,4 +1,5 @@
 import tensorflow as tf
+import tensorflow_addons as tfa
 import numpy as np
 import tensorflow as tf
 import cv2 as cv
@@ -7,9 +8,9 @@ import argparse
 import yaml
 from pathlib import Path
 
-from superpoint.models.homographies import (sample_homography, flat2mat,
+from models.homographies import (sample_homography, flat2mat,
                                             invert_homography)
-from superpoint.settings import DATA_PATH
+from settings import DATA_PATH
 
 tf.compat.v1.disable_eager_execution()
 
@@ -19,10 +20,10 @@ seed = None
 def _scale_preserving_resize(image):
     target_size = tf.convert_to_tensor(config['preprocessing']['resize'])
     scales = tf.cast(tf.divide(target_size, tf.shape(image)[:2]), dtype=tf.float32)
-    new_size = tf.cast(tf.shape(image)[:2]) * tf.reduce_max(scales, dtype=tf.float32)
-    image = tf.image.resize_images(image, tf.cast(new_size, dtype=tf.int32),
+    new_size = tf.cast(tf.shape(image)[:2], dtype=tf.float32) * tf.reduce_max(scales)
+    image = tf.image.resize(image, tf.cast(new_size, dtype=tf.int32),
                                    method=tf.image.ResizeMethod.BILINEAR)
-    return tf.image.resize_image_with_crop_or_pad(image, target_size[0],
+    return tf.image.resize_with_crop_or_pad(image, target_size[0],
                                                   target_size[1])
 
 
@@ -58,11 +59,11 @@ if __name__ == '__main__':
 
     # Warp the image
     H = sample_homography(tf.shape(image)[:2], **config['homographies'])
-    warped_image = tf.image.resize(image, H, method=tf.ResizeMethod.BILINEAR)
+    warped_image = tfa.image.transform(image, H, method=tf.image.ResizeMethod.BILINEAR)
     patch_ratio = config['homographies']['patch_ratio']
     new_shape = tf.multiply(tf.cast(shape, dtype=tf.float32), patch_ratio)
     new_shape = tf.cast(new_shape, dtype=tf.int32)
-    warped_image = tf.image.resize_images(warped_image, new_shape)
+    warped_image = tf.image.resize(warped_image, new_shape)
     H = invert_homography(H)
     H = flat2mat(H)[0, :, :]
 

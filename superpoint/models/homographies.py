@@ -1,10 +1,14 @@
-import tensorflow as tf
-from tensorflow_addons.image import transform as H_transform
+
 from math import pi
 import cv2 as cv
+import sys, os
+
+print(os.getcwd())
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
 
 from superpoint.utils.tools import dict_update
-
+import tensorflow as tf
+from tensorflow_addons.image import transform as H_transform
 
 homography_adaptation_default_config = {
         'num': 1,
