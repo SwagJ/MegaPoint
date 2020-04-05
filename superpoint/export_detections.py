@@ -7,7 +7,7 @@ from pathlib import Path
 from tqdm import tqdm
 
 import experiment
-from superpoint.settings import EXPER_PATH
+from settings import EXPER_PATH
 
 tf.compat.v1.disable_eager_execution()
 

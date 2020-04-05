@@ -2,7 +2,7 @@
 
 # On cluster environment
 export TMPDIR=/tmp/
-export USERNAME=majing
+export USERNAME=$USER
 export DATA_PATH=/cluster/scratch/${USERNAME}/superpoint
 export EXPER_PATH=/cluster/scratch/${USERNAME}/SuperPoint/outputs
 

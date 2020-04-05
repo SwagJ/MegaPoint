@@ -193,8 +193,8 @@ class SyntheticShapes(BaseDataset):
             data = data.take(config['validation_size'])
         elif split_name == 'test':
             data = data.take(config['test_size'])
-
         data = data.map(lambda image, kp: {'image': image, 'keypoints': kp})
+
         data = data.map(pipeline.add_dummy_valid_mask)
 
         if config['cache_in_memory'] and not config['on-the-fly']:
@@ -202,13 +202,13 @@ class SyntheticShapes(BaseDataset):
             data = data.cache()
 
         # Apply augmentation
-        # if split_name == 'training' or config['add_augmentation_to_test_set']:
-        #     if config['augmentation']['photometric']['enable']:
-        #         data = data.map_parallel(lambda d: pipeline.photometric_augmentation(
-        #             d, **config['augmentation']['photometric']))
-        #     if config['augmentation']['homographic']['enable']:
-        #         data = data.map_parallel(lambda d: pipeline.homographic_augmentation(
-        #             d, **config['augmentation']['homographic']))
+        if split_name == 'training' or config['add_augmentation_to_test_set']:
+            if config['augmentation']['photometric']['enable']:
+                data = data.map_parallel(lambda d: pipeline.photometric_augmentation(
+                    d, **config['augmentation']['photometric']))
+            if config['augmentation']['homographic']['enable']:
+                data = data.map_parallel(lambda d: pipeline.homographic_augmentation(
+                    d, **config['augmentation']['homographic']))
 
         # Convert the point coordinates to a dense keypoint map
         data = data.map_parallel(pipeline.add_keypoint_map)

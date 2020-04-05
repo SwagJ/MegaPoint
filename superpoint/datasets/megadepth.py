@@ -7,7 +7,7 @@ from .utils import pipeline
 from superpoint.settings import DATA_PATH, EXPER_PATH
 
 
-class Coco(BaseDataset):
+class Megadepth(BaseDataset):
     default_config = {
         'labels': None,
         'cache_in_memory': False,
@@ -38,13 +38,18 @@ class Coco(BaseDataset):
     }
 
     def _init_dataset(self, **config):
-        base_path = Path(DATA_PATH, 'COCO/train2017/')
-        image_paths = list(base_path.iterdir())
-        if config['truncate']:
-            image_paths = image_paths[:config['truncate']]
-        names = [p.stem for p in image_paths]
-        image_paths = [str(p) for p in image_paths]
-        files = {'image_paths': image_paths, 'names': names}
+
+        image_paths = []
+        for index in np.arange(9):
+            if index != 6:
+                img_path = 'megadepth/MegaDepth_SfM_v1/000' + str(index) + '/images/'
+                base_path = Path(DATA_PATH, img_path)
+                image_paths = image_paths.append(list(base_path.iterdir()))
+                if config['truncate']:
+                    image_paths = image_paths[:config['truncate']]
+                names = [p.stem for p in image_paths]
+                image_paths = [str(p) for p in image_paths]
+                files = {'image_paths': image_paths, 'names': names}
 
         if config['labels']:
             label_paths = []
@@ -71,8 +76,7 @@ class Coco(BaseDataset):
         def _preprocess(image):
             image = tf.image.rgb_to_grayscale(image)
             if config['preprocessing']['resize']:
-                image = pipeline.ratio_preserving_resize(image,
-                                                         **config['preprocessing'])
+                image = pipeline.ratio_preserving_resize(image,**config['preprocessing'])
             return image
 
         # Python function

@@ -1,5 +1,6 @@
 env/
-__pycache__/
+*/__pycache__/**
 *.egg-info/
 settings.py
 *synthetic_shapes_v6/*
+*.pyc

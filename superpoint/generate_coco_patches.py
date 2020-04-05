@@ -42,7 +42,7 @@ if __name__ == '__main__':
     with open(args.config, 'r') as f:
         config = yaml.load(f)
 
-    base_path = Path(DATA_PATH, 'COCO/val2014/')
+    base_path = Path(DATA_PATH, 'COCO/val2017/')
     image_paths = list(base_path.iterdir())
     output_dir = Path(DATA_PATH, 'COCO/patches/')
     if not output_dir.exists():
