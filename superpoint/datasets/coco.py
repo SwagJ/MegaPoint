@@ -59,7 +59,6 @@ class Coco(BaseDataset):
                 else:
                     indicesToRemove.append(i)
             indicesToRemove.sort(reverse=True)
-            print(indicesToRemove)
             for i in indicesToRemove:
                 names.pop(i)
                 image_paths.pop(i)
@@ -67,7 +66,6 @@ class Coco(BaseDataset):
 
         files['image_paths'] = image_paths
         files['names'] = names
-        print(files)
         
         tf.data.Dataset.map_parallel = lambda self, fn: self.map(
                 fn, num_parallel_calls=config['num_parallel_calls'])
