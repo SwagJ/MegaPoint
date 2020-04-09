@@ -8,7 +8,7 @@
 
 #On local setup
 export TMPDIR=/tmp/
-export EXPER_PATH=/home/hashswan/Desktop/SuperPoint/outputs
+export EXPER_PATH=/home/hashswan/Desktop/SuperPoint/
 export DATA_PATH=/disk_hdd/superpoint
 export CUDA_VISIBLE_DEVICES=0
 
@@ -30,9 +30,9 @@ cd superpoint
 
 
 #python experiment.py train configs/magic-point_shapes.yaml magic-point_synth
-python export_detections.py configs/magic-point_megadepth_export.yaml magic-point_synth \
-	   --pred_only --batch_size=5 --export_name=magic-point_megadepth-export1
-#python experiment.py train configs/magic-point_coco_train.yaml magic-point_coco
+#python export_detections.py configs/magic-point_megadepth_export.yaml magic-point_synth \
+#	   --pred_only --batch_size=5 --export_name=magic-point_megadepth-export1
+python experiment.py train configs/magic-point_megadepth_train.yaml magic-point_megadepth
 #python export_detections_repeatability.py configs/magic-point_repeatability.yaml \
 #	   magic-point_coco --export_name=magic-point_hpatches-repeatability-v
 #python experiment.py train configs/superpoint_coco.yaml superpoint_coco

@@ -1,0 +1,215 @@
+[04/09/2020 20:14:58 INFO] Running command TRAIN
+2020-04-09 20:14:58.564574: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcuda.so.1
+2020-04-09 20:14:58.577848: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-04-09 20:14:58.578208: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1555] Found device 0 with properties: 
+pciBusID: 0000:01:00.0 name: GeForce RTX 2060 SUPER computeCapability: 7.5
+coreClock: 1.83GHz coreCount: 34 deviceMemorySize: 7.79GiB deviceMemoryBandwidth: 417.29GiB/s
+2020-04-09 20:14:58.578260: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudart.so.10.1
+2020-04-09 20:14:58.578315: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcublas.so.10
+2020-04-09 20:14:58.579157: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcufft.so.10
+2020-04-09 20:14:58.579388: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcurand.so.10
+2020-04-09 20:14:58.580490: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusolver.so.10
+2020-04-09 20:14:58.581126: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusparse.so.10
+2020-04-09 20:14:58.581178: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudnn.so.7
+2020-04-09 20:14:58.581266: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-04-09 20:14:58.581621: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-04-09 20:14:58.581936: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1697] Adding visible gpu devices: 0
+[04/09/2020 20:14:58 INFO] Number of GPUs detected: 1
+[04/09/2020 20:15:01 WARNING] From /home/hashswan/Desktop/SuperPoint/superpoint/datasets/utils/pipeline.py:99: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.cast` instead.
+[04/09/2020 20:15:01 WARNING] From /home/hashswan/Desktop/SuperPoint/superpoint/datasets/megadepth.py:102: py_func (from tensorflow.python.ops.script_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+tf.py_func is deprecated in TF V2. Instead, there are two
+    options available in V2.
+    - tf.py_function takes a python function which manipulates tf eager
+    tensors instead of numpy arrays. It's easy to convert a tf eager tensor to
+    an ndarray (just call tensor.numpy()) but having access to eager tensors
+    means `tf.py_function`s can use accelerators such as GPUs as well as
+    being differentiable using a gradient tape.
+    - tf.numpy_function maintains the semantics of the deprecated tf.py_func
+    (it is not differentiable, and manipulates numpy arrays). It drops the
+    stateful argument making all functions stateful.
+    
+2020-04-09 20:15:02.631233: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+2020-04-09 20:15:02.755239: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 3199980000 Hz
+2020-04-09 20:15:02.766885: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x555641a6cec0 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+2020-04-09 20:15:02.766950: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+2020-04-09 20:15:02.923551: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-04-09 20:15:02.923888: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x555641a702f0 initialized for platform CUDA (this does not guarantee that XLA will be used). Devices:
+2020-04-09 20:15:02.923901: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): GeForce RTX 2060 SUPER, Compute Capability 7.5
+2020-04-09 20:15:02.924256: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-04-09 20:15:02.924520: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1555] Found device 0 with properties: 
+pciBusID: 0000:01:00.0 name: GeForce RTX 2060 SUPER computeCapability: 7.5
+coreClock: 1.83GHz coreCount: 34 deviceMemorySize: 7.79GiB deviceMemoryBandwidth: 417.29GiB/s
+2020-04-09 20:15:02.924544: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudart.so.10.1
+2020-04-09 20:15:02.924556: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcublas.so.10
+2020-04-09 20:15:02.924575: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcufft.so.10
+2020-04-09 20:15:02.924588: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcurand.so.10
+2020-04-09 20:15:02.924602: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusolver.so.10
+2020-04-09 20:15:02.924615: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusparse.so.10
+2020-04-09 20:15:02.924626: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudnn.so.7
+2020-04-09 20:15:02.924665: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-04-09 20:15:02.924938: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-04-09 20:15:02.925184: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1697] Adding visible gpu devices: 0
+2020-04-09 20:15:02.933071: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudart.so.10.1
+2020-04-09 20:15:03.274034: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1096] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-04-09 20:15:03.274057: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1102]      0 
+2020-04-09 20:15:03.274064: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1115] 0:   N 
+2020-04-09 20:15:03.284739: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-04-09 20:15:03.285062: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-04-09 20:15:03.285344: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1241] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 7412 MB memory) -> physical GPU (device: 0, name: GeForce RTX 2060 SUPER, pci bus id: 0000:01:00.0, compute capability: 7.5)
+/home/hashswan/Desktop/SuperPoint/superpoint/datasets/megadepth.py:70: UserWarning: Seed 208842506 from outer graph might be getting used by function Dataset_map_lambda, if the random op has not been provided any seed. Explicitly set the seed in the function if this is not the intended behavior.
+  fn, num_parallel_calls=config['num_parallel_calls'])
+2020-04-09 20:15:09.838405: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-04-09 20:15:09.838822: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1555] Found device 0 with properties: 
+pciBusID: 0000:01:00.0 name: GeForce RTX 2060 SUPER computeCapability: 7.5
+coreClock: 1.83GHz coreCount: 34 deviceMemorySize: 7.79GiB deviceMemoryBandwidth: 417.29GiB/s
+2020-04-09 20:15:09.838885: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudart.so.10.1
+2020-04-09 20:15:09.838909: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcublas.so.10
+2020-04-09 20:15:09.838958: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcufft.so.10
+2020-04-09 20:15:09.838999: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcurand.so.10
+2020-04-09 20:15:09.839026: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusolver.so.10
+2020-04-09 20:15:09.839051: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusparse.so.10
+2020-04-09 20:15:09.839091: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudnn.so.7
+2020-04-09 20:15:09.839193: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-04-09 20:15:09.839521: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-04-09 20:15:09.839806: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1697] Adding visible gpu devices: 0
+2020-04-09 20:15:09.989259: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1096] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-04-09 20:15:09.989329: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1102]      0 
+2020-04-09 20:15:09.989363: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1115] 0:   N 
+2020-04-09 20:15:09.989758: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-04-09 20:15:09.991243: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-04-09 20:15:09.992521: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1241] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 7412 MB memory) -> physical GPU (device: 0, name: GeForce RTX 2060 SUPER, pci bus id: 0000:01:00.0, compute capability: 7.5)
+{'training': <ParallelMapDataset shapes: {image: (None, None, 1), name: (), keypoints: (None, 2), valid_mask: (None, None), keypoint_map: (None, None)}, types: {image: tf.float32, name: tf.string, keypoints: tf.float32, valid_mask: tf.int32, keypoint_map: tf.int32}>, 'validation': <ParallelMapDataset shapes: {image: (None, None, 1), name: (), keypoints: (None, 2), valid_mask: (None, None), keypoint_map: (None, None)}, types: {image: tf.float32, name: tf.string, keypoints: tf.float32, valid_mask: tf.int32, keypoint_map: tf.int32}>, 'test': <ParallelMapDataset shapes: {image: (None, None, 1), name: (), keypoints: (None, 2), valid_mask: (None, None), keypoint_map: (None, None)}, types: {image: tf.float32, name: tf.string, keypoints: tf.float32, valid_mask: tf.int32, keypoint_map: tf.int32}>}
+{'name': 'magic_point', 'batch_size': 32, 'eval_batch_size': 32, 'learning_rate': 0.001, 'detection_threshold': 0.001, 'nms': 4}
+<ParallelMapDataset shapes: {image: (None, None, 1), name: (), keypoints: (None, 2), valid_mask: (None, None), keypoint_map: (None, None)}, types: {image: tf.float32, name: tf.string, keypoints: tf.float32, valid_mask: tf.int32, keypoint_map: tf.int32}>
+<ParallelMapDataset shapes: {image: (None, None, 1), name: (), keypoints: (None, 2), valid_mask: (None, None), keypoint_map: (None, None)}, types: {image: tf.float32, name: tf.string, keypoints: tf.float32, valid_mask: tf.int32, keypoint_map: tf.int32}>
+<ParallelMapDataset shapes: {image: (None, None, 1), name: (), keypoints: (None, 2), valid_mask: (None, None), keypoint_map: (None, None)}, types: {image: tf.float32, name: tf.string, keypoints: tf.float32, valid_mask: tf.int32, keypoint_map: tf.int32}>
+[04/09/2020 20:15:10 WARNING] From /home/hashswan/.local/lib/python3.7/site-packages/tensorflow_core/python/data/ops/iterator_ops.py:347: Iterator.output_types (from tensorflow.python.data.ops.iterator_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.compat.v1.data.get_output_types(iterator)`.
+[04/09/2020 20:15:10 WARNING] From /home/hashswan/.local/lib/python3.7/site-packages/tensorflow_core/python/data/ops/iterator_ops.py:348: Iterator.output_shapes (from tensorflow.python.data.ops.iterator_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.compat.v1.data.get_output_shapes(iterator)`.
+[04/09/2020 20:15:10 WARNING] From /home/hashswan/.local/lib/python3.7/site-packages/tensorflow_core/python/data/ops/iterator_ops.py:350: Iterator.output_classes (from tensorflow.python.data.ops.iterator_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.compat.v1.data.get_output_classes(iterator)`.
+[04/09/2020 20:15:11 WARNING] From /home/hashswan/Desktop/SuperPoint/superpoint/models/backbones/vgg.py:10: conv2d (from tensorflow.python.layers.convolutional) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.keras.layers.Conv2D` instead.
+[04/09/2020 20:15:11 WARNING] From /home/hashswan/.local/lib/python3.7/site-packages/tensorflow_core/python/layers/convolutional.py:424: Layer.apply (from tensorflow.python.keras.engine.base_layer) is deprecated and will be removed in a future version.
+Instructions for updating:
+Please use `layer.__call__` method instead.
+[04/09/2020 20:15:11 WARNING] From /home/hashswan/.local/lib/python3.7/site-packages/tensorflow_core/python/ops/resource_variable_ops.py:1635: calling BaseResourceVariable.__init__ (from tensorflow.python.ops.resource_variable_ops) with constraint is deprecated and will be removed in a future version.
+Instructions for updating:
+If using Keras pass *_constraint arguments to layers.
+[04/09/2020 20:15:11 WARNING] From /home/hashswan/Desktop/SuperPoint/superpoint/models/backbones/vgg.py:14: batch_normalization (from tensorflow.python.layers.normalization) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use keras.layers.BatchNormalization instead.  In particular, `tf.control_dependencies(tf.GraphKeys.UPDATE_OPS)` should not be used (consult the `tf.keras.layers.BatchNormalization` documentation).
+[04/09/2020 20:15:11 WARNING] From /home/hashswan/Desktop/SuperPoint/superpoint/models/backbones/vgg.py:28: max_pooling2d (from tensorflow.python.layers.pooling) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use keras.layers.MaxPooling2D instead.
+2020-04-09 20:15:12.919605: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-04-09 20:15:12.919942: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1555] Found device 0 with properties: 
+pciBusID: 0000:01:00.0 name: GeForce RTX 2060 SUPER computeCapability: 7.5
+coreClock: 1.83GHz coreCount: 34 deviceMemorySize: 7.79GiB deviceMemoryBandwidth: 417.29GiB/s
+2020-04-09 20:15:12.920000: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudart.so.10.1
+2020-04-09 20:15:12.920012: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcublas.so.10
+2020-04-09 20:15:12.920060: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcufft.so.10
+2020-04-09 20:15:12.920102: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcurand.so.10
+2020-04-09 20:15:12.920144: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusolver.so.10
+2020-04-09 20:15:12.920171: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusparse.so.10
+2020-04-09 20:15:12.920197: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudnn.so.7
+2020-04-09 20:15:12.920284: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-04-09 20:15:12.920583: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-04-09 20:15:12.920868: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1697] Adding visible gpu devices: 0
+2020-04-09 20:15:12.920900: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1096] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-04-09 20:15:12.920922: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1102]      0 
+2020-04-09 20:15:12.920928: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1115] 0:   N 
+2020-04-09 20:15:12.921022: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-04-09 20:15:12.921330: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-04-09 20:15:12.921736: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1241] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 7412 MB memory) -> physical GPU (device: 0, name: GeForce RTX 2060 SUPER, pci bus id: 0000:01:00.0, compute capability: 7.5)
+[04/09/2020 20:15:32 INFO] Start training
+2020-04-09 20:16:06.304556: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudnn.so.7
+2020-04-09 20:16:07.920074: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcublas.so.10
+2020-04-09 20:16:08.543457: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.17G (3403644928 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:08.725510: W tensorflow/core/common_runtime/bfc_allocator.cc:309] Garbage collection: deallocate free memory regions (i.e., allocations) so that we can re-allocate a larger region to avoid OOM due to memory fragmentation. If you see this message frequently, you are running near the threshold of the available device memory and re-allocation may incur great performance overhead. You may try smaller batch sizes to observe the performance impact. Set TF_ENABLE_GPU_GARBAGE_COLLECTION=false if you'd like to disable this feature.
+2020-04-09 20:16:08.792770: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3437199360 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:08.792798: W tensorflow/core/common_runtime/bfc_allocator.cc:243] Allocator (GPU_0_bfc) ran out of memory trying to allocate 3.04GiB with freed_by_count=0. The caller indicates that this is not a failure, but may mean that there could be performance gains if more memory were available.
+2020-04-09 20:16:08.793267: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3437199360 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:08.793278: W tensorflow/core/common_runtime/bfc_allocator.cc:243] Allocator (GPU_0_bfc) ran out of memory trying to allocate 3.04GiB with freed_by_count=0. The caller indicates that this is not a failure, but may mean that there could be performance gains if more memory were available.
+2020-04-09 20:16:08.872008: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3437199360 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:08.872031: W tensorflow/core/common_runtime/bfc_allocator.cc:243] Allocator (GPU_0_bfc) ran out of memory trying to allocate 1.29GiB with freed_by_count=0. The caller indicates that this is not a failure, but may mean that there could be performance gains if more memory were available.
+2020-04-09 20:16:08.872467: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3437199360 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:08.872476: W tensorflow/core/common_runtime/bfc_allocator.cc:243] Allocator (GPU_0_bfc) ran out of memory trying to allocate 1.29GiB with freed_by_count=0. The caller indicates that this is not a failure, but may mean that there could be performance gains if more memory were available.
+2020-04-09 20:16:08.922457: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3437199360 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:08.922480: W tensorflow/core/common_runtime/bfc_allocator.cc:243] Allocator (GPU_0_bfc) ran out of memory trying to allocate 691.00MiB with freed_by_count=0. The caller indicates that this is not a failure, but may mean that there could be performance gains if more memory were available.
+2020-04-09 20:16:08.922927: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3437199360 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:08.922938: W tensorflow/core/common_runtime/bfc_allocator.cc:243] Allocator (GPU_0_bfc) ran out of memory trying to allocate 691.00MiB with freed_by_count=0. The caller indicates that this is not a failure, but may mean that there could be performance gains if more memory were available.
+2020-04-09 20:16:08.923382: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3437199360 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:08.923392: W tensorflow/core/common_runtime/bfc_allocator.cc:243] Allocator (GPU_0_bfc) ran out of memory trying to allocate 2.55GiB with freed_by_count=0. The caller indicates that this is not a failure, but may mean that there could be performance gains if more memory were available.
+2020-04-09 20:16:08.923822: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3437199360 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:08.923831: W tensorflow/core/common_runtime/bfc_allocator.cc:243] Allocator (GPU_0_bfc) ran out of memory trying to allocate 2.55GiB with freed_by_count=0. The caller indicates that this is not a failure, but may mean that there could be performance gains if more memory were available.
+2020-04-09 20:16:08.943824: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3437199360 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:08.943893: W tensorflow/core/common_runtime/bfc_allocator.cc:243] Allocator (GPU_0_bfc) ran out of memory trying to allocate 355.75MiB with freed_by_count=0. The caller indicates that this is not a failure, but may mean that there could be performance gains if more memory were available.
+2020-04-09 20:16:08.944580: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3437199360 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:08.944597: W tensorflow/core/common_runtime/bfc_allocator.cc:243] Allocator (GPU_0_bfc) ran out of memory trying to allocate 355.75MiB with freed_by_count=0. The caller indicates that this is not a failure, but may mean that there could be performance gains if more memory were available.
+2020-04-09 20:16:08.966764: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3437199360 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:08.967225: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3437199360 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:08.995703: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3437199360 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:08.996184: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3437199360 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:08.996639: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3437199360 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:08.997078: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3437199360 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:09.004910: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3437199360 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:09.005367: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3437199360 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:09.019812: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3437199360 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:09.020414: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3437199360 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:09.197014: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3437199360 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:09.199365: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3437199360 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:09.213572: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3437199360 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:09.215823: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3437199360 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:09.218042: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3437199360 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:09.219970: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3437199360 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:09.237805: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3437199360 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:09.238772: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3437199360 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:09.269684: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3437199360 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:09.270144: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3437199360 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:09.270582: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3437199360 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:09.271032: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3437199360 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:09.277566: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3437199360 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:09.278242: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3437199360 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:09.291437: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3437199360 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:09.291894: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3437199360 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:09.313723: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3437199360 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:09.314174: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3437199360 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:09.357846: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3437199360 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:09.357868: W tensorflow/core/common_runtime/bfc_allocator.cc:309] Garbage collection: deallocate free memory regions (i.e., allocations) so that we can re-allocate a larger region to avoid OOM due to memory fragmentation. If you see this message frequently, you are running near the threshold of the available device memory and re-allocation may incur great performance overhead. You may try smaller batch sizes to observe the performance impact. Set TF_ENABLE_GPU_GARBAGE_COLLECTION=false if you'd like to disable this feature.
+2020-04-09 20:16:09.363227: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3441393664 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:09.363677: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3441393664 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:09.382849: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3441393664 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:09.383305: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3441393664 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:09.423328: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3441393664 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:09.424423: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3441393664 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:09.439934: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3441393664 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:09.440388: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3441393664 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:09.467401: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3441393664 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:09.467915: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3441393664 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:09.506337: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3441393664 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:09.506844: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3441393664 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:09.570800: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3441393664 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:09.571254: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3441393664 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:09.594949: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3441393664 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:09.595401: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3441393664 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:09.666717: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3441393664 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:09.667183: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3441393664 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:09.698391: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3441393664 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:09.699066: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3441393664 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:09.699939: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3441393664 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:09.699951: W tensorflow/core/kernels/gpu_utils.cc:48] Failed to allocate memory for convolution redzone checking; skipping this check. This is benign and only means that we won't check cudnn for out-of-bounds reads and writes. This message will only be printed once.
+2020-04-09 20:16:09.982010: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3441393664 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:09.982466: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3441393664 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:10.379799: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3441393664 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+2020-04-09 20:16:10.380272: I tensorflow/stream_executor/cuda/cuda_driver.cc:801] failed to allocate 3.20G (3441393664 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+[04/09/2020 20:16:18 INFO] Got Keyboard Interrupt, saving model and closing.
+[04/09/2020 20:16:20 INFO] Saving checkpoint for iteration #1

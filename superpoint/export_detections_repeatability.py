@@ -31,6 +31,8 @@ if __name__ == '__main__':
     if 'checkpoint' in config:
         checkpoint = Path(checkpoint, config['checkpoint'])
 
+    gpus= tf.config.experimental.list_physical_devices('GPU')
+    tf.config.experimental.set_memory_growth(gpus[0], True)
     with experiment._init_graph(config, with_dataset=True) as (net, dataset):
         if net.trainable:
             net.load(str(checkpoint))
