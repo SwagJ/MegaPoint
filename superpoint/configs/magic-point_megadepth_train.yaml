@@ -1,6 +1,6 @@
 data:
     name: 'megadepth'
-    labels: outputs/magic-point_megadepth-export2  # Complete with your export labels
+    labels: magic-point_megadepth-export2  # Complete with your export labels
     cache_in_memory: false
     validation_size: 192
     augmentation:
