@@ -6,7 +6,7 @@ import cv2
 import numpy as np
 import tensorflow as tf  # noqa: E402
 
-from superpoint.settings import EXPER_PATH  # noqa: E402
+from settings import EXPER_PATH  # noqa: E402
 
 tf.compat.v1.disable_eager_execution()
 

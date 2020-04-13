@@ -1,0 +1,1 @@
+bsub -W 12:00 -n 8 -R "rusage[mem=4500,scratch=10000,ngpus_excl_p=1]" -R "select[gpu_mtotal0>=10000]" ./train.sh bash

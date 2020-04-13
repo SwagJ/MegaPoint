@@ -186,7 +186,7 @@ class SyntheticShapes(BaseDataset):
             # Read image and point coordinates
             data = data.map(
                     lambda image, points:
-                    (_read_image(image), tf.compat.v1.py_func(_read_points, [points], tf.float32)))
+                    (_read_image(image), tf.numpy_function(_read_points, [points], tf.float32)))
             data = data.map(lambda image, points: (image, tf.reshape(points, [-1, 2])))
 
         if split_name == 'validation':

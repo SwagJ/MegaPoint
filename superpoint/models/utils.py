@@ -2,7 +2,7 @@ import tensorflow as tf
 
 from .homographies import warp_points
 from .backbones.vgg import vgg_block
-
+from .backbones.squeezeNet import fire_layer
 
 def detector_head(inputs, **config):
     params_conv = {'padding': 'SAME', 'data_format': config['data_format'],
@@ -13,10 +13,15 @@ def detector_head(inputs, **config):
     cindex = 1 if cfirst else -1  # index of the channel
 
     with tf.compat.v1.variable_scope('detector', reuse=tf.compat.v1.AUTO_REUSE):
+        # if(config['name'] == "squeeze_point"):
+        #     x = fire_layer('firelayer1', inputs, 64, 128, 128)
+        #     x = fire_layer('firelayer3', x, int(pow(config['grid_size'], 2)/2),
+        #                    int(pow(config['grid_size'], 2)/2), 1+int(pow(config['grid_size'], 2)/2))
+        # else:
         x = vgg_block(inputs, 256, 3, 'conv1',
-                      activation=tf.nn.relu, **params_conv)
+                        activation=tf.nn.relu, **params_conv)
         x = vgg_block(x, 1+pow(config['grid_size'], 2), 1, 'conv2',
-                      activation=None, **params_conv)
+                        activation=None, **params_conv)
 
         prob = tf.nn.softmax(x, axis=cindex)
         # Strip the extra “no interest point” dustbin
@@ -37,11 +42,15 @@ def descriptor_head(inputs, **config):
     cindex = 1 if cfirst else -1  # index of the channel
 
     with tf.compat.v1.variable_scope('descriptor', reuse=tf.compat.v1.AUTO_REUSE):
+        # if(config['name'] == "squeeze_point"):
+        #     x = fire_layer('firelayer1', inputs, 128, 256, 256)
+        #     x = fire_layer('firelayer2', x, config['descriptor_size'], 
+        #                    config['descriptor_size'], config['descriptor_size'])
+        # else:
         x = vgg_block(inputs, 256, 3, 'conv1',
-                      activation=tf.nn.relu, **params_conv)
+                        activation=tf.nn.relu, **params_conv)
         x = vgg_block(x, config['descriptor_size'], 1, 'conv2',
-                      activation=None, **params_conv)
-
+                        activation=None, **params_conv)
         desc = tf.transpose(x, [0, 2, 3, 1]) if cfirst else x
         desc = tf.image.resize(
             desc, config['grid_size'] * tf.shape(desc)[1:3])
@@ -75,7 +84,7 @@ def detector_loss(keypoint_map, logits, valid_mask=None, **config):
 def descriptor_loss(descriptors, warped_descriptors, homographies,
                     valid_mask=None, **config):
     # Compute the position of the center pixel of every cell in the image
-    (batch_size, Hc, Wc) = tf.unstack(tf.compat.v1.to_int32(tf.shape(descriptors)[:3]))
+    (batch_size, Hc, Wc) = tf.unstack(tf.cast(tf.shape(descriptors)[:3], dtype=tf.int32))
     coord_cells = tf.stack(tf.meshgrid(
         tf.range(Hc), tf.range(Wc), indexing='ij'), axis=-1)
     coord_cells = coord_cells * config['grid_size'] + config['grid_size'] // 2  # (Hc, Wc, 2)
@@ -131,6 +140,7 @@ def descriptor_loss(descriptors, warped_descriptors, homographies,
     valid_mask = tf.cast(valid_mask[..., tf.newaxis], tf.float32)  # for GPU
     valid_mask = tf.nn.space_to_depth(valid_mask, config['grid_size'])
     valid_mask = tf.reduce_prod(valid_mask, axis=3)  # AND along the channel dim
+    print(valid_mask, [batch_size, 1, 1, Hc, Wc], config)
     valid_mask = tf.reshape(valid_mask, [batch_size, 1, 1, Hc, Wc])
 
     normalization = tf.reduce_sum(valid_mask) * tf.cast(Hc * Wc, tf.float32)
@@ -179,7 +189,7 @@ def box_nms(prob, size, iou=0.1, min_prob=0.01, keep_top_k=0):
         pts = tf.cast(tf.where(tf.greater_equal(prob, min_prob)), tf.float32)
         size = tf.constant(size/2.)
         boxes = tf.concat([pts-size, pts+size], axis=1)
-        scores = tf.gather_nd(prob, tf.compat.v1.to_int32(pts))
+        scores = tf.gather_nd(prob, tf.cast(pts, dtype=tf.int32))
         with tf.device('/cpu:0'):
             indices = tf.image.non_max_suppression(
                     boxes, scores, tf.shape(boxes)[0], iou)
@@ -189,5 +199,5 @@ def box_nms(prob, size, iou=0.1, min_prob=0.01, keep_top_k=0):
             k = tf.minimum(tf.shape(scores)[0], tf.constant(keep_top_k))  # when fewer
             scores, indices = tf.nn.top_k(scores, k)
             pts = tf.gather(pts, indices)
-        prob = tf.scatter_nd(tf.compat.v1.to_int32(pts), scores, tf.shape(prob))
+        prob = tf.scatter_nd(tf.cast(pts, dtype=tf.int32), scores, tf.shape(prob))
     return prob

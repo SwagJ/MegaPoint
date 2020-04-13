@@ -31,9 +31,14 @@ cd superpoint
 #python experiment.py train configs/magic-point_shapes.yaml magic-point_synth
 # python export_detections.py configs/magic-point_coco_export.yaml magic-point_synth \
 # 	   --pred_only --batch_size=5 --export_name=magic-point_coco-export1
-# python experiment.py train configs/magic-point_coco_train.yaml magic-point_coco
 
-python experiment.py train configs/superpoint_megadepth.yaml superpoint_megadepth
+# python generate_coco_patches.py configs/coco_patches_generation.yaml
+
+# python experiment.py train configs/squeezepoint_coco_train.yaml squeezepoint_coco
+
+python experiment.py train configs/magic-point_coco_train.yaml magic-point_coco
+
+# python experiment.py train configs/superpoint_megadepth.yaml superpoint_megadepth
 
 #python export_detections_repeatability.py configs/magic-point_repeatability.yaml \
 #	   magic-point_coco --export_name=magic-point_hpatches-repeatability-v
@@ -44,4 +49,3 @@ python experiment.py train configs/superpoint_megadepth.yaml superpoint_megadept
 #	   superpoint_coco --export_name=superpoint_hpatches-v
 #python export_descriptors.py configs/superpoint_hpatches.yaml \
 #	   superpoint_coco --export_name=superpoint_hpatches-v
-

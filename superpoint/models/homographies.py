@@ -278,7 +278,7 @@ def compute_valid_mask(image_shape, homography, erosion_radius=0):
                 mask[tf.newaxis, ..., tf.newaxis],
                 tf.cast(tf.constant(kernel)[..., tf.newaxis], tf.float32),
                 [1, 1, 1, 1], 'SAME','NHWC',[1, 1, 1, 1])[0, ..., 0] + 1.
-    return tf.compat.v1.to_int32(mask)
+    return tf.cast(mask, dtype=tf.int32)
 
 
 def warp_points(points, homography):
@@ -361,7 +361,7 @@ def warp_keypoints_to_map(packed_arg):
 
     Returns: a map of keypoints of the same size as the original keypoint_map.
     """
-    warped_keypoints = tf.compat.v1.to_int32(warp_keypoints_to_list(packed_arg))
+    warped_keypoints = tf.cast(warp_keypoints_to_list(packed_arg), dtype=tf.int32)
     n_keypoints = tf.shape(warped_keypoints)[0]
     shape = tf.shape(packed_arg[0])
 

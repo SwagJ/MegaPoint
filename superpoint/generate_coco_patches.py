@@ -8,11 +8,12 @@ import argparse
 import yaml
 from pathlib import Path
 
+tf.compat.v1.disable_eager_execution()
+
 from models.homographies import (sample_homography, flat2mat,
                                             invert_homography)
 from settings import DATA_PATH
 
-tf.compat.v1.disable_eager_execution()
 
 seed = None
 
@@ -59,7 +60,7 @@ if __name__ == '__main__':
 
     # Warp the image
     H = sample_homography(tf.shape(image)[:2], **config['homographies'])
-    warped_image = tfa.image.transform(image, H, method=tf.image.ResizeMethod.BILINEAR)
+    warped_image = tfa.image.transform(image, H, interpolation='BILINEAR')
     patch_ratio = config['homographies']['patch_ratio']
     new_shape = tf.multiply(tf.cast(shape, dtype=tf.float32), patch_ratio)
     new_shape = tf.cast(new_shape, dtype=tf.int32)
@@ -68,7 +69,7 @@ if __name__ == '__main__':
     H = flat2mat(H)[0, :, :]
 
     print("Generating patches of Coco val...")
-    sess = tf.InteractiveSession()
+    sess = tf.compat.v1.InteractiveSession()
     for num, path in enumerate(image_paths):
         new_path = Path(output_dir, str(num))
         if not new_path.exists():

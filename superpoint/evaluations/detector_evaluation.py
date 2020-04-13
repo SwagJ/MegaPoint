@@ -76,7 +76,7 @@ def compute_pr(exper_name, **kwargs):
         fp.append(f)
         prob.append(p)
         n_gt += n
-    print(paths)
+    print(paths, exper_name)
     
     tp = np.concatenate(tp)
     fp = np.concatenate(fp)

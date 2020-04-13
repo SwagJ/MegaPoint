@@ -38,7 +38,6 @@ class Coco(BaseDataset):
     }
 
     def _init_dataset(self, **config):
-        print(DATA_PATH)
         base_path = Path(DATA_PATH, 'COCO/train2017/')
         image_paths = list(base_path.iterdir())
         if config['truncate']:
@@ -47,12 +46,12 @@ class Coco(BaseDataset):
         image_paths = [str(p) for p in image_paths]
 
         files = {}
-
         if config['labels']:
             indicesToRemove = []
             label_paths = []
             for i,n in enumerate(names):
                 p = Path(EXPER_PATH, config['labels'], '{}.npz'.format(n))
+                
                 # assert p.exists(), 'Image {} has no corresponding label {}'.format(n, p)
                 if p.exists():
                     label_paths.append(str(p))
@@ -66,7 +65,7 @@ class Coco(BaseDataset):
 
         files['image_paths'] = image_paths
         files['names'] = names
-        
+
         tf.data.Dataset.map_parallel = lambda self, fn: self.map(
                 fn, num_parallel_calls=config['num_parallel_calls'])
 
@@ -78,7 +77,7 @@ class Coco(BaseDataset):
 
         def _read_image(path):
             image = tf.io.read_file(path)
-            image = tf.image.decode_png(image, channels=3)
+            image = tf.image.decode_jpeg(image, channels=3)
             return tf.cast(image, tf.float32)
 
         def _preprocess(image):
@@ -101,7 +100,7 @@ class Coco(BaseDataset):
         # Add keypoints
         if has_keypoints:
             kp = tf.data.Dataset.from_tensor_slices(files['label_paths'])
-            kp = kp.map(lambda path: tf.compat.v1.py_func(_read_points, [path], tf.float32))
+            kp = kp.map(lambda path: tf.numpy_function(_read_points, [path], tf.float32))
             kp = kp.map(lambda points: tf.reshape(points, [-1, 2]))
             data = tf.data.Dataset.zip((data, kp)).map(
                     lambda d, k: {**d, 'keypoints': k})

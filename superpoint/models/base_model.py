@@ -5,6 +5,9 @@ import numpy as np
 from tqdm import tqdm
 import os.path as osp
 import itertools
+import sys, os
+sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
+sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
 
 from superpoint.utils.tools import dict_update
 
@@ -88,8 +91,6 @@ class BaseModel(metaclass=ABCMeta):
         raise NotImplementedError
 
     def __init__(self, data={}, n_gpus=1, data_shape=None, **config):
-        print(data)
-        print(config)
         self.datasets = data
         self.data_shape = data_shape
         self.n_gpus = n_gpus
@@ -230,9 +231,15 @@ class BaseModel(metaclass=ABCMeta):
             raw_numpy_output_shapes = {}
             with tf.device('/cpu:0'):
                 for n, d in self.datasets.items():
-                    print(d)
                     raw_output_shapes[n] = tf.compat.v1.data.get_output_shapes(d)
-                    raw_numpy_output_shapes[n] = {k:v.as_list() for k,v in raw_output_shapes[n].items()}
+                    _raw_numpy_output_shapes_n = {}
+                    for  k,v in raw_output_shapes[n].items():
+                        if type(v) is dict:
+                            _raw_numpy_output_shapes_n[k] = list(v.values())
+                        else:
+                            _raw_numpy_output_shapes_n[k] = list(v)
+                    raw_numpy_output_shapes[n] = _raw_numpy_output_shapes_n
+
                 tf.compat.v1.disable_eager_execution()
                 d2 = None
                 for n, d in self.datasets.items():
@@ -242,7 +249,7 @@ class BaseModel(metaclass=ABCMeta):
                                 train_batch, raw_output_shapes[n]).prefetch(train_batch)
                         self.dataset_iterators[n] = tf.compat.v1.data.make_one_shot_iterator(d2)
                     else:
-                        d2 = d.padded_batch(self.config['eval_batch_size']*self.n_devices, padded_shapes=raw_numpy_output_shapes[n])
+                        d2 = d.padded_batch(self.config['eval_batch_size']*self.n_devices, padded_shapes=raw_output_shapes[n])
                         self.dataset_iterators[n] = tf.compat.v1.data.make_one_shot_iterator(d2)
                     self.dataset_iterators_initializers[n] = self.dataset_iterators[n].make_initializer(d2)
                     
@@ -399,7 +406,6 @@ class BaseModel(metaclass=ABCMeta):
         with tf.device('/cpu:0'):
             saver = tf.compat.v1.train.Saver(save_relative_paths=True)
         if tf.io.gfile.isdir(checkpoint_path):
-            print(checkpoint_path)
             checkpoint_path = tf.train.latest_checkpoint(checkpoint_path)
             if checkpoint_path is None:
                 raise ValueError('Checkpoint directory is empty.')
