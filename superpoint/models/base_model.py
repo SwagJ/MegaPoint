@@ -88,8 +88,8 @@ class BaseModel(metaclass=ABCMeta):
         raise NotImplementedError
 
     def __init__(self, data={}, n_gpus=1, data_shape=None, **config):
-        print(data)
-        print(config)
+        #print(data)
+        #print(config)
         self.datasets = data
         self.data_shape = data_shape
         self.n_gpus = n_gpus
@@ -228,11 +228,24 @@ class BaseModel(metaclass=ABCMeta):
             self.dataset_iterators_initializers = {}
             raw_output_shapes = {}
             raw_numpy_output_shapes = {}
+            #raw_numpy_output_test = {}
             with tf.device('/cpu:0'):
                 for n, d in self.datasets.items():
-                    print(d)
+                    print(n)
                     raw_output_shapes[n] = tf.compat.v1.data.get_output_shapes(d)
-                    raw_numpy_output_shapes[n] = {k:v.as_list() for k,v in raw_output_shapes[n].items()}
+                    #print(raw_output_shapes[n].items())
+                    tmp = {}
+                    #tmp_warp = {}
+                    for k,v in raw_output_shapes[n].items():
+                        print(k,v)
+                        if k != 'warped':
+                            tmp.update({k:v.as_list()})
+                        else:
+                            tmp.update({'warped':{k1:v1.as_list() for k1,v1 in v.items()}})
+                        raw_numpy_output_shapes[n] = tmp
+                    #print(raw_numpy_output_test[n])
+                    #raw_numpy_output_shapes[n] = {k:v.as_list() for k,v in raw_output_shapes[n].items()}
+                    #print(raw_numpy_output_shapes[n])
                 tf.compat.v1.disable_eager_execution()
                 d2 = None
                 for n, d in self.datasets.items():
