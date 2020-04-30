@@ -1,0 +1,4 @@
+Tensor("squeezepoint/pred_tower0/conv1_1/BiasAdd:0", shape=(1, None, None, 128), dtype=float32, device=/device:CPU:0)
+Tensor("squeezepoint/pred_tower0/descriptor/firelayer1/concat:0", shape=(1, None, None, 128), dtype=float32, device=/device:CPU:0)
+Tensor("squeezepoint/pred_tower0/descriptor/concat_2:0", shape=(1, None, None, 65), dtype=float32, device=/device:CPU:0)
+Tensor("squeezepoint/pred_tower0/descriptor/l2_normalize:0", shape=(1, None, None, 65), dtype=float32, device=/device:CPU:0)

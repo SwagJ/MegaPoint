@@ -1,0 +1,8 @@
+2 root error(s) found.
+  (0) Invalid argument: assertion failed: [Condition x == y did not hold element-wise:] [x (squeezepoint/train_tower0/sparse_softmax_cross_entropy_loss_1/xentropy/Shape_1:0) = ] [2 30 40] [y (squeezepoint/train_tower0/sparse_softmax_cross_entropy_loss_1/xentropy/strided_slice:0) = ] [2 15 20]
+	 [[node squeezepoint/train_tower0/sparse_softmax_cross_entropy_loss_1/xentropy/assert_equal_1/Assert/Assert (defined at /media/terabyte/projects/SUPERPOINT/SuperPointIoannis/superpoint/datasets/../../superpoint/models/utils.py:98) ]]
+	 [[GroupCrossDeviceControlEdges_0/Func/squeezepoint/train_tower0/sparse_softmax_cross_entropy_loss_1/assert_broadcastable/AssertGuard/then/_88/output/_283/_6]]
+  (1) Invalid argument: assertion failed: [Condition x == y did not hold element-wise:] [x (squeezepoint/train_tower0/sparse_softmax_cross_entropy_loss_1/xentropy/Shape_1:0) = ] [2 30 40] [y (squeezepoint/train_tower0/sparse_softmax_cross_entropy_loss_1/xentropy/strided_slice:0) = ] [2 15 20]
+	 [[node squeezepoint/train_tower0/sparse_softmax_cross_entropy_loss_1/xentropy/assert_equal_1/Assert/Assert (defined at /media/terabyte/projects/SUPERPOINT/SuperPointIoannis/superpoint/datasets/../../superpoint/models/utils.py:98) ]]
+0 successful operations.
+0 derived errors ignored.

@@ -2,7 +2,7 @@ data:
     name: 'coco'
     cache_in_memory: false
     validation_size: 96
-    labels: outputs/magic-point_coco-export1  # use your own labels here
+    labels: magic-point_coco-export1  # use your own labels here
     augmentation:
         photometric:
             enable: true
@@ -48,4 +48,3 @@ model:
     top_k: 600
 train_iter: 600000
 validation_interval: 5000
-blockName: "squeezeNet"

@@ -38,13 +38,13 @@ class Coco(BaseDataset):
     }
 
     def _init_dataset(self, **config):
-        base_path = Path(DATA_PATH, 'COCO/train2017/')
+        base_path = Path(DATA_PATH, 'COCO/train2014/')
         image_paths = list(base_path.iterdir())
         if config['truncate']:
             image_paths = image_paths[:config['truncate']]
         names = [p.stem for p in image_paths]
         image_paths = [str(p) for p in image_paths]
-
+        
         files = {}
         if config['labels']:
             indicesToRemove = []
@@ -53,11 +53,12 @@ class Coco(BaseDataset):
                 p = Path(EXPER_PATH, config['labels'], '{}.npz'.format(n))
                 
                 # assert p.exists(), 'Image {} has no corresponding label {}'.format(n, p)
+                # label_paths.append(str(p))
                 if p.exists():
                     label_paths.append(str(p))
                 else:
                     indicesToRemove.append(i)
-            indicesToRemove.sort(reverse=True)
+            # indicesToRemove.sort(reverse=True)
             for i in indicesToRemove:
                 names.pop(i)
                 image_paths.pop(i)
@@ -86,7 +87,7 @@ class Coco(BaseDataset):
                 image = pipeline.ratio_preserving_resize(image,
                                                          **config['preprocessing'])
             return image
-
+        
         # Python function
         def _read_points(filename):
             return np.load(filename.decode('utf-8'))['points'].astype(np.float32)
@@ -96,7 +97,7 @@ class Coco(BaseDataset):
         images = images.map(_read_image)
         images = images.map(_preprocess)
         data = tf.data.Dataset.zip({'image': images, 'name': names})
-
+        
         # Add keypoints
         if has_keypoints:
             kp = tf.data.Dataset.from_tensor_slices(files['label_paths'])
@@ -114,7 +115,7 @@ class Coco(BaseDataset):
         if config['cache_in_memory']:
             tf.compat.v1.logging.info('Caching data, fist access will take some time.')
             data = data.cache()
-
+        
         # Generate the warped pair
         if config['warped_pair']['enable']:
             assert has_keypoints
@@ -137,7 +138,7 @@ class Coco(BaseDataset):
                 assert not config['warped_pair']['enable']  # doesn't support hom. aug.
                 data = data.map_parallel(lambda d: pipeline.homographic_augmentation(
                     d, **config['augmentation']['homographic']))
-
+        
         # Generate the keypoint map
         if has_keypoints:
             data = data.map_parallel(pipeline.add_keypoint_map)
@@ -148,5 +149,4 @@ class Coco(BaseDataset):
                 lambda d: {
                     **d, 'warped': {**d['warped'],
                                     'image': tf.cast(d['warped']['image'], tf.float32) / 255.}})
-
         return data

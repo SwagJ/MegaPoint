@@ -1,0 +1,5 @@
+Tensor("superpoint/pred_tower0/vgg/conv4_2/bn/FusedBatchNormV3:0", shape=(1, 128, None, None), dtype=float32, device=/device:CPU:0)
+Tensor("superpoint/pred_tower0/descriptor/conv1/bn/FusedBatchNormV3:0", shape=(1, 256, None, None), dtype=float32, device=/device:CPU:0)
+Tensor("superpoint/pred_tower0/descriptor/conv2/bn/FusedBatchNormV3:0", shape=(1, 256, None, None), dtype=float32, device=/device:CPU:0)
+Tensor("superpoint/pred_tower0/descriptor/transpose:0", shape=(1, None, None, 256), dtype=float32, device=/device:CPU:0)
+Tensor("superpoint/pred_tower0/descriptor/l2_normalize:0", shape=(1, 256, None, None), dtype=float32, device=/device:CPU:0)

@@ -11,7 +11,7 @@ class SqueezePoint(BaseModel):
     }
     required_config_keys = []
     default_config = {
-            'data_format': 'channels_first',
+            'data_format': 'channels_last',
             'grid_size': 8,
             'detection_threshold': 0.4,
             'descriptor_size': 256,
@@ -38,7 +38,7 @@ class SqueezePoint(BaseModel):
             return {**detections, **descriptors}
 
         results = net(inputs['image'])
-
+        
         if config['training']:
             warped_results = net(inputs['warped']['image'])
             results = {**results, 'warped_results': warped_results,

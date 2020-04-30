@@ -13,22 +13,56 @@ def detector_head(inputs, **config):
     cindex = 1 if cfirst else -1  # index of the channel
 
     with tf.compat.v1.variable_scope('detector', reuse=tf.compat.v1.AUTO_REUSE):
-        # if(config['name'] == "squeeze_point"):
-        #     x = fire_layer('firelayer1', inputs, 64, 128, 128)
-        #     x = fire_layer('firelayer3', x, int(pow(config['grid_size'], 2)/2),
-        #                    int(pow(config['grid_size'], 2)/2), 1+int(pow(config['grid_size'], 2)/2))
-        # else:
-        x = vgg_block(inputs, 256, 3, 'conv1',
-                        activation=tf.nn.relu, **params_conv)
-        x = vgg_block(x, 1+pow(config['grid_size'], 2), 1, 'conv2',
-                        activation=None, **params_conv)
+        if(config['name'] == "squeeze_point"):
+            # x = fire_layer('firelayer11', inputs, 128, 64, 64)
+            x = vgg_block(inputs, 256, 3, 'conv1',
+                          activation=tf.nn.relu, **params_conv)
+            
+            # x = tf.concat([tf.keras.layers.Dense(pow(config['grid_size'],2) + 1)(x),
+            #                tf.keras.layers.Dense(pow(config['grid_size'],2) + 1)(x)],
+            #                                          3, name='firelayer1/concat')
+            x0 = tf.concat([vgg_block(x, 1+pow(config['grid_size'], 2), 1, 'conv2',
+                          activation=None, **params_conv),
+                           vgg_block(x, 1+pow(config['grid_size'], 2), 1, 'conv2',
+                          activation=None, **params_conv)], axis=2)
+            x1 = tf.concat([vgg_block(x, 1+pow(config['grid_size'], 2), 1, 'conv2',
+                          activation=None, **params_conv),
+                           vgg_block(x, 1+pow(config['grid_size'], 2), 1, 'conv2',
+                          activation=None, **params_conv)], axis=2)                          
+            x = tf.concat([x0,x1], axis=1)
+            # if params_conv['batch_normalization']:
+            #     x = tf.keras.layers.BatchNormalization(
+            #         trainable=True if params_conv['training'] else False, name='bn',
+            #         fused=True, axis=1 if cfirst else -1)(x)
+            y = x
+            # x = fire_layer('firelayer3', x, int(pow(config['grid_size'], 2)),
+            #                int(pow(config['grid_size'], 2)/2), 1+int(pow(config['grid_size'], 2)/2))
+            # x = tf.transpose(x, perm=[0,3,2,1])
+            # x = tf.reduce_max(x, axis=-1)
+            # S = tf.shape(x)
+            # x = tf.reshape(x[:,:,:,:4], [S[0],S[1]*2,S[2]*2])
+        else:
+            x = vgg_block(inputs, 256, 3, 'conv1',
+                          activation=tf.nn.relu, **params_conv)
+            x = vgg_block(x, 1+pow(config['grid_size'], 2), 1, 'conv2',
+                          activation=None, **params_conv)
+            y = x
 
-        prob = tf.nn.softmax(x, axis=cindex)
+        # x = tf.compat.v1.Print(x, [tf.shape(x), tf.shape(x)[-1], tf.rank(x)], "x = ")
+        prob = tf.nn.softmax(y, axis=cindex)
         # Strip the extra “no interest point” dustbin
         prob = prob[:, :-1, :, :] if cfirst else prob[:, :, :, :-1]
+
+        # prob = tf.compat.v1.Print(prob, [tf.shape(prob), tf.shape(prob)[3], tf.rank(prob)], "prob = ")
+
         prob = tf.nn.depth_to_space(
                 prob, config['grid_size'], data_format='NCHW' if cfirst else 'NHWC')
+
+        # prob = tf.compat.v1.Print(prob, [cindex, tf.shape(prob), tf.shape(prob)[3], tf.rank(prob)], "prob = ")
+
         prob = tf.squeeze(prob, axis=cindex)
+
+        # prob = tf.compat.v1.Print(prob, [tf.shape(prob), tf.shape(prob)[3], tf.rank(prob)], "prob = ")
 
     return {'logits': x, 'prob': prob}
 
@@ -42,21 +76,46 @@ def descriptor_head(inputs, **config):
     cindex = 1 if cfirst else -1  # index of the channel
 
     with tf.compat.v1.variable_scope('descriptor', reuse=tf.compat.v1.AUTO_REUSE):
-        # if(config['name'] == "squeeze_point"):
-        #     x = fire_layer('firelayer1', inputs, 128, 256, 256)
-        #     x = fire_layer('firelayer2', x, config['descriptor_size'], 
-        #                    config['descriptor_size'], config['descriptor_size'])
-        # else:
-        x = vgg_block(inputs, 256, 3, 'conv1',
-                        activation=tf.nn.relu, **params_conv)
-        x = vgg_block(x, config['descriptor_size'], 1, 'conv2',
-                        activation=None, **params_conv)
+        
+        if(config['name'] == "squeeze_point"):
+            file = open('temp_squeeze.info', 'w')
+            # print(inputs, file=file)
+            x = fire_layer('firelayer1', inputs, 128, 64, 64)
+            # print(x, file=file)
+            # x = fire_layer('firelayer2', x, config['descriptor_size'], 
+            #                int(config['descriptor_size']), int(config['descriptor_size']))
+            # x = tf.keras.layers.Dense(config['descriptor_size'])(x)
+            # print(x, file=file)
+            x0 = tf.concat([vgg_block(x, 1+pow(config['grid_size'], 2), 1, 'conv2',
+                          activation=None, **params_conv),
+                           vgg_block(x, 1+pow(config['grid_size'], 2), 1, 'conv2',
+                          activation=None, **params_conv)], axis=2)
+            x1 = tf.concat([vgg_block(x, 1+pow(config['grid_size'], 2), 1, 'conv2',
+                          activation=None, **params_conv),
+                           vgg_block(x, 1+pow(config['grid_size'], 2), 1, 'conv2',
+                          activation=None, **params_conv)], axis=2)                          
+            x = tf.concat([x0,x1], axis=1)
+            # x = tf.transpose(__x, perm=[3,1,2,0])
+        else:
+            file = open('temp_vgg.info', 'w')
+            # print(inputs, file=file)
+            x = vgg_block(inputs, 256, 3, 'conv1',
+                          activation=tf.nn.relu, **params_conv)
+            # print(x, file=file)
+            x = vgg_block(x, config['descriptor_size'], 1, 'conv2',
+                          activation=None, **params_conv)
+            # print(x, file=file)
+        
         desc = tf.transpose(x, [0, 2, 3, 1]) if cfirst else x
+        print(desc, file=file)
+
+        
         desc = tf.image.resize(
             desc, config['grid_size'] * tf.shape(desc)[1:3])
         desc = tf.transpose(desc, [0, 3, 1, 2]) if cfirst else desc
         desc = tf.nn.l2_normalize(desc, cindex)
-
+        # print(desc, file=file)
+        file.close()
     return {'descriptors_raw': x, 'descriptors': desc}
 
 
@@ -76,6 +135,9 @@ def detector_loss(keypoint_map, logits, valid_mask=None, **config):
     valid_mask = tf.nn.space_to_depth(valid_mask, config['grid_size'])
     valid_mask = tf.reduce_prod(valid_mask, axis=3)  # AND along the channel dim
 
+    # labels = tf.compat.v1.Print(labels,[tf.shape(labels), tf.shape(logits), tf.shape(logits)[-1], tf.rank(logits), tf.shape(valid_mask)], "labels, logits, valid_mask =")
+    #  output_stream="file:///media/terabyte/projects/SUPERPOINT/SuperPointIoannis/superpoint.info")
+    
     loss = tf.compat.v1.losses.sparse_softmax_cross_entropy(
             labels=labels, logits=logits, weights=valid_mask)
     return loss
@@ -85,6 +147,7 @@ def descriptor_loss(descriptors, warped_descriptors, homographies,
                     valid_mask=None, **config):
     # Compute the position of the center pixel of every cell in the image
     (batch_size, Hc, Wc) = tf.unstack(tf.cast(tf.shape(descriptors)[:3], dtype=tf.int32))
+    # print((batch_size, Hc, Wc), file=open("3plet.info", "w"))
     coord_cells = tf.stack(tf.meshgrid(
         tf.range(Hc), tf.range(Wc), indexing='ij'), axis=-1)
     coord_cells = coord_cells * config['grid_size'] + config['grid_size'] // 2  # (Hc, Wc, 2)
@@ -140,8 +203,11 @@ def descriptor_loss(descriptors, warped_descriptors, homographies,
     valid_mask = tf.cast(valid_mask[..., tf.newaxis], tf.float32)  # for GPU
     valid_mask = tf.nn.space_to_depth(valid_mask, config['grid_size'])
     valid_mask = tf.reduce_prod(valid_mask, axis=3)  # AND along the channel dim
-    print(valid_mask, [batch_size, 1, 1, Hc, Wc], config)
-    valid_mask = tf.reshape(valid_mask, [batch_size, 1, 1, Hc, Wc])
+    # print(valid_mask, [batch_size, 1, 1, Hc, Wc], config, file=open('valid_mask.info', 'w'))
+    vms = tf.shape(valid_mask)
+    vmsH = vms[1]
+    vmsW = vms[2]
+    valid_mask = tf.reshape(valid_mask, [batch_size, 1, 1, vmsH, vmsW])
 
     normalization = tf.reduce_sum(valid_mask) * tf.cast(Hc * Wc, tf.float32)
     # Summaries for debugging
@@ -151,6 +217,11 @@ def descriptor_loss(descriptors, warped_descriptors, homographies,
                                                      s * positive_dist) / normalization)
     tf.summary.scalar('negative_dist', tf.reduce_sum(valid_mask * (1 - s) *
                                                      negative_dist) / normalization)
+    # loss = tf.compat.v1.Print(loss, [tf.shape(loss), tf.shape(loss)[-1],
+    #                                  tf.shape(valid_mask), tf.shape(valid_mask)[-1],
+    #                                  tf.rank(loss), tf.rank(valid_mask)],
+    #                                 "loss, valid_mask = ")
+
     loss = tf.reduce_sum(valid_mask * loss) / normalization
     return loss
 

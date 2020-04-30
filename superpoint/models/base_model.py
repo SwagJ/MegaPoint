@@ -232,13 +232,13 @@ class BaseModel(metaclass=ABCMeta):
             with tf.device('/cpu:0'):
                 for n, d in self.datasets.items():
                     raw_output_shapes[n] = tf.compat.v1.data.get_output_shapes(d)
-                    _raw_numpy_output_shapes_n = {}
+                    tmp = {}
                     for  k,v in raw_output_shapes[n].items():
-                        if type(v) is dict:
-                            _raw_numpy_output_shapes_n[k] = list(v.values())
+                        if k!= 'warped':
+                            tmp.update({k:v.as_list()})
                         else:
-                            _raw_numpy_output_shapes_n[k] = list(v)
-                    raw_numpy_output_shapes[n] = _raw_numpy_output_shapes_n
+                            tmp.update({'warped': {k1:v1.as_list() for k1,v1 in v.items()}})
+                    raw_numpy_output_shapes[n] = tmp
 
                 tf.compat.v1.disable_eager_execution()
                 d2 = None
@@ -319,7 +319,7 @@ class BaseModel(metaclass=ABCMeta):
             run_metadata = tf.compat.v1.RunMetadata()
         else:
             options, run_metadata = None, None
-
+    
         tf.compat.v1.logging.info('Start training')
         for i in range(iterations):
             loss, summaries, _ = self.sess.run(
