@@ -130,6 +130,10 @@ $DATA_DIR
 |   |-- i_ajuntament
 |   `-- ...
 `-- synthetic_shapes  # will be automatically created
+`-- MegaDepth_V1
+|   |-- 0000
+|   |   |-- denseX
+|       `-- ...
 ```
 
 ## Usage

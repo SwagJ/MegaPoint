@@ -41,19 +41,22 @@ class Megadepth(BaseDataset):
 
         image_paths = []
 
-        base_path = Path(DATA_PATH, 'megadepth/phoenix/S6/zl548/MegaDepth_v1/')
+        
+        base_path = Path(DATA_PATH, 'MegaDepth_v1/')
         for sub_dir in list(base_path.iterdir()):
             num_dir = base_path / sub_dir
             for sub_dir2 in list(num_dir.iterdir()):
                 dense_dir = num_dir / sub_dir2
                 imgs_path = dense_dir / 'imgs'
-                image_paths.extend(list(imgs_path.iterdir()))
+                for p in list(imgs_path.iterdir()):
+                    image_paths.append(p)
 
         if config['truncate']:
             image_paths = image_paths[:config['truncate']]
-        names = map(lambda p: p.stem, image_paths)
-        image_paths = map(str, image_paths)
+        names = [p.stem for p in image_paths]
+        image_paths = [str(p) for p in image_paths]
         files = {'image_paths': image_paths, 'names': names}
+
 
         if config['labels']:
             label_paths = []

@@ -2,145 +2,113 @@ import tensorflow as tf
 
 from .homographies import warp_points
 from .backbones.vgg import vgg_block
-from .backbones.squeezeNet import fire_layer
 
-def detector_head(inputs, **config):
-    params_conv = {'padding': 'SAME', 'data_format': config['data_format'],
+
+
+def _extend_dict(dict_to_extend, other_dict):
+    for conf_key in other_dict.keys():
+        if(conf_key not in dict_to_extend.keys()):
+            self.config[conf_key] = other_dict[conf_key]
+    return dict_to_extend
+
+class DetectorHead(tf.keras.Model):
+    params_conv = {'padding': 'SAME', 'data_format': '',
                    'batch_normalization': True,
-                   'training': config['training'],
-                   'kernel_reg': config.get('kernel_reg', 0.)}
-    cfirst = config['data_format'] == 'channels_first'
-    cindex = 1 if cfirst else -1  # index of the channel
+                   'training': False,
+                   'kernel_reg': 0.}
+    def __init__(self, initializer=None, config={}, path=''):
+        super(DetectorHead, self).__init__()
+        self.config = _extend_dict(config, DetectorHead.params_conv)
+        self.cfirst = (config['data_format'] == 'channels_first')
+        self.cindex = 1 if self.cfirst else -1
+        # with tf.compat.v1.variable_scope('detector', reuse=tf.compat.v1.AUTO_REUSE):
+        self.conv1 = vgg_block(256, 3, 'conv1',
+                      activation=tf.nn.relu, **self.config)
+        self.conv2 = vgg_block(1+pow(config['grid_size'], 2), 1, 'conv2',
+                      activation=None, **self.config)
+        
+    def call(self, features):
+        _x = self.conv1(features)
+        logits = self.conv2(_x)
 
-    with tf.compat.v1.variable_scope('detector', reuse=tf.compat.v1.AUTO_REUSE):
-        if(config['name'] == "squeeze_point"):
-            # x = fire_layer('firelayer11', inputs, 128, 64, 64)
-            x = vgg_block(inputs, 256, 3, 'conv1',
-                          activation=tf.nn.relu, **params_conv)
-            
-            # x = tf.concat([tf.keras.layers.Dense(pow(config['grid_size'],2) + 1)(x),
-            #                tf.keras.layers.Dense(pow(config['grid_size'],2) + 1)(x)],
-            #                                          3, name='firelayer1/concat')
-            x0 = tf.concat([vgg_block(x, 1+pow(config['grid_size'], 2), 1, 'conv2',
-                          activation=None, **params_conv),
-                           vgg_block(x, 1+pow(config['grid_size'], 2), 1, 'conv2',
-                          activation=None, **params_conv)], axis=2)
-            x1 = tf.concat([vgg_block(x, 1+pow(config['grid_size'], 2), 1, 'conv2',
-                          activation=None, **params_conv),
-                           vgg_block(x, 1+pow(config['grid_size'], 2), 1, 'conv2',
-                          activation=None, **params_conv)], axis=2)                          
-            x = tf.concat([x0,x1], axis=1)
-            # if params_conv['batch_normalization']:
-            #     x = tf.keras.layers.BatchNormalization(
-            #         trainable=True if params_conv['training'] else False, name='bn',
-            #         fused=True, axis=1 if cfirst else -1)(x)
-            y = x
-            # x = fire_layer('firelayer3', x, int(pow(config['grid_size'], 2)),
-            #                int(pow(config['grid_size'], 2)/2), 1+int(pow(config['grid_size'], 2)/2))
-            # x = tf.transpose(x, perm=[0,3,2,1])
-            # x = tf.reduce_max(x, axis=-1)
-            # S = tf.shape(x)
-            # x = tf.reshape(x[:,:,:,:4], [S[0],S[1]*2,S[2]*2])
-        else:
-            x = vgg_block(inputs, 256, 3, 'conv1',
-                          activation=tf.nn.relu, **params_conv)
-            x = vgg_block(x, 1+pow(config['grid_size'], 2), 1, 'conv2',
-                          activation=None, **params_conv)
-            y = x
-
-        # x = tf.compat.v1.Print(x, [tf.shape(x), tf.shape(x)[-1], tf.rank(x)], "x = ")
-        prob = tf.nn.softmax(y, axis=cindex)
+        prob = tf.nn.softmax(logits, axis=self.cindex)
         # Strip the extra “no interest point” dustbin
-        prob = prob[:, :-1, :, :] if cfirst else prob[:, :, :, :-1]
-
-        # prob = tf.compat.v1.Print(prob, [tf.shape(prob), tf.shape(prob)[3], tf.rank(prob)], "prob = ")
-
+        prob = prob[:, :-1, :, :] if self.cfirst else prob[:, :, :, :-1]
         prob = tf.nn.depth_to_space(
-                prob, config['grid_size'], data_format='NCHW' if cfirst else 'NHWC')
+                prob, config['grid_size'], data_format='NCHW' if self.cfirst else 'NHWC')
+        prob = tf.squeeze(prob, axis=self.cindex)
 
-        # prob = tf.compat.v1.Print(prob, [cindex, tf.shape(prob), tf.shape(prob)[3], tf.rank(prob)], "prob = ")
+        return logits, prob
 
-        prob = tf.squeeze(prob, axis=cindex)
-
-        # prob = tf.compat.v1.Print(prob, [tf.shape(prob), tf.shape(prob)[3], tf.rank(prob)], "prob = ")
-
-    return {'logits': x, 'prob': prob}
-
-
-def descriptor_head(inputs, **config):
-    params_conv = {'padding': 'SAME', 'data_format': config['data_format'],
-                   'batch_normalization': True,
-                   'training': config['training'],
-                   'kernel_reg': config.get('kernel_reg', 0.)}
-    cfirst = config['data_format'] == 'channels_first'
-    cindex = 1 if cfirst else -1  # index of the channel
-
-    with tf.compat.v1.variable_scope('descriptor', reuse=tf.compat.v1.AUTO_REUSE):
+class DetectorHeadLoss(tf.keras.losses.Loss):
+    def __init__(self, config):
+        super(DetectorHeadLoss, self).__init__()
+        self.config = {'grid_size': config['grid_size']}
         
-        if(config['name'] == "squeeze_point"):
-            file = open('temp_squeeze.info', 'w')
-            # print(inputs, file=file)
-            x = fire_layer('firelayer1', inputs, 128, 64, 64)
-            # print(x, file=file)
-            # x = fire_layer('firelayer2', x, config['descriptor_size'], 
-            #                int(config['descriptor_size']), int(config['descriptor_size']))
-            # x = tf.keras.layers.Dense(config['descriptor_size'])(x)
-            # print(x, file=file)
-            x0 = tf.concat([vgg_block(x, 1+pow(config['grid_size'], 2), 1, 'conv2',
-                          activation=None, **params_conv),
-                           vgg_block(x, 1+pow(config['grid_size'], 2), 1, 'conv2',
-                          activation=None, **params_conv)], axis=2)
-            x1 = tf.concat([vgg_block(x, 1+pow(config['grid_size'], 2), 1, 'conv2',
-                          activation=None, **params_conv),
-                           vgg_block(x, 1+pow(config['grid_size'], 2), 1, 'conv2',
-                          activation=None, **params_conv)], axis=2)                          
-            x = tf.concat([x0,x1], axis=1)
-            # x = tf.transpose(__x, perm=[3,1,2,0])
-        else:
-            file = open('temp_vgg.info', 'w')
-            # print(inputs, file=file)
-            x = vgg_block(inputs, 256, 3, 'conv1',
-                          activation=tf.nn.relu, **params_conv)
-            # print(x, file=file)
-            x = vgg_block(x, config['descriptor_size'], 1, 'conv2',
-                          activation=None, **params_conv)
-            # print(x, file=file)
-        
-        desc = tf.transpose(x, [0, 2, 3, 1]) if cfirst else x
-        print(desc, file=file)
-
-        
-        desc = tf.image.resize(
-            desc, config['grid_size'] * tf.shape(desc)[1:3])
-        desc = tf.transpose(desc, [0, 3, 1, 2]) if cfirst else desc
-        desc = tf.nn.l2_normalize(desc, cindex)
-        # print(desc, file=file)
-        file.close()
-    return {'descriptors_raw': x, 'descriptors': desc}
-
-
-def detector_loss(keypoint_map, logits, valid_mask=None, **config):
-    # Convert the boolean labels to indices including the "no interest point" dustbin
-    labels = tf.cast(keypoint_map[..., tf.newaxis], tf.float32)  # for GPU
-    labels = tf.nn.space_to_depth(labels, config['grid_size'])
-    shape = tf.concat([tf.shape(labels)[:3], [1]], axis=0)
-    labels = tf.concat([2*labels, tf.ones(shape)], 3)
-    # multiply by a small random matrix to randomly break ties in argmax
-    labels = tf.argmax(labels * tf.compat.v1.random_uniform(tf.shape(labels), 0, 0.1),
+    def call(self, y_true, y_pred):
+        keypoint_map = y_true[0]
+        valid_mask = y_true[1]
+        logits = y_pred[0]
+        # Convert the boolean labels to indices including the "no interest point" dustbin
+        labels = tf.cast(keypoint_map[..., tf.newaxis], tf.float32)  # for GPU
+        labels = tf.nn.space_to_depth(labels, self.config['grid_size'])
+        shape = tf.concat([tf.shape(labels)[:3], [1]], axis=0)
+        labels = tf.concat([2*labels, tf.ones(shape)], 3)
+        # multiply by a small random matrix to randomly break ties in argmax
+        labels = tf.argmax(labels * tf.compat.v1.random_uniform(tf.shape(labels), 0, 0.1),
                        axis=3)
 
-    # Mask the pixels if bordering artifacts appear
-    valid_mask = tf.ones_like(keypoint_map) if valid_mask is None else valid_mask
-    valid_mask = tf.cast(valid_mask[..., tf.newaxis], tf.float32)  # for GPU
-    valid_mask = tf.nn.space_to_depth(valid_mask, config['grid_size'])
-    valid_mask = tf.reduce_prod(valid_mask, axis=3)  # AND along the channel dim
-
-    # labels = tf.compat.v1.Print(labels,[tf.shape(labels), tf.shape(logits), tf.shape(logits)[-1], tf.rank(logits), tf.shape(valid_mask)], "labels, logits, valid_mask =")
-    #  output_stream="file:///media/terabyte/projects/SUPERPOINT/SuperPointIoannis/superpoint.info")
-    
-    loss = tf.compat.v1.losses.sparse_softmax_cross_entropy(
+        # Mask the pixels if bordering artifacts appear
+        valid_mask = tf.ones_like(keypoint_map) if valid_mask is None else valid_mask
+        valid_mask = tf.cast(valid_mask[..., tf.newaxis], tf.float32)  # for GPU
+        valid_mask = tf.nn.space_to_depth(valid_mask, self.config['grid_size'])
+        valid_mask = tf.reduce_prod(valid_mask, axis=3)  # AND along the channel dim
+        
+        # labels = tf.compat.v1.Print(labels,[tf.shape(labels), tf.shape(logits), tf.shape(logits)[-1], tf.rank(logits), tf.shape(valid_mask)], "labels, logits, valid_mask =")
+        #  output_stream="file:///media/terabyte/projects/SUPERPOINT/SuperPointIoannis/superpoint.info")
+        
+        loss = tf.compat.v1.losses.sparse_softmax_cross_entropy(
             labels=labels, logits=logits, weights=valid_mask)
-    return loss
+        
+        return loss
+
+class DescriptorHead(tf.keras.Model):
+    params_conv = {'padding': 'SAME', 'data_format': '',
+                   'batch_normalization': True,
+                   'training': False,
+                   'kernel_reg': 0.0}
+    def __init__(self, initializer=None, config={}, path=''):
+        super(DescriptorHead, self).__init__()
+        self.config = _extend_dict(config, DetectorHead.params_conv)
+        self.cfirst = (config['data_format'] == 'channels_first')
+        self.cindex = 1 if self.cfirst else -1
+        # with tf.compat.v1.variable_scope('detector', reuse=tf.compat.v1.AUTO_REUSE):
+        # just use a model instance twice or more times and it will have the same result 
+        self.conv1 = vgg_block(256, 3, 'conv1',
+                      activation=tf.nn.relu, **params_conv)
+        self.conv2 = vgg_block(config['descriptor_size'], 1, 'conv2',
+                      activation=None, **params_conv)
+    def call(self, features):
+        _x = self.conv1(features)
+        descriptors_raw = self.conv2(_x)
+        
+        desc = tf.transpose(descriptors_raw, [0, 2, 3, 1]) if self.cfirst else descriptors_raw
+        desc = tf.image.resize(
+            desc, self.config['grid_size'] * tf.shape(desc)[1:3])
+        desc = tf.transpose(desc, [0, 3, 1, 2]) if self.cfirst else desc
+        desc = tf.nn.l2_normalize(desc, self.cindex)
+        
+        return descriptors_raw, desc
+
+
+class DescriptorHeadLoss(tf.keras.losses.Loss):
+    def __init__(self, config):
+        super(DescriptorHeadLoss, self).__init__()
+
+    def call(self, y_true, y_pred):
+        keypoint_map = y_true[0]
+        valid_mask = y_true[1]
+        logits = y_pred[0]
 
 
 def descriptor_loss(descriptors, warped_descriptors, homographies,
@@ -261,8 +229,8 @@ def box_nms(prob, size, iou=0.1, min_prob=0.01, keep_top_k=0):
         size = tf.constant(size/2.)
         boxes = tf.concat([pts-size, pts+size], axis=1)
         scores = tf.gather_nd(prob, tf.cast(pts, dtype=tf.int32))
-        with tf.device('/cpu:0'):
-            indices = tf.image.non_max_suppression(
+
+        indices = tf.image.non_max_suppression(
                     boxes, scores, tf.shape(boxes)[0], iou)
         pts = tf.gather(pts, indices)
         scores = tf.gather(scores, indices)
