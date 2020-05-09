@@ -1,7 +1,7 @@
 import tensorflow as tf
 
 from .homographies import warp_points
-from .backbones.vgg import vgg_block
+from .backbones.vgg import VGGBlock
 
 
 
@@ -22,9 +22,9 @@ class DetectorHead(tf.keras.Model):
         self.cfirst = (config['data_format'] == 'channels_first')
         self.cindex = 1 if self.cfirst else -1
         # with tf.compat.v1.variable_scope('detector', reuse=tf.compat.v1.AUTO_REUSE):
-        self.conv1 = vgg_block(256, 3, 'conv1',
+        self.conv1 = VGGBlock(256, 3, 'conv1',
                       activation=tf.nn.relu, **self.config)
-        self.conv2 = vgg_block(1+pow(config['grid_size'], 2), 1, 'conv2',
+        self.conv2 = VGGBlock(1+pow(config['grid_size'], 2), 1, 'conv2',
                       activation=None, **self.config)
         
     def call(self, features):
@@ -56,7 +56,7 @@ class DetectorHeadLoss(tf.keras.losses.Loss):
         labels = tf.concat([2*labels, tf.ones(shape)], 3)
         # multiply by a small random matrix to randomly break ties in argmax
         labels = tf.argmax(labels * tf.compat.v1.random_uniform(tf.shape(labels), 0, 0.1),
-                       axis=3)
+                            axis=3)
 
         # Mask the pixels if bordering artifacts appear
         valid_mask = tf.ones_like(keypoint_map) if valid_mask is None else valid_mask

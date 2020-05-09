@@ -1,6 +1,6 @@
 import tensorflow as tf
 
-from .backbones.vgg import vgg_backbone
+from .backbones.vgg import VGGBackbone
 from . import utils
 
 
@@ -8,17 +8,17 @@ from . import utils
 class NetBackend(tf.keras.Model):
     def __init__(self, config={}, initializer=None, path=''):
         super(NetBackend, self).__init__()
-        self.features = vgg_backbone(initializer, path=path, **config)
-        self.detections = utils.detector_head(initializer, path=path, **config)
-        self.descriptors = utils.descriptor_head(initializer, path=path, **config)
+        self.features = VGGBackbone(initializer, path=path, **config)
+        self.detections = utils.DetectorHead(initializer, path=path, **config)
+        self.descriptors = utils.DescriptorHead(initializer, path=path, **config)
         
     def call(self, image):
         _features = self.features(image)
         _detections = self.detections(_features)
         _logits = _detections[0]
-        _prob = _detections[1]        
+        _prob = _detections[1]
         
-        _descriptors = self.descriptors(_features)        
+        _descriptors = self.descriptors(_features)
         _descriptors_raw = _descriptors[0]
         _desc_processed = _descriptors[1]
 
@@ -55,7 +55,6 @@ class SuperPoint(tf.keras.Model):
     input_spec = {
         'image': {'shape': [None, None, None, 1], 'type': tf.float32}
     }
-    required_config_keys = []
     default_config = {
         'data_format': 'channels_first',
         'grid_size': 8,
@@ -64,14 +63,13 @@ class SuperPoint(tf.keras.Model):
         'batch_size': 32,
         'learning_rate': 0.001,
         'lambda_d': 250,
-        'descriptor_size': 256,
         'positive_margin': 1,
         'negative_margin': 0.2,
         'lambda_loss': 0.0001,
         'nms': 0,
         'top_k': 0,
     }
-    def __init__(self, config={}, initializer=None,  training=True, path=''):
+    def __init__(self, config={}, initializer=None, training=True, path=''):
         super(SuperPoint, self).__init__()
         self.config=utils._extend_dict(config, SuperPoint.default_config)
         self.training = training
@@ -80,9 +78,9 @@ class SuperPoint(tf.keras.Model):
         self._net_image = NetBackend(config, initializer, path)
 
         # for warped image input
-        if self.training:
-            self._net_warped_image = NetBackend(config, initializer, path)
-
+        # the net backend is the same
+        # if self.training:
+        #     self._net_warped_image = NetBackend(config, initializer, path)
 
     def call(self, x):
         # x = image, warped image, homography
@@ -95,12 +93,12 @@ class SuperPoint(tf.keras.Model):
             warped_image = x[1]
             homography = x[2]
             # warped_results = net(inputs['warped']['image'])
-            _logits_warped, _prob_warped, _descriptors_raw_warped, _desc_processed_warped = self._net_warped_image(warped_image)
+            _logits_warped, _prob_warped, _descriptors_raw_warped, _desc_processed_warped = self._net_image(warped_image)
             ret_list = ret_list.extend([_logits_warped, _prob_warped, _descriptors_raw_warped, _desc_processed_warped])
         
         if self.config['nms']:
             _results_prob_nms = tf.map_fn(lambda p: utils.box_nms(
-                                            p, config['nms'], keep_top_k=config['top_k']), _prob)
+                                          p, self.config['nms'], keep_top_k=self.config['top_k']), _prob)
             pred = tf.cast(tf.greater_equal(
                                         _results_prob_nms, self.config['detection_threshold']), dtype=tf.int32)
         else:
@@ -116,12 +114,13 @@ class SuperPoint(tf.keras.Model):
         return ret_list 
 
 class SuperPointLoss(tf.keras.losses.Loss):
-    def __init__(self, config):
+    def __init__(self, config, hasWarped=False): # hasWarped=(training ==True) in this version 
         super(SuperPointLoss, self).__init__()
         self.config = config
-        
+        self.hasWarped = hasWarped   
         self.detector_loss = utils.DetectorHeadLoss(config)
-        self.warped_detector_loss = utils.DetectorHeadLoss(config)
+        if self.hasWarped:
+            self.warped_detector_loss = utils.DetectorHeadLoss(config)
         self.descriptor_loss = utils.DescriptorHeadLoss(config)
         
     def call(self, y_true, y_pred):
@@ -144,7 +143,13 @@ class SuperPointLoss(tf.keras.losses.Loss):
         # warped_detector_loss = utils.detector_loss(
         #         inputs['warped']['keypoint_map'], warped_logits,
         #         valid_mask=inputs['warped']['valid_mask'], **config)
-        _warped_detector_loss = self.warped_detector_loss([warped_keypoint_map, warped_valid_mask],[warped_logits])
+        if self.hasWarped:
+            _warped_detector_loss = self.warped_detector_loss([warped_keypoint_map, warped_valid_mask],[warped_logits])
+            tf.summary.scalar('detector_loss2', _warped_detector_loss)
+            L1 = _detector_loss + _warped_detector_loss
+        else:
+            L1 = _detector_loss
+        
         # Compute the loss for the descriptor head
         # descriptor_loss = utils.descriptor_loss(
         #         descriptors, warped_descriptors, outputs['homography'],
@@ -152,11 +157,9 @@ class SuperPointLoss(tf.keras.losses.Loss):
         _descriptor_loss = self.descriptor_loss([warped_descriptors_raw, warped_valid_mask, homography],
                                                 [descriptors_raw, None])
 
-        L1 = _detector_loss + _warped_detector_loss
         L2 = config['lambda_loss'] * _descriptor_loss
         
         tf.summary.scalar('detector_loss1', _detector_loss)
-        tf.summary.scalar('detector_loss2', _warped_detector_loss)
         tf.summary.scalar('detector_loss_full', L1)
         tf.summary.scalar('descriptor_loss', L2)
 
@@ -168,7 +171,7 @@ class SuperPointMetrics(tf.keras.metrics.Metric):
     def __init__(self, name='SuperPoint_metrics', **kwargs):
         super(SuperPointMetrics, self).__init__(name, **kwargs)
         self.precisions = self.add_weight(name='precision', initializer='zeros')
-        self.recalls = self.add_weight(name='recall', initializer='zeros')        
+        self.recalls = self.add_weight(name='recall', initializer='zeros')
     
     def update_state(self, y_true, y_pred, sample_weight=None):
         keypoint_map = y_true[0]
