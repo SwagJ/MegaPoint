@@ -71,9 +71,9 @@ class SuperPoint(tf.keras.Model):
         'nms': 0,
         'top_k': 0,
     }
-    def __init__(self, config=SuperPoint.default_config, initializer=None,  training=True, path=''):
+    def __init__(self, config={}, initializer=None,  training=True, path=''):
         super(SuperPoint, self).__init__()
-        self.config=config
+        self.config=utils._extend_dict(config, SuperPoint.default_config)
         self.training = training
         
         # for image input
@@ -101,94 +101,92 @@ class SuperPoint(tf.keras.Model):
         if self.config['nms']:
             _results_prob_nms = tf.map_fn(lambda p: utils.box_nms(
                                             p, config['nms'], keep_top_k=config['top_k']), _prob)
-            _results_pred = tf.cast(tf.greater_equal(
+            pred = tf.cast(tf.greater_equal(
                                         _results_prob_nms, self.config['detection_threshold']), dtype=tf.int32)
         else:
             _results_prob_nms = None
-            _results_pred = tf.cast(tf.greater_equal(
+            pred = tf.cast(tf.greater_equal(
                                         _prob, self.config['detection_threshold']), dtype=tf.int32)
 
-        ret_list.append(_results_pred)
+        ret_list.append(pred)
         ret_list.append(_results_prob_nms)
         # [_logits, _prob, _descriptors_raw, _desc_processed,  # 0 1 2 3
         # _logits_warped, _prob_warped, _descriptors_raw_warped, _desc_processed_warped, # 4 5 6 7 
-        # _results_pred, _results_prob_nms] # 8 9
+        # pred, _results_prob_nms] # 8 9
         return ret_list 
 
 class SuperPointLoss(tf.keras.losses.Loss):
-    def __init__(self):
+    def __init__(self, config):
         super(SuperPointLoss, self).__init__()
+        self.config = config
+        
+        self.detector_loss = utils.DetectorHeadLoss(config)
+        self.warped_detector_loss = utils.DetectorHeadLoss(config)
+        self.descriptor_loss = utils.DescriptorHeadLoss(config)
+        
     def call(self, y_true, y_pred):
-        pass
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    def _loss(self, outputs, inputs, **config):
-        logits = outputs['logits']
-        warped_logits = outputs['warped_results']['logits']
-        descriptors = outputs['descriptors_raw']
-        warped_descriptors = outputs['warped_results']['descriptors_raw']
-
-        # Switch to 'channels last' once and for all
-        if config['data_format'] == 'channels_first':
-            logits = tf.transpose(logits, [0, 2, 3, 1])
-            warped_logits = tf.transpose(warped_logits, [0, 2, 3, 1])
-            descriptors = tf.transpose(descriptors, [0, 2, 3, 1])
-            warped_descriptors = tf.transpose(warped_descriptors, [0, 2, 3, 1])
+        keypoint_map = y_true[0]
+        valid_mask = y_true[1]
+        warped_keypoint_map = y_true[2]
+        warped_valid_mask = y_true[3]
+        homography = y_true[4]
+        
+        logits = y_pred[0]
+        descriptors_raw = y_pred[2] # outputs['descriptors_raw']
+        warped_logits = y_pred[4] # outputs['warped_results']['logits']
+        warped_descriptors_raw = y_pred[6] # outputs['warped_results']['descriptors_raw']
 
         # Compute the loss for the detector head
-        detector_loss = utils.detector_loss(
-                inputs['keypoint_map'], logits,
-                valid_mask=inputs['valid_mask'], **config)
-        warped_detector_loss = utils.detector_loss(
-                inputs['warped']['keypoint_map'], warped_logits,
-                valid_mask=inputs['warped']['valid_mask'], **config)
-
+        # detector_loss = utils.detector_loss(
+        #         inputs['keypoint_map'], logits,
+        #         valid_mask=inputs['valid_mask'], **config)
+        _detector_loss = self.detector_loss([keypoint_map, valid_mask], [logits])
+        # warped_detector_loss = utils.detector_loss(
+        #         inputs['warped']['keypoint_map'], warped_logits,
+        #         valid_mask=inputs['warped']['valid_mask'], **config)
+        _warped_detector_loss = self.warped_detector_loss([warped_keypoint_map, warped_valid_mask],[warped_logits])
         # Compute the loss for the descriptor head
-        descriptor_loss = utils.descriptor_loss(
-                descriptors, warped_descriptors, outputs['homography'],
-                valid_mask=inputs['warped']['valid_mask'], **config)
+        # descriptor_loss = utils.descriptor_loss(
+        #         descriptors, warped_descriptors, outputs['homography'],
+        #         valid_mask=inputs['warped']['valid_mask'], **config)
+        _descriptor_loss = self.descriptor_loss([warped_descriptors_raw, warped_valid_mask, homography],
+                                                [descriptors_raw, None])
 
-        tf.summary.scalar('detector_loss1', detector_loss)
-        tf.summary.scalar('detector_loss2', warped_detector_loss)
-        tf.summary.scalar('detector_loss_full', detector_loss + warped_detector_loss)
-        tf.summary.scalar('descriptor_loss', config['lambda_loss'] * descriptor_loss)
+        L1 = _detector_loss + _warped_detector_loss
+        L2 = config['lambda_loss'] * _descriptor_loss
+        
+        tf.summary.scalar('detector_loss1', _detector_loss)
+        tf.summary.scalar('detector_loss2', _warped_detector_loss)
+        tf.summary.scalar('detector_loss_full', L1)
+        tf.summary.scalar('descriptor_loss', L2)
 
-        loss = (detector_loss + warped_detector_loss
-                + config['lambda_loss'] * descriptor_loss)
+        loss = L1 + L2
+
         return loss
 
-    def _metrics(self, outputs, inputs, **config):
-        pred = inputs['valid_mask'] * outputs['pred']
-        labels = inputs['keypoint_map']
-
+class SuperPointMetrics(tf.keras.metrics.Metric):
+    def __init__(self, name='SuperPoint_metrics', **kwargs):
+        super(SuperPointMetrics, self).__init__(name, **kwargs)
+        self.precisions = self.add_weight(name='precision', initializer='zeros')
+        self.recalls = self.add_weight(name='recall', initializer='zeros')        
+    
+    def update_state(self, y_true, y_pred, sample_weight=None):
+        keypoint_map = y_true[0]
+        valid_mask = y_true[1]
+        warped_keypoint_map = y_true[2]
+        warped_valid_mask = y_true[3]
+        homography = y_true[4]
+        
+        pred = y_pred[8]
+        
+        _pred = valid_mask * pred
+        labels = keypoint_map
+        
         precision = tf.reduce_sum(pred * labels) / tf.reduce_sum(pred)
         recall = tf.reduce_sum(pred * labels) / tf.reduce_sum(labels)
 
-        return {'precision': precision, 'recall': recall}
+        self.precisions.assign_add(precision)
+        self.recalls.assign_add(recall)
+        
+    def result(self):
+        return [self.precisions, self.recalls]
