@@ -75,7 +75,7 @@ class SuperPoint(tf.keras.Model):
         self.config=utils._extend_dict(config, default_config)
         
         # for image input
-        self._net_image = NetBackend(self.config, initializer, path)
+        self._net_image = NetBackend(self.config, initializer, path + 'superpoint/')
 
         # for warped image input
         # the net backend is the same

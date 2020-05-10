@@ -29,11 +29,12 @@ class DetectorHead(tf.keras.Model):
 
         self.cfirst = (config['data_format'] == 'channels_first')
         self.cindex = 1 if self.cfirst else -1
+        _path = path + 'detector/'
         # with tf.compat.v1.variable_scope('detector', reuse=tf.compat.v1.AUTO_REUSE):
         self.conv1 = VGGBlock(256, 3, 'conv1',
-                      activation=tf.nn.relu, **self.config)
+                      activation=tf.nn.relu, path=(_path+'conv1/'), initializer=initializer, **self.config)
         self.conv2 = VGGBlock(1+pow(self.config['grid_size'], 2), 1, 'conv2',
-                      activation=None, **self.config)
+                      activation=None, path=(_path+'conv2/'), initializer=initializer, **self.config)
     
     def call(self, features):
         _x = self.conv1(features)
@@ -90,12 +91,13 @@ class DescriptorHead(tf.keras.Model):
         self.config = _correct_dict(DetectorHead.params_conv, config)
         self.cfirst = (config['data_format'] == 'channels_first')
         self.cindex = 1 if self.cfirst else -1
+        _path = path + 'descriptor/'
         # with tf.compat.v1.variable_scope('detector', reuse=tf.compat.v1.AUTO_REUSE):
         # just use a model instance twice or more times and it will have the same result 
         self.conv1 = VGGBlock(256, 3, 'conv1',
-                      activation=tf.nn.relu, **self.config)
+                      activation=tf.nn.relu, path=(_path+'conv1/'), initializer=initializer, **self.config)
         self.conv2 = VGGBlock(config['descriptor_size'], 1, 'conv2',
-                      activation=None, **self.config)
+                      activation=None, path=(_path+'conv2/'), initializer=initializer, **self.config)
     def call(self, features):
         _x = self.conv1(features)
         descriptors_raw = self.conv2(_x)

@@ -2,51 +2,47 @@ import tensorflow as tf
 import numpy as numpy
 
 class ConstantWeightsInitializer(object):
-    def __init__(self, weightsDictionary):
+    def __init__(self, weights_dictionary, debug_mode=False):
         """ Initialize weights in the Hourglass model
         Arguments:
-            weightsDictionary {dictionary} -- dictionary of numpy arrays holding the weights of each
+            weights_dictionary {dictionary} -- dictionary of numpy arrays holding the weights of each
         """
-        self.weightsDictionary = weightsDictionary
-            
-    def conv2d_kernel(self, path, index=0):
-        if index > 0:
-            conv2dChoice = 'conv2d_{}/kernel'.format(index)
-        else:
-            conv2dChoice = 'conv2d/kernel'
-        return tf.constant_initializer(self.weightsDictionary[path + conv2dChoice])            
+        self.weights_dictionary = weights_dictionary
+        self.debug_mode = debug_mode
+        if debug_mode:
+            self.all_used_paths = []
+    def conv2d_kernel(self, path):
+        conv2dChoice = 'conv/kernel'
+        if self.debug_mode:
+            self.all_used_paths.append(path + conv2dChoice)
+        return tf.constant_initializer(self.weights_dictionary[path + conv2dChoice])            
     
-    def conv2d_bias(self, path, index=0):
-        if index > 0:
-            conv2dChoice = 'conv2d_{}/bias'.format(index)
-        else:
-            conv2dChoice = 'conv2d/bias'
-        return tf.constant_initializer(self.weightsDictionary[path +conv2dChoice])
+    def conv2d_bias(self, path):
+        conv2dChoice = 'conv/bias'
+        if self.debug_mode:
+            self.all_used_paths.append(path + conv2dChoice)
+        return tf.constant_initializer(self.weights_dictionary[path +conv2dChoice])
     
-    def BN_mean(self, path, index=0):
-        if index > 0:
-            bnChoice = 'batch_normalization_{}/moving_mean'.format(index)
-        else:
-            bnChoice = 'batch_normalization/moving_mean'
-        return tf.constant_initializer(self.weightsDictionary[path + bnChoice])
+    def BN_mean(self, path):
+        bnChoice = 'bn/moving_mean'
+        if self.debug_mode:
+            self.all_used_paths.append(path + bnChoice)
+        return tf.constant_initializer(self.weights_dictionary[path + bnChoice])
     
-    def BN_variance(self, path, index=0):
-        if index > 0:
-            bnChoice = 'batch_normalization_{}/moving_variance'.format(index)
-        else:
-            bnChoice = 'batch_normalization/moving_variance' 
-        return tf.constant_initializer(self.weightsDictionary[path + bnChoice])
+    def BN_variance(self, path):
+        bnChoice = 'bn/moving_variance'
+        if self.debug_mode:
+            self.all_used_paths.append(path + bnChoice)
+        return tf.constant_initializer(self.weights_dictionary[path + bnChoice])
     
-    def BN_gamma(self, path, index=0):
-        if index > 0:
-            bnChoice = 'batch_normalization_{}/gamma'.format(index)
-        else:
-            bnChoice = 'batch_normalization/gamma'
-        return tf.constant_initializer(self.weightsDictionary[path + bnChoice])
+    def BN_gamma(self, path):
+        bnChoice = 'bn/gamma'
+        if self.debug_mode:
+            self.all_used_paths.append(path + bnChoice)
+        return tf.constant_initializer(self.weights_dictionary[path + bnChoice])
     
-    def BN_beta(self, path, index=0):
-        if index > 0:
-            bnChoice = 'batch_normalization_{}/beta'.format(index)
-        else:
-            bnChoice = 'batch_normalization/beta'
-        return tf.constant_initializer(self.weightsDictionary[path + bnChoice])
+    def BN_beta(self, path):
+        bnChoice = 'bn/beta'
+        if self.debug_mode:
+            self.all_used_paths.append(path + bnChoice)
+        return tf.constant_initializer(self.weights_dictionary[path + bnChoice])
