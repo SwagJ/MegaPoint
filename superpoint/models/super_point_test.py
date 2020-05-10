@@ -36,8 +36,9 @@ if __name__ == "__main__":
     sp.trainable = True
     x = tf.zeros((1,256,256,1))
     wx = tf.zeros((1,256,256,1))
-    out = sp.call({'image':x, 'warped': {'image': wx}})
-    print(out[0])
+    # out = sp.call({'image':x, 'warped': {'image': wx}})
+    # print(out[1])
+    sp.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=conf['learning_rate']), loss=super_point.SuperPointLoss(conf), metrics=super_point.SuperPointMetrics())
     with open('debug.txt', 'w') as fw:
         for var in tf.compat.v1.global_variables():
             print(var.name, file=fw)

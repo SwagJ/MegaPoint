@@ -9,16 +9,16 @@ class NetBackend(tf.keras.Model):
     def __init__(self, config={}, initializer=None, path=''):
         super(NetBackend, self).__init__()
         self.features = VGGBackbone(config, initializer, path=path)
-        self.detections = utils.DetectorHead(config, initializer, path=path)
-        self.descriptors = utils.DescriptorHead(config, initializer, path=path)
+        self.detector = utils.DetectorHead(config, initializer, path=path)
+        self.descriptor = utils.DescriptorHead(config, initializer, path=path)
         
     def call(self, image):
         _features = self.features(image)
-        _detections = self.detections(_features)
+        _detections = self.detector(_features)
         _logits = _detections[0]
         _prob = _detections[1]
         
-        _descriptors = self.descriptors(_features)
+        _descriptors = self.descriptor(_features)
         _descriptors_raw = _descriptors[0]
         _desc_processed = _descriptors[1]
 
