@@ -1,32 +1,40 @@
 import tensorflow as tf
 
-from .homographies import warp_points
-from .backbones.vgg import VGGBlock
+from homographies import warp_points
+from backbones.vgg import VGGBlock
 
 
 
 def _extend_dict(dict_to_extend, other_dict):
     for conf_key in other_dict.keys():
         if(conf_key not in dict_to_extend.keys()):
-            self.config[conf_key] = other_dict[conf_key]
+            dict_to_extend[conf_key] = other_dict[conf_key]
     return dict_to_extend
+
+def _correct_dict(dict_to_correct, other_dict):
+    for conf_key in other_dict.keys():
+        if(conf_key in dict_to_correct.keys()):
+            dict_to_correct[conf_key] = other_dict[conf_key]
+    return dict_to_correct
 
 class DetectorHead(tf.keras.Model):
     params_conv = {'padding': 'SAME', 'data_format': '',
                    'batch_normalization': True,
                    'training': False,
                    'kernel_reg': 0.}
-    def __init__(self, initializer=None, config={}, path=''):
+    def __init__(self, config={}, initializer=None, path=''):
         super(DetectorHead, self).__init__()
-        self.config = _extend_dict(config, DetectorHead.params_conv)
+        self.config = _correct_dict(DetectorHead.params_conv, config)
+        self.config['grid_size'] = config['grid_size']
+
         self.cfirst = (config['data_format'] == 'channels_first')
         self.cindex = 1 if self.cfirst else -1
         # with tf.compat.v1.variable_scope('detector', reuse=tf.compat.v1.AUTO_REUSE):
         self.conv1 = VGGBlock(256, 3, 'conv1',
                       activation=tf.nn.relu, **self.config)
-        self.conv2 = VGGBlock(1+pow(config['grid_size'], 2), 1, 'conv2',
+        self.conv2 = VGGBlock(1+pow(self.config['grid_size'], 2), 1, 'conv2',
                       activation=None, **self.config)
-        
+    
     def call(self, features):
         _x = self.conv1(features)
         logits = self.conv2(_x)
@@ -35,7 +43,7 @@ class DetectorHead(tf.keras.Model):
         # Strip the extra “no interest point” dustbin
         prob = prob[:, :-1, :, :] if self.cfirst else prob[:, :, :, :-1]
         prob = tf.nn.depth_to_space(
-                prob, config['grid_size'], data_format='NCHW' if self.cfirst else 'NHWC')
+                prob, self.config['grid_size'], data_format='NCHW' if self.cfirst else 'NHWC')
         prob = tf.squeeze(prob, axis=self.cindex)
 
         return logits, prob
@@ -77,17 +85,17 @@ class DescriptorHead(tf.keras.Model):
                    'batch_normalization': True,
                    'training': False,
                    'kernel_reg': 0.0}
-    def __init__(self, initializer=None, config={}, path=''):
+    def __init__(self, config={}, initializer=None, path=''):
         super(DescriptorHead, self).__init__()
-        self.config = _extend_dict(config, DetectorHead.params_conv)
+        self.config = _correct_dict(DetectorHead.params_conv, config)
         self.cfirst = (config['data_format'] == 'channels_first')
         self.cindex = 1 if self.cfirst else -1
         # with tf.compat.v1.variable_scope('detector', reuse=tf.compat.v1.AUTO_REUSE):
         # just use a model instance twice or more times and it will have the same result 
-        self.conv1 = vgg_block(256, 3, 'conv1',
-                      activation=tf.nn.relu, **params_conv)
-        self.conv2 = vgg_block(config['descriptor_size'], 1, 'conv2',
-                      activation=None, **params_conv)
+        self.conv1 = VGGBlock(256, 3, 'conv1',
+                      activation=tf.nn.relu, **self.config)
+        self.conv2 = VGGBlock(config['descriptor_size'], 1, 'conv2',
+                      activation=None, **self.config)
     def call(self, features):
         _x = self.conv1(features)
         descriptors_raw = self.conv2(_x)

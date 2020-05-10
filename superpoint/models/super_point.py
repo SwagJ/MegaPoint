@@ -1,16 +1,16 @@
 import tensorflow as tf
 
-from .backbones.vgg import VGGBackbone
-from . import utils
+from backbones.vgg import VGGBackbone
+import utils
 
 
 
 class NetBackend(tf.keras.Model):
     def __init__(self, config={}, initializer=None, path=''):
         super(NetBackend, self).__init__()
-        self.features = VGGBackbone(initializer, path=path, **config)
-        self.detections = utils.DetectorHead(initializer, path=path, **config)
-        self.descriptors = utils.DescriptorHead(initializer, path=path, **config)
+        self.features = VGGBackbone(config, initializer, path=path)
+        self.detections = utils.DetectorHead(config, initializer, path=path)
+        self.descriptors = utils.DescriptorHead(config, initializer, path=path)
         
     def call(self, image):
         _features = self.features(image)
@@ -52,30 +52,30 @@ class NetBackendLoss(tf.keras.losses.Loss):
             descriptor_loss = self.descriptor_loss(valid_mask, [descriptors, homography])
 
 class SuperPoint(tf.keras.Model):
-    input_spec = {
-        'image': {'shape': [None, None, None, 1], 'type': tf.float32}
-    }
-    default_config = {
-        'data_format': 'channels_first',
-        'grid_size': 8,
-        'detection_threshold': 0.4,
-        'descriptor_size': 256,
-        'batch_size': 32,
-        'learning_rate': 0.001,
-        'lambda_d': 250,
-        'positive_margin': 1,
-        'negative_margin': 0.2,
-        'lambda_loss': 0.0001,
-        'nms': 0,
-        'top_k': 0,
-    }
-    def __init__(self, config={}, initializer=None, training=True, path=''):
+    def __init__(self, config={}, training=False, initializer=None, path=''):
         super(SuperPoint, self).__init__()
-        self.config=utils._extend_dict(config, SuperPoint.default_config)
+        input_spec = {
+            'image': {'shape': [None, None, None, 1], 'type': tf.float32}
+        }
+        default_config = {
+            'data_format': 'channels_last',
+            'grid_size': 8,
+            'detection_threshold': 0.4,
+            'descriptor_size': 256,
+            'batch_size': 32,
+            'learning_rate': 0.001,
+            'lambda_d': 250,
+            'positive_margin': 1,
+            'negative_margin': 0.2,
+            'lambda_loss': 0.0001,
+            'nms': 0,
+            'top_k': 0,
+        }
         self.training = training
+        self.config=utils._extend_dict(config, default_config)
         
         # for image input
-        self._net_image = NetBackend(config, initializer, path)
+        self._net_image = NetBackend(self.config, initializer, path)
 
         # for warped image input
         # the net backend is the same
@@ -87,14 +87,14 @@ class SuperPoint(tf.keras.Model):
         image = x[0]
         ret_list = []
         _logits, _prob, _descriptors_raw, _desc_processed = self._net_image(image)
-        ret_list = ret_list.extend([_logits, _prob, _descriptors_raw, _desc_processed])
+        ret_list.extend([_logits, _prob, _descriptors_raw, _desc_processed])
         
         if self.training:
             warped_image = x[1]
-            homography = x[2]
+            # homography = x[2]
             # warped_results = net(inputs['warped']['image'])
             _logits_warped, _prob_warped, _descriptors_raw_warped, _desc_processed_warped = self._net_image(warped_image)
-            ret_list = ret_list.extend([_logits_warped, _prob_warped, _descriptors_raw_warped, _desc_processed_warped])
+            ret_list.extend([_logits_warped, _prob_warped, _descriptors_raw_warped, _desc_processed_warped])
         
         if self.config['nms']:
             _results_prob_nms = tf.map_fn(lambda p: utils.box_nms(
