@@ -5,7 +5,7 @@ import yaml
 import super_point
 import initializer
 
-tf.compat.v1.disable_eager_execution()
+# tf.compat.v1.disable_eager_execution()
 
 CONFIG_FILEPATH = '../configs/superpoint_coco.yaml'
 WEIGHTS_FILEPATH= '../../pretrained_models/weights.pkl.npy'
@@ -37,6 +37,7 @@ if __name__ == "__main__":
     x = tf.zeros((1,256,256,1))
     wx = tf.zeros((1,256,256,1))
     out = sp.call({'image':x, 'warped': {'image': wx}})
+    print(out[0])
     with open('debug.txt', 'w') as fw:
         for var in tf.compat.v1.global_variables():
             print(var.name, file=fw)
