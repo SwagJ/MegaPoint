@@ -52,8 +52,8 @@ class NetBackendLoss(tf.keras.losses.Loss):
             descriptor_loss = self.descriptor_loss(valid_mask, [descriptors, homography])
 
 class SuperPoint(tf.keras.Model):
-    def __init__(self, config={}, training=False, initializer=None, path=''):
-        super(SuperPoint, self).__init__()
+    def __init__(self, config={}, training=False, initializer=None, path='', name='superpoint'):
+        super(SuperPoint, self).__init__(name=name)
         input_spec = {
             'image': {'shape': [None, None, None, 1], 'type': tf.float32}
         }
@@ -84,13 +84,13 @@ class SuperPoint(tf.keras.Model):
 
     def call(self, x):
         # x = image, warped image, homography
-        image = x[0]
+        image = x['image']
         ret_list = []
         _logits, _prob, _descriptors_raw, _desc_processed = self._net_image(image)
         ret_list.extend([_logits, _prob, _descriptors_raw, _desc_processed])
         
         if self.training:
-            warped_image = x[1]
+            warped_image = x['warped']['image']
             # homography = x[2]
             # warped_results = net(inputs['warped']['image'])
             _logits_warped, _prob_warped, _descriptors_raw_warped, _desc_processed_warped = self._net_image(warped_image)

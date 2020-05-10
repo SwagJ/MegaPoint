@@ -3,10 +3,12 @@ import numpy as np
 import tensorflow as tf
 import yaml
 import super_point
+import initializer
 
 tf.compat.v1.disable_eager_execution()
 
 CONFIG_FILEPATH = '../configs/superpoint_coco.yaml'
+WEIGHTS_FILEPATH= ''
 
 if __name__ == "__main__":
     with open(CONFIG_FILEPATH, 'r') as fr:
@@ -27,10 +29,15 @@ if __name__ == "__main__":
     #     'top_k': 600,
     #     'training': True
     # }
-    
-    sp = super_point.SuperPoint(config=conf, training=True)
+    # weightsDictionary = np.load(WEIGHTS_FILEPATH)
+    # cw_init = initializer.ConstantWeightsInitializer(weightsDictionary)
+    cw_init=None
+    sp = super_point.SuperPoint(config=conf, training=True, initializer=cw_init, name='superpoint')
     sp.trainable = True
     x = tf.zeros((1,256,256,1))
     wx = tf.zeros((1,256,256,1))
-    out = sp.call([x,wx])
+    out = sp.call({'image':x, 'warped': {'image': wx}})
+    for var in tf.compat.v1.global_variables():
+        print(var.name)
+    
     print("FINISHED")
