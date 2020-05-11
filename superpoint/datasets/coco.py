@@ -52,16 +52,16 @@ class Coco(BaseDataset):
             for i,n in enumerate(names):
                 p = Path(EXPER_PATH, config['labels'], '{}.npz'.format(n))
                 
-                # assert p.exists(), 'Image {} has no corresponding label {}'.format(n, p)
-                # label_paths.append(str(p))
-                if p.exists():
-                    label_paths.append(str(p))
-                else:
-                    indicesToRemove.append(i)
-            # indicesToRemove.sort(reverse=True)
-            for i in indicesToRemove:
-                names.pop(i)
-                image_paths.pop(i)
+                assert p.exists(), 'Image {} has no corresponding label {}'.format(n, p)
+                label_paths.append(str(p))
+            #     if p.exists():
+            #         label_paths.append(str(p))
+            #     else:
+            #         indicesToRemove.append(i)
+            # # indicesToRemove.sort(reverse=True)
+            # for i in indicesToRemove:
+            #     names.pop(i)
+            #     image_paths.pop(i)
             files['label_paths'] = label_paths
 
         files['image_paths'] = image_paths

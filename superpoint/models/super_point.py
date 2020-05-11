@@ -1,7 +1,7 @@
 import tensorflow as tf
 
-from backbones.vgg import VGGBackbone
-import utils
+from .backbones.vgg import VGGBackbone
+from . import utils
 
 
 

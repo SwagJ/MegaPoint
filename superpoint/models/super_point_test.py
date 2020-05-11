@@ -5,7 +5,6 @@ import yaml
 import super_point
 import initializer
 
-# tf.compat.v1.disable_eager_execution()
 
 CONFIG_FILEPATH = '../configs/superpoint_coco.yaml'
 WEIGHTS_FILEPATH= '../../pretrained_models/weights.pkl.npy'

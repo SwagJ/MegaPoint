@@ -1,7 +1,7 @@
 import tensorflow as tf
 
-from homographies import warp_points
-from backbones.vgg import VGGBlock
+from .homographies import warp_points
+from .backbones.vgg import VGGBlock
 
 
 
@@ -241,7 +241,7 @@ def box_nms(prob, size, iou=0.1, min_prob=0.01, keep_top_k=0):
     """
     with tf.name_scope('box_nms'):
         pts = tf.cast(tf.where(tf.greater_equal(prob, min_prob)), tf.float32)
-        size = tf.constant(size/2.)
+        size = tf.constant(size/2.0, dtype=tf.float32)
         boxes = tf.concat([pts-size, pts+size], axis=1)
         scores = tf.gather_nd(prob, tf.cast(pts, dtype=tf.int32))
 

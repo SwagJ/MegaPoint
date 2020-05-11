@@ -46,5 +46,6 @@ model:
     detection_threshold: 0.001
     nms: 4
     top_k: 600
+    training: true
 train_iter: 600000
 validation_interval: 5000
