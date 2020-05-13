@@ -15,7 +15,7 @@ def parse_primitives(names, all_primitives):
     return p
 
 
-def photometric_augmentation(data, **config):
+def photometric_augmentation(img, **config):
     with tf.name_scope('photometric_augmentation'):
         primitives = parse_primitives(config['primitives'], photaug.augmentations)
         prim_configs = [config['params'].get(
@@ -33,12 +33,12 @@ def photometric_augmentation(data, **config):
             return i + 1, image
 
         _, image = tf.while_loop(lambda i, image: tf.less(i, len(primitives)),
-                                 step, [0, data['image']], parallel_iterations=1)
+                                 step, [0, img], parallel_iterations=1)
 
-    return {**data, 'image': image}
+    return image
 
 
-def homographic_augmentation(data, add_homography=False, **config):
+def homographic_augmentation(data, add_homography=False, warped_pair_enable=False, **config):
     with tf.name_scope('homographic_augmentation'):
         image_shape = tf.shape(data['image'])[:2]
         homography = sample_homography(image_shape, **config['params'])[0]
@@ -49,11 +49,23 @@ def homographic_augmentation(data, add_homography=False, **config):
 
         warped_points = warp_points(data['keypoints'], homography)
         warped_points = filter_points(warped_points, image_shape)
+    
+    # if config['warped_pair']['enable'] then add prefix
+    # because additional warped data have to be added to the dataset
+    # Otherwise
+    # all data are transformed according to a homographic transform
+    # keeping their names 
+    if warped_pair_enable:
+        prefix = 'warped/'
+    else:
+        prefix = ''
 
-    ret = {**data, 'image': warped_image, 'keypoints': warped_points,
-           'valid_mask': valid_mask}
+    ret = {'{}image'.format(prefix): warped_image, '{}keypoints'.format(prefix): warped_points,
+           '{}valid_mask'.format(prefix): valid_mask}
+    
     if add_homography:
-        ret['homography'] = homography
+        ret['{}homography'.format(prefix)] = homography
+    
     return ret
 
 
@@ -63,13 +75,13 @@ def add_dummy_valid_mask(data):
     return {**data, 'valid_mask': valid_mask}
 
 
-def add_keypoint_map(data):
+def add_keypoint_map(img, keypoints):
     with tf.name_scope('add_keypoint_map'):
-        image_shape = tf.shape(data['image'])[:2]
-        kp = tf.minimum(tf.cast(tf.round(data['keypoints']), dtype=tf.int32), image_shape-1)
+        image_shape = tf.shape(img)[:2]
+        kp = tf.minimum(tf.cast(keypoints, dtype=tf.int32), image_shape-1)
         kmap = tf.scatter_nd(
                 kp, tf.ones([tf.shape(kp)[0]], dtype=tf.int32), image_shape)
-    return {**data, 'keypoint_map': kmap}
+    return kmap
 
 
 def downsample(image, coordinates, **config):

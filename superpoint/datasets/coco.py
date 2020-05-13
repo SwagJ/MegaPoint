@@ -75,7 +75,7 @@ class Coco(BaseDataset):
     def _get_data(self, files, split_name, **config):
         has_keypoints = 'label_paths' in files
         is_training = split_name == 'training'
-
+        
         def _read_image(path):
             image = tf.io.read_file(path)
             image = tf.image.decode_jpeg(image, channels=3)
@@ -84,8 +84,11 @@ class Coco(BaseDataset):
         def _preprocess(image):
             image = tf.image.rgb_to_grayscale(image)
             if config['preprocessing']['resize']:
-                image = pipeline.ratio_preserving_resize(image,
-                                                         **config['preprocessing'])
+                # image = pipeline.ratio_preserving_resize(image,
+                #                                          **config['preprocessing'])
+                image = tf.image.resize(image, config['preprocessing']['resize'],
+                                       method=tf.image.ResizeMethod.GAUSSIAN,
+                                       preserve_aspect_ratio=True)
             return image
         
         # Python function
@@ -96,6 +99,7 @@ class Coco(BaseDataset):
         images = tf.data.Dataset.from_tensor_slices(files['image_paths'])
         images = images.map(_read_image)
         images = images.map(_preprocess)
+        
         data = tf.data.Dataset.zip({'image': images, 'name': names})
         
         # Add keypoints
@@ -120,33 +124,90 @@ class Coco(BaseDataset):
         if config['warped_pair']['enable']:
             assert has_keypoints
             warped = data.map_parallel(lambda d: pipeline.homographic_augmentation(
-                d, add_homography=True, **config['warped_pair']))
+                d, warped_pair_enable=True, add_homography=True, **config['warped_pair']))
+          
             if is_training and config['augmentation']['photometric']['enable']:
-                warped = warped.map_parallel(lambda d: pipeline.photometric_augmentation(
-                    d, **config['augmentation']['photometric']))
-            warped = warped.map_parallel(pipeline.add_keypoint_map)
+                warped = warped.map_parallel(lambda w: {**w, 
+                                                        'warped/image': pipeline.photometric_augmentation(
+                    w['warped/image'], **config['augmentation']['photometric'])})
+            
+            warped = warped.map_parallel(lambda w: {**w, 
+                                            'warped/keypoint_map': pipeline.add_keypoint_map(w['warped/image'],
+                                                                                             w['warped/keypoints'])})
+            
             # Merge with the original data
+            # for key in warped.keys():
+                # data['warped/'+key] = warped[key]
             data = tf.data.Dataset.zip((data, warped))
-            data = data.map(lambda d, w: {**d, 'warped': w})
+            data = data.map_parallel(lambda d, w: {**d, **w})
 
         # Data augmentation
         if has_keypoints and is_training:
             if config['augmentation']['photometric']['enable']:
-                data = data.map_parallel(lambda d: pipeline.photometric_augmentation(
-                    d, **config['augmentation']['photometric']))
+                data = data.map_parallel(lambda d: {**d, 'image' : pipeline.photometric_augmentation(
+                    d['image'], **config['augmentation']['photometric'])})
             if config['augmentation']['homographic']['enable']:
                 assert not config['warped_pair']['enable']  # doesn't support hom. aug.
                 data = data.map_parallel(lambda d: pipeline.homographic_augmentation(
-                    d, **config['augmentation']['homographic']))
+                    d, warped_pair_enable=False, **config['augmentation']['homographic']))
         
         # Generate the keypoint map
         if has_keypoints:
-            data = data.map_parallel(pipeline.add_keypoint_map)
+            data = data.map_parallel(lambda d: {**d, 
+                                                'keypoint_map' : pipeline.add_keypoint_map(d['image'],
+                                                                                           d['keypoints'])})
         data = data.map_parallel(
             lambda d: {**d, 'image': tf.cast(d['image'], tf.float32) / 255.})
+        
         if config['warped_pair']['enable']:
             data = data.map_parallel(
                 lambda d: {
-                    **d, 'warped': {**d['warped'],
-                                    'image': tf.cast(d['warped']['image'], tf.float32) / 255.}})
-        return data
+                    **d, 'warped/image': tf.cast(d['warped/image'], tf.float32) / 255.})
+        
+        # inputs = data.map_parallel(lambda d: {'image' : d['image'], 
+        #                                       'warped/image' : d['warped/image']})
+        # inputs = data.map_parallel(lambda d: [d['image'], 
+        #                                       d['warped/image']])
+        # targets = data.map_parallel(lambda d : {
+        #     'keypoint_map' : d['keypoint_map'],
+        #     'valid_mask' : d['valid_mask'],
+        #     'warped/keypoint_map' : d['warped/keypoint_map'],
+        #     'warped/valid_mask' : d['warped/valid_mask'],
+        #     'homography' : d['warped/homography']
+        # })
+        # targets = data.map_parallel(lambda d : [
+        #     d['keypoint_map'],
+        #     d['valid_mask'],
+        #     d['warped/keypoint_map'],
+        #     d['warped/valid_mask'],
+        #     d['warped/homography'] ])
+        
+        # tf.data.Dataset.zip causes segmentation fault
+        # if not config['warped_pair']['enable']:
+        #     return data.map(lambda d :
+        #         ([d['image']],
+        #          [d['keypoint_map'], d['valid_mask']]))
+        # else:
+        #     return data.map(lambda d :
+        #         ({'image' : d['image'], 'warped/image' : d['warped/image']},
+        #          {'keypoint_map' : d['keypoint_map'],
+        #           'valid_mask' : d['valid_mask'],
+        #           'warped/keypoint_map' : d['warped/keypoint_map'],
+        #           'warped/valid_mask' : d['warped/valid_mask'],
+        #           'homography' : d['warped/homography']}))
+        
+        return data.map_parallel(
+            lambda d: {
+              'input_1' : d['image'], 'input_2' : d['warped/image'],
+              'target_1' : d['keypoint_map'],
+              'target_2' : d['valid_mask'],
+              'target_3' : d['warped/keypoint_map'],
+              'target_4' : d['warped/valid_mask'],
+              'target_5' : d['warped/homography']                
+            }
+        )
+        #return data.map(lambda d :
+        #         {'input':[d['image'], d['warped/image']],
+
+        #          'output':[d['keypoint_map'], d['valid_mask'],
+        #           d['warped/keypoint_map'], d['warped/valid_mask'], d['warped/homography']]} ))

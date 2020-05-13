@@ -3,6 +3,9 @@ data:
     cache_in_memory: false
     validation_size: 96
     labels: magic-point_coco-export1  # use your own labels here
+    preprocessing:
+        blur_size: 21
+        resize: [240, 320]  # Should be multiples of 8
     augmentation:
         photometric:
             enable: true

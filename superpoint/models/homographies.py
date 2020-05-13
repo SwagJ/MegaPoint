@@ -245,8 +245,9 @@ def flat2mat(H):
     """
     Converts a flattened homography transformation with shape `[1, 8]` to its
     corresponding homography matrix with shape `[1, 3, 3]`.
+    Extended to 3 Dimensions in case of batches are used
     """
-    return tf.reshape(tf.concat([H, tf.ones([tf.shape(H)[0], 1])], axis=1), [-1, 3, 3])
+    return tf.reshape(tf.concat([H, tf.ones(tf.concat([tf.shape(H)[0:-1], [1]], axis=0))], axis=1), [-1, 3, 3])
 
 
 def mat2flat(H):

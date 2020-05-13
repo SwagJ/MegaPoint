@@ -59,7 +59,7 @@ class DetectorHeadLoss(tf.keras.losses.Loss):
         valid_mask = y_true[1]
         logits = y_pred[0]
         # Convert the boolean labels to indices including the "no interest point" dustbin
-        labels = tf.cast(keypoint_map[..., tf.newaxis], tf.float32)  # for GPU
+        labels = tf.cast(tf.expand_dims(keypoint_map, -1), tf.float32)  # for GPU
         labels = tf.nn.space_to_depth(labels, self.config['grid_size'])
         shape = tf.concat([tf.shape(labels)[:3], [1]], axis=0)
         labels = tf.concat([2*labels, tf.ones(shape)], 3)
@@ -69,7 +69,7 @@ class DetectorHeadLoss(tf.keras.losses.Loss):
 
         # Mask the pixels if bordering artifacts appear
         valid_mask = tf.ones_like(keypoint_map) if valid_mask is None else valid_mask
-        valid_mask = tf.cast(valid_mask[..., tf.newaxis], tf.float32)  # for GPU
+        valid_mask = tf.cast(tf.expand_dims(valid_mask, -1), tf.float32)  # for GPU
         valid_mask = tf.nn.space_to_depth(valid_mask, self.config['grid_size'])
         valid_mask = tf.reduce_prod(valid_mask, axis=3)  # AND along the channel dim
         
