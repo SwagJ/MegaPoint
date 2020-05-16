@@ -16,6 +16,7 @@ export EXPER_PATH=/cluster/scratch/${USERNAME}/outputs
 module load eth_proxy gcc/6.3.0 python_gpu/3.7.4 cuda/10.1.243 openblas/0.2.19
 #install requirement
 pip install -r requirements.txt
+pip install --upgrade tensorflow_addons
 pip install -e .
 
 #initial setup
