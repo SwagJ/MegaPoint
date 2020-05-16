@@ -54,14 +54,6 @@ class Coco(BaseDataset):
                 
                 assert p.exists(), 'Image {} has no corresponding label {}'.format(n, p)
                 label_paths.append(str(p))
-            #     if p.exists():
-            #         label_paths.append(str(p))
-            #     else:
-            #         indicesToRemove.append(i)
-            # # indicesToRemove.sort(reverse=True)
-            # for i in indicesToRemove:
-            #     names.pop(i)
-            #     image_paths.pop(i)
             files['label_paths'] = label_paths
 
         files['image_paths'] = image_paths
@@ -83,12 +75,12 @@ class Coco(BaseDataset):
 
         def _preprocess(image):
             image = tf.image.rgb_to_grayscale(image)
-            if config['preprocessing']['resize']:
-                # image = pipeline.ratio_preserving_resize(image,
-                #                                          **config['preprocessing'])
-                image = tf.image.resize(image, config['preprocessing']['resize'],
-                                       method=tf.image.ResizeMethod.GAUSSIAN,
-                                       preserve_aspect_ratio=True)
+            target_size = self.config['preprocessing']['resize']
+            if self.config['preprocessing']['resize']:
+                image = tf.image.resize(image, target_size,
+                                        method=tf.image.ResizeMethod.GAUSSIAN,
+                                        preserve_aspect_ratio=True)
+                image = tf.image.resize_with_crop_or_pad(image, target_size[0], target_size[1])
             return image
         
         # Python function
@@ -98,7 +90,8 @@ class Coco(BaseDataset):
         names = tf.data.Dataset.from_tensor_slices(files['names'])
         images = tf.data.Dataset.from_tensor_slices(files['image_paths'])
         images = images.map(_read_image)
-        images = images.map(_preprocess)
+        images = images.map(lambda im: tf.image.resize(im, self.config['preprocessing']['resize'],
+                                method=tf.image.ResizeMethod.GAUSSIAN))
         
         data = tf.data.Dataset.zip({'image': images, 'name': names})
         
@@ -123,15 +116,15 @@ class Coco(BaseDataset):
         # Generate the warped pair
         if config['warped_pair']['enable']:
             assert has_keypoints
-            warped = data.map_parallel(lambda d: pipeline.homographic_augmentation(
-                d, warped_pair_enable=True, add_homography=True, **config['warped_pair']))
+            warped = data.map(lambda d: pipeline.homographic_augmentation(
+                d['image'], d['keypoints'], warped_pair_enable=True, add_homography=True, **config['warped_pair']))
           
             if is_training and config['augmentation']['photometric']['enable']:
-                warped = warped.map_parallel(lambda w: {**w, 
-                                                        'warped/image': pipeline.photometric_augmentation(
-                    w['warped/image'], **config['augmentation']['photometric'])})
+                warped = warped.map(lambda w: {**w, 
+                            'warped/image': pipeline.photometric_augmentation(
+                                w['warped/image'], **config['augmentation']['photometric'])})
             
-            warped = warped.map_parallel(lambda w: {**w, 
+            warped = warped.map(lambda w: {**w, 
                                             'warped/keypoint_map': pipeline.add_keypoint_map(w['warped/image'],
                                                                                              w['warped/keypoints'])})
             
@@ -139,24 +132,24 @@ class Coco(BaseDataset):
             # for key in warped.keys():
                 # data['warped/'+key] = warped[key]
             data = tf.data.Dataset.zip((data, warped))
-            data = data.map_parallel(lambda d, w: {**d, **w})
+            data = data.map(lambda d, w: {**d, **w})
 
         # Data augmentation
         if has_keypoints and is_training:
             if config['augmentation']['photometric']['enable']:
-                data = data.map_parallel(lambda d: {**d, 'image' : pipeline.photometric_augmentation(
+                data = data.map(lambda d: {**d, 'image' : pipeline.photometric_augmentation(
                     d['image'], **config['augmentation']['photometric'])})
             if config['augmentation']['homographic']['enable']:
                 assert not config['warped_pair']['enable']  # doesn't support hom. aug.
-                data = data.map_parallel(lambda d: pipeline.homographic_augmentation(
+                data = data.map(lambda d: pipeline.homographic_augmentation(
                     d, warped_pair_enable=False, **config['augmentation']['homographic']))
         
         # Generate the keypoint map
         if has_keypoints:
-            data = data.map_parallel(lambda d: {**d, 
-                                                'keypoint_map' : pipeline.add_keypoint_map(d['image'],
-                                                                                           d['keypoints'])})
-        data = data.map_parallel(
+            data = data.map(lambda d: {**d, 
+                                        'keypoint_map' : pipeline.add_keypoint_map(d['image'],
+                                                                                   d['keypoints'])})
+        data = data.map(
             lambda d: {**d, 'image': tf.cast(d['image'], tf.float32) / 255.})
         
         if config['warped_pair']['enable']:
@@ -195,19 +188,63 @@ class Coco(BaseDataset):
         #           'warped/keypoint_map' : d['warped/keypoint_map'],
         #           'warped/valid_mask' : d['warped/valid_mask'],
         #           'homography' : d['warped/homography']}))
+        # This is a really bad hack, it puts an insane number of unessary zeros to homography
+        sizes_to_pad = [[0, self.config['preprocessing']['resize'][0]-1],
+                        [0, self.config['preprocessing']['resize'][1]-8],
+                        [0,2]]
+        # d1 = data.map(lambda d:
+        #         tf.stack([d['image'], d['warped/image'],
+        #                    tf.pad(tf.expand_dims(
+        #                        tf.expand_dims(d['warped/homography'],axis=0), axis=[-1]),
+        #                        sizes_to_pad)],
+        #                   axis=0)
+        # )    
+        # d2 = data.map(lambda d: tf.stack([d['keypoint_map'], d['valid_mask'],
+        #                    d['warped/keypoint_map'], d['warped/valid_mask']
+        #                    ], axis=0)
+        #     )
+        # return tf.data.Dataset.zip((d1,d2))
+        dataIn = data.map(lambda d: ({
+                'input_1': d['image'],
+                'input_2': d['warped/image']}))
+        dataOut = data.map(lambda d: ({
+                'output_1': d['keypoint_map'],
+                'output_2': d['valid_mask'],
+                'output_3': d['warped/keypoint_map'],
+                'output_4': d['warped/valid_mask'],
+                'output_5': d['warped/homography']}))
         
-        return data.map_parallel(
-            lambda d: {
-              'input_1' : d['image'], 'input_2' : d['warped/image'],
-              'target_1' : d['keypoint_map'],
-              'target_2' : d['valid_mask'],
-              'target_3' : d['warped/keypoint_map'],
-              'target_4' : d['warped/valid_mask'],
-              'target_5' : d['warped/homography']                
-            }
-        )
+        data = tf.data.Dataset.zip((dataIn, dataOut))
+        # data = data.map(lambda d:
+        #         (tf.stack([d['image'], d['warped/image'],
+        #                    tf.pad(tf.expand_dims(
+        #                        tf.expand_dims(d['warped/homography'],axis=0), axis=[-1]),
+        #                        sizes_to_pad)],
+        #                   axis=0),
+        #          tf.stack([d['keypoint_map'], d['valid_mask'],
+        #                    d['warped/keypoint_map'], d['warped/valid_mask']
+        #                    ], axis=0))
+        # )
+        return data       
+        
+        # return data
         #return data.map(lambda d :
         #         {'input':[d['image'], d['warped/image']],
 
         #          'output':[d['keypoint_map'], d['valid_mask'],
         #           d['warped/keypoint_map'], d['warped/valid_mask'], d['warped/homography']]} ))
+
+
+class CocoSequence(tf.keras.utils.Sequence):
+    def __init__(self, data, batch_size):
+        self.batch_size = batch_size
+        self.data = data
+    def __len__(self):
+        return self.batch_size
+    def __getitem__(self, idx):
+        assert idx == 0
+        for d in self.data:
+            return d
+    def __iter__(self):
+        for d in self.data:
+            yield d

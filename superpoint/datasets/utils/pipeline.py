@@ -38,18 +38,18 @@ def photometric_augmentation(img, **config):
     return image
 
 
-def homographic_augmentation(data, add_homography=False, warped_pair_enable=False, **config):
+def homographic_augmentation(img, keypoints, add_homography=False, warped_pair_enable=False, **config):
     with tf.name_scope('homographic_augmentation'):
-        image_shape = tf.shape(data['image'])[:2]
+        image_shape = tf.shape(img)[:2]
         homography = sample_homography(image_shape, **config['params'])[0]
         warped_image = tfa.image.transform(
-                data['image'], homography, interpolation='BILINEAR')
+                img, homography, interpolation='BILINEAR')
         valid_mask = compute_valid_mask(image_shape, homography,
                                         config['valid_border_margin'])
 
-        warped_points = warp_points(data['keypoints'], homography)
+        warped_points = warp_points(keypoints, homography)
         warped_points = filter_points(warped_points, image_shape)
-    
+
     # if config['warped_pair']['enable'] then add prefix
     # because additional warped data have to be added to the dataset
     # Otherwise

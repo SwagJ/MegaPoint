@@ -52,15 +52,17 @@ class NetBackendLoss(tf.keras.losses.Loss):
             descriptor_loss = self.descriptor_loss(valid_mask, [descriptors, homography])
 
 class SuperPoint(tf.keras.Model):
-    input_spec = {
-        'image': {'shape': [None, None, None, 1], 'dtype': tf.float32},
-        'warped/image' : {'shape': [None, None, None, 1], 'dtype': tf.float32}
-    }
+    # input_spec = {
+    #     'image': {'shape': [None, None, None, 1], 'dtype': tf.float32},
+    #     'warped/image' : {'shape': [None, None, None, 1], 'dtype': tf.float32}
+    # }
     def __init__(self, config={}, training=False, initializer=None, path='', name='superpoint'):
         super(SuperPoint, self).__init__(name=name)
                                         #  inputs={'input_1': tf.keras.Input(**SuperPoint.input_spec['image']),
                                         #          'input_2': tf.keras.Input(**SuperPoint.input_spec['warped/image'])})
-
+        self.input_names = ['input_1', 'input_2']
+        self.output_names = ['output_1', 'output_2', 'output_3','output_4', 'output_5', 'output_6', 'output_7',
+                             'output_8', 'output_9', 'output_10']
         default_config = {
             'data_format': 'channels_last',
             'grid_size': 8,
@@ -91,14 +93,22 @@ class SuperPoint(tf.keras.Model):
         image = x['input_1'] # ['image']
         ret_list = []
         _logits, _prob, _descriptors_raw, _desc_processed = self._net_image(image)
-        ret_list.extend([_logits, _prob, _descriptors_raw, _desc_processed])
+        ret_list = {
+            'output_1' : _logits,
+            'output_2' : _prob,
+            'output_3' : _descriptors_raw,
+            'output_4' : _desc_processed}
         
         if self.training:
             warped_image = x['input_2'] # ['warped/image']
             # homography = x[2]
             # warped_results = net(inputs['warped']['image'])
             _logits_warped, _prob_warped, _descriptors_raw_warped, _desc_processed_warped = self._net_image(warped_image)
-            ret_list.extend([_logits_warped, _prob_warped, _descriptors_raw_warped, _desc_processed_warped])
+            ret_list = { **ret_list,
+                        'output_5': _logits_warped,
+                        'output_6': _prob_warped,
+                        'output_7': _descriptors_raw_warped,
+                        'output_8': _desc_processed_warped}
         
         if self.config['nms']:
             _results_prob_nms = tf.map_fn(lambda p: utils.box_nms(
@@ -110,39 +120,71 @@ class SuperPoint(tf.keras.Model):
             pred = tf.cast(tf.greater_equal(
                                         _prob, self.config['detection_threshold']), dtype=tf.int32)
 
-        ret_list.append(pred)
-        ret_list.append(_results_prob_nms)
+        ret_list['output_9'] = pred
+        ret_list['output_10'] = _results_prob_nms
+        
+        
+        # fix homography
+        # homography = x[:,-1,0,:8,0]
+
+        # ret_list['output_11'] = homography
         # [_logits, _prob, _descriptors_raw, _desc_processed,  # 0 1 2 3
         # _logits_warped, _prob_warped, _descriptors_raw_warped, _desc_processed_warped, # 4 5 6 7 
         # pred, _results_prob_nms] # 8 9
         return ret_list 
+    def set_compiled_loss(self):
+        self.compiled_loss = SuperPointLoss(self.config, hasWarped=True)
+        self.compiled_loss.metrics = [SuperPointMetrics()]
 
-class SuperPointLoss(tf.keras.losses.Loss):
-    def __init__(self, config, hasWarped=False): # hasWarped=(training ==True) in this version 
-        super(SuperPointLoss, self).__init__()
+    # @tf.keras.model.enable_multi_worker
+    # def fit(self,
+    #       x=None,
+    #       batch_size=None,
+    #       epochs=1,
+    #       verbose=1,
+    #       callbacks=None,
+    #       validation_split=0.,
+    #       validation_data=None,
+    #       shuffle=True,
+    #       class_weight=None,
+    #       sample_weight=None,
+    #       initial_epoch=0,
+    #       steps_per_epoch=None,
+    #       validation_steps=None,
+    #       validation_batch_size=None,
+    #       validation_freq=1,
+    #       max_queue_size=10,
+    #       workers=1,
+    #       use_multiprocessing=False):
+    #     pass  
+class SuperPointLoss(object):
+    def __init__(self, config, hasWarped=True): # hasWarped=(training ==True) in this version 
+        # super(SuperPointLoss, self).__init__()
         self.lambda_loss = config['lambda_loss']
         self.hasWarped = hasWarped   
         self.detector_loss = utils.DetectorHeadLoss(config)
         if self.hasWarped:
             self.warped_detector_loss = utils.DetectorHeadLoss(config)
         self.descriptor_loss = utils.DescriptorHeadLoss(config)
+    
+    def __call__(self, y_true, y_pred, sample_weight, regularization_losses=None):
+        # print(y_true)
+        # print(y_pred)
+        keypoint_map = y_true['output_1']
+        valid_mask = y_true['output_2']
+        warped_keypoint_map = y_true['output_3']
+        warped_valid_mask = y_true['output_4']
+        homography = y_true['output_5']
+        # keypoint_map = y_true[:,0] # ['output_1_target_1']
+        # valid_mask = y_true[:,1] # ['output_2_target_2']
+        # warped_keypoint_map = y_true[:,2] # ['output_3_target_3']
+        # warped_valid_mask = y_true[:,3] # ['output_4_target_4']
+        # homography = y_pred[:,-1] # ['output_5_target_5']
         
-    def call(self, y_true, y_pred):
-        # keypoint_map = y_true['keypoint_map']
-        # valid_mask = y_true['valid_mask']
-        # warped_keypoint_map = y_true['warped/keypoint_map']
-        # warped_valid_mask = y_true['warped/valid_mask']
-        # homography = y_true['warped/homography']
-        keypoint_map = y_true['output_1_target_1']
-        valid_mask = y_true['output_2_target_2']
-        warped_keypoint_map = y_true['output_3_target_3']
-        warped_valid_mask = y_true['output_4_target_4']
-        homography = y_true['output_5_target_5']
-        
-        logits = y_pred[0]
-        descriptors_raw = y_pred[2] # outputs['descriptors_raw']
-        warped_logits = y_pred[4] # outputs['warped_results']['logits']
-        warped_descriptors_raw = y_pred[6] # outputs['warped_results']['descriptors_raw']
+        logits = y_pred['output_1']
+        descriptors_raw = y_pred['output_3'] # outputs['descriptors_raw']
+        warped_logits = y_pred['output_5'] # outputs['warped_results']['logits']
+        warped_descriptors_raw = y_pred['output_7'] # outputs['warped_results']['descriptors_raw']
 
         # Compute the loss for the detector head
         # detector_loss = utils.detector_loss(
@@ -187,19 +229,24 @@ class SuperPointMetrics(tf.keras.metrics.Metric):
         # valid_mask = y_true['valid_mask']
         # warped_keypoint_map = y_true['warped/keypoint_map']
         # warped_valid_mask = y_true['warped/valid_mask']
-        # homography = y_true['warped/homography']
-        keypoint_map = y_true['output_1_target_1']
-        valid_mask = y_true['output_2_target_2']
-        warped_keypoint_map = y_true['output_3_target_3']
-        warped_valid_mask = y_true['output_4_target_4']
-        homography = y_true['output_5_target_5']
-        #keypoint_map = y_true[0]
-        #valid_mask = y_true[1]
-        #warped_keypoint_map = y_true[2]
-        #warped_valid_mask = y_true[3]
-        #homography = y_true[4]
+        # keypoint_map = y_true['output_1_target_1']
+        # valid_mask = y_true['output_2_target_2']
+        # warped_keypoint_map = y_true['output_3_target_3']
+        # warped_valid_mask = y_true['output_4_target_4']
+        # keypoint_map = y_true[:,0]
+        # valid_mask = y_true[:,1]
+        # warped_keypoint_map = y_true[:,2]
+        # warped_valid_mask = y_true[:,3]
+
+        keypoint_map = y_true['output_1']
+        valid_mask = y_true['output_2']
+        warped_keypoint_map = y_true['output_3']
+        warped_valid_mask = y_true['output_4']
+
         
-        pred = y_pred[8]
+        #homography = y_true[4]
+        pred = y_pred['output_9']        
+        # pred = y_pred[8]
         
         _pred = valid_mask * pred
         labels = keypoint_map
