@@ -129,8 +129,6 @@ class Coco(BaseDataset):
                                                                                              w['warped/keypoints'])})
             
             # Merge with the original data
-            # for key in warped.keys():
-                # data['warped/'+key] = warped[key]
             data = tf.data.Dataset.zip((data, warped))
             data = data.map(lambda d, w: {**d, **w})
 
@@ -157,53 +155,8 @@ class Coco(BaseDataset):
                 lambda d: {
                     **d, 'warped/image': tf.cast(d['warped/image'], tf.float32) / 255.})
         
-        # inputs = data.map_parallel(lambda d: {'image' : d['image'], 
-        #                                       'warped/image' : d['warped/image']})
-        # inputs = data.map_parallel(lambda d: [d['image'], 
-        #                                       d['warped/image']])
-        # targets = data.map_parallel(lambda d : {
-        #     'keypoint_map' : d['keypoint_map'],
-        #     'valid_mask' : d['valid_mask'],
-        #     'warped/keypoint_map' : d['warped/keypoint_map'],
-        #     'warped/valid_mask' : d['warped/valid_mask'],
-        #     'homography' : d['warped/homography']
-        # })
-        # targets = data.map_parallel(lambda d : [
-        #     d['keypoint_map'],
-        #     d['valid_mask'],
-        #     d['warped/keypoint_map'],
-        #     d['warped/valid_mask'],
-        #     d['warped/homography'] ])
-        
-        # tf.data.Dataset.zip causes segmentation fault
-        # if not config['warped_pair']['enable']:
-        #     return data.map(lambda d :
-        #         ([d['image']],
-        #          [d['keypoint_map'], d['valid_mask']]))
-        # else:
-        #     return data.map(lambda d :
-        #         ({'image' : d['image'], 'warped/image' : d['warped/image']},
-        #          {'keypoint_map' : d['keypoint_map'],
-        #           'valid_mask' : d['valid_mask'],
-        #           'warped/keypoint_map' : d['warped/keypoint_map'],
-        #           'warped/valid_mask' : d['warped/valid_mask'],
-        #           'homography' : d['warped/homography']}))
-        # This is a really bad hack, it puts an insane number of unessary zeros to homography
-        sizes_to_pad = [[0, self.config['preprocessing']['resize'][0]-1],
-                        [0, self.config['preprocessing']['resize'][1]-8],
-                        [0,2]]
-        # d1 = data.map(lambda d:
-        #         tf.stack([d['image'], d['warped/image'],
-        #                    tf.pad(tf.expand_dims(
-        #                        tf.expand_dims(d['warped/homography'],axis=0), axis=[-1]),
-        #                        sizes_to_pad)],
-        #                   axis=0)
-        # )    
-        # d2 = data.map(lambda d: tf.stack([d['keypoint_map'], d['valid_mask'],
-        #                    d['warped/keypoint_map'], d['warped/valid_mask']
-        #                    ], axis=0)
-        #     )
-        # return tf.data.Dataset.zip((d1,d2))
+
+
         dataIn = data.map(lambda d: ({
                 'input_1': d['image'],
                 'input_2': d['warped/image']}))
@@ -215,25 +168,9 @@ class Coco(BaseDataset):
                 'output_5': d['warped/homography']}))
         
         data = tf.data.Dataset.zip((dataIn, dataOut))
-        # data = data.map(lambda d:
-        #         (tf.stack([d['image'], d['warped/image'],
-        #                    tf.pad(tf.expand_dims(
-        #                        tf.expand_dims(d['warped/homography'],axis=0), axis=[-1]),
-        #                        sizes_to_pad)],
-        #                   axis=0),
-        #          tf.stack([d['keypoint_map'], d['valid_mask'],
-        #                    d['warped/keypoint_map'], d['warped/valid_mask']
-        #                    ], axis=0))
-        # )
+
         return data       
         
-        # return data
-        #return data.map(lambda d :
-        #         {'input':[d['image'], d['warped/image']],
-
-        #          'output':[d['keypoint_map'], d['valid_mask'],
-        #           d['warped/keypoint_map'], d['warped/valid_mask'], d['warped/homography']]} ))
-
 
 class CocoSequence(tf.keras.utils.Sequence):
     def __init__(self, data, batch_size):
