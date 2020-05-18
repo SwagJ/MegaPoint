@@ -257,22 +257,40 @@ def box_nms(prob, size, iou=0.1, min_prob=0.01, keep_top_k=0):
     return prob
 
 
-def layer_predictor(depth, semantic, og, label = [2,13,16,26,60]):
+def layer_predictor(depth, semantic, og, batch_size=0):
     """ The layer predictor function takes input a depth field of an image og
         and a semantic desciription for the image.
 
     Arguments:
-        depth {tf tensor} -- [description]
-        semantic {tf tensor} -- [description]
-        og {tf tensor} -- original image tensor
+        depth {tf tensor} -- A 2D Tensor where each element is the depth of the corresponding pixel in the original image
+        semantic {tf tensor} -- A 2D Tensor where each element is the class of the corresponding pixel in the original image
+        og {tf tensor} -- The original image tensor 3D.
+    
+    Note:
+        batched version is not suppported yet
 
     Returns:
         [type] -- [description]
     """
-    height, width = semantic.shape
-    semantic_flat = tf.reshape(semantic,(height*width,))
-    unique_label, idx, counts = tf.unique_with_counts(semantic_flat)
-
+	# print("Semantic shape:",np.shape(semantic))
+	# print("OG shape:",np.shape(og))
+	# print("Depth shape:",np.shape(depth))
+    if batch_size == 0:
+        semantic_flat = tf.reshape(semantic, [-1])
+        unique_label, _ = tf.unique(semantic_flat)
+    elif batch_size == 1:
+        depth = tf.squeeze(depth)
+        semantic = tf.squeeze(semantic)
+        og = tf.squeeze(og)        
+        semantic_flat = tf.reshape(semantic, [-1])
+        unique_label, _ = tf.unique(semantic_flat)
+    else:
+        # semantic_flat = tf.reshape(semantic, [batch_size, -1])
+        # semantic_flat_unstacked = tf.unstack(semantic_flat, axis=0)
+        # for k in range(batch_size):
+        #     _unique_label, _ = tf.unique(semantic_flat_unstacked[k])
+        raise NotImplementedError("layer predictor is not implemented for batches > 1")
+    
     #calculate class average
     depth_avg = []
     classed_pixel = []
@@ -284,18 +302,18 @@ def layer_predictor(depth, semantic, og, label = [2,13,16,26,60]):
         
         depth_avg.append(tf.math.reduce_mean(masked_depth))
         classed_pixel.append(masked_og)
-    classed_pixel= tf.stack(classed_pixel, axis=0)
+    classed_pixel = tf.stack(classed_pixel, axis=0)
 
-
+    #print(len(classed_pixel))
     index = tf.argsort(depth_avg)
-
+    #print(index)
     num_class = len(unique_label)
     start_idx = num_class // 4
     end_idx = num_class - num_class // 4
-
     foreground_idx = tf.squeeze(index[0:start_idx])
     midground_idx = tf.squeeze(index[start_idx:end_idx])
     background_idx = tf.squeeze(index[end_idx:num_class])
+    #print(len(foreground_idx))
 
     fore_class = tf.gather(classed_pixel, foreground_idx, axis=0)
     mid_class = tf.gather(classed_pixel, midground_idx, axis=0)
@@ -308,5 +326,10 @@ def layer_predictor(depth, semantic, og, label = [2,13,16,26,60]):
     layer0 = foreground + midground
     layer1 = foreground + background
     layer2 = midground + background
-
+    
+    if batch_size == 1:
+        layer0 = layer0[tf.newaxis,...]
+        layer1 = layer1[tf.newaxis,...]
+        layer2 = layer2[tf.newaxis,...]
+    
     return layer0, layer1, layer2
