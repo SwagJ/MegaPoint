@@ -1,5 +1,5 @@
 import tensorflow as tf
-
+import numpy as np
 from .homographies import warp_points
 from .backbones.vgg import VGGBlock
 
@@ -255,3 +255,58 @@ def box_nms(prob, size, iou=0.1, min_prob=0.01, keep_top_k=0):
             pts = tf.gather(pts, indices)
         prob = tf.scatter_nd(tf.cast(pts, dtype=tf.int32), scores, tf.shape(prob))
     return prob
+
+
+def layer_predictor(depth, semantic, og, label = [2,13,16,26,60]):
+    """ The layer predictor function takes input a depth field of an image og
+        and a semantic desciription for the image.
+
+    Arguments:
+        depth {tf tensor} -- [description]
+        semantic {tf tensor} -- [description]
+        og {tf tensor} -- original image tensor
+
+    Returns:
+        [type] -- [description]
+    """
+    height, width = semantic.shape
+    semantic_flat = tf.reshape(semantic,(height*width,))
+    unique_label, idx, counts = tf.unique_with_counts(semantic_flat)
+
+    #calculate class average
+    depth_avg = []
+    classed_pixel = []
+    for i in range(len(unique_label)):
+        mask = tf.math.equal(semantic,unique_label[i])
+        fl_mask = tf.cast(mask, dtype=tf.float32)
+        masked_depth = tf.boolean_mask(depth, mask)
+        masked_og = tf.stack([tf.math.multiply(fl_mask, og[...,j]) for j in range(3)], axis=-1)
+        
+        depth_avg.append(tf.math.reduce_mean(masked_depth))
+        classed_pixel.append(masked_og)
+    classed_pixel= tf.stack(classed_pixel, axis=0)
+
+
+    index = tf.argsort(depth_avg)
+
+    num_class = len(unique_label)
+    start_idx = num_class // 4
+    end_idx = num_class - num_class // 4
+
+    foreground_idx = tf.squeeze(index[0:start_idx])
+    midground_idx = tf.squeeze(index[start_idx:end_idx])
+    background_idx = tf.squeeze(index[end_idx:num_class])
+
+    fore_class = tf.gather(classed_pixel, foreground_idx, axis=0)
+    mid_class = tf.gather(classed_pixel, midground_idx, axis=0)
+    back_class = tf.gather(classed_pixel, background_idx, axis=0)
+
+    foreground = tf.reduce_sum(fore_class, axis=0)
+    midground = tf.reduce_sum(mid_class, axis=0)
+    background = tf.reduce_sum(back_class, axis=0)
+
+    layer0 = foreground + midground
+    layer1 = foreground + background
+    layer2 = midground + background
+
+    return layer0, layer1, layer2
