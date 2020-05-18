@@ -66,9 +66,6 @@ class Megadepth(BaseDataset):
                 label_paths.append(str(p))
             files['label_paths'] = label_paths
 
-        tf.data.Dataset.map_parallel = lambda self, fn: self.map(
-                fn, num_parallel_calls=config['num_parallel_calls'])
-
         return files
 
     def _get_data(self, files, split_name, **config):
@@ -117,12 +114,12 @@ class Megadepth(BaseDataset):
         # Generate the warped pair
         if config['warped_pair']['enable']:
             assert has_keypoints
-            warped = data.map_parallel(lambda d: pipeline.homographic_augmentation(
+            warped = data.map(lambda d: pipeline.homographic_augmentation(
                 d, add_homography=True, **config['warped_pair']))
             if is_training and config['augmentation']['photometric']['enable']:
-                warped = warped.map_parallel(lambda d: pipeline.photometric_augmentation(
+                warped = warped.map(lambda d: pipeline.photometric_augmentation(
                     d, **config['augmentation']['photometric']))
-            warped = warped.map_parallel(pipeline.add_keypoint_map)
+            warped = warped.map(pipeline.add_keypoint_map)
             # Merge with the original data
             data = tf.data.Dataset.zip((data, warped))
             data = data.map(lambda d, w: {**d, 'warped': w})
@@ -130,22 +127,36 @@ class Megadepth(BaseDataset):
         # Data augmentation
         if has_keypoints and is_training:
             if config['augmentation']['photometric']['enable']:
-                data = data.map_parallel(lambda d: pipeline.photometric_augmentation(
-                    d, **config['augmentation']['photometric']))
+                data = data.map(lambda d: pipeline.photometric_augmentation(
+                    d['image'], **config['augmentation']['photometric']))
             if config['augmentation']['homographic']['enable']:
                 assert not config['warped_pair']['enable']  # doesn't support hom. aug.
-                data = data.map_parallel(lambda d: pipeline.homographic_augmentation(
-                    d, **config['augmentation']['homographic']))
+                data = data.map(lambda d: pipeline.homographic_augmentation(
+                    d, warped_pair_enable=config['warped_pair']['enable'], **config['augmentation']['homographic']))
 
         # Generate the keypoint map
         if has_keypoints:
-            data = data.map_parallel(pipeline.add_keypoint_map)
-        data = data.map_parallel(
+            data = data.map(pipeline.add_keypoint_map)
+        data = data.map(
             lambda d: {**d, 'image': tf.cast(d['image'], tf.float32) / 255.})
         if config['warped_pair']['enable']:
-            data = data.map_parallel(
+            data = data.map(
                 lambda d: {
                     **d, 'warped': {**d['warped'],
                                     'image': tf.cast(d['warped']['image'], tf.float32) / 255.}})
+
+
+
+        #     dataIn = data.map(lambda d: ({
+        #         'input_1': d['image'],
+        #         'input_2': d['warped']['image']}))
+        #     dataOut = data.map(lambda d: ({
+        #             'output_1': d['keypoint_map'],
+        #             'output_2': d['valid_mask'],
+        #             'output_3': d['warped']['keypoint_map'],
+        #             'output_4': d['warped']['valid_mask'],
+        #             'output_5': d['warped']['homography']}))
+        # else:
+            
 
         return data

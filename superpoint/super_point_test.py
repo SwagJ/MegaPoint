@@ -2,12 +2,12 @@ import os, sys
 import numpy as np
 import tensorflow as tf
 import yaml
-import super_point
-import initializer
+from models import super_point
+from models import initializer
 
 
-CONFIG_FILEPATH = '../configs/superpoint_coco.yaml'
-WEIGHTS_FILEPATH= '../../pretrained_models/weights.pkl.npy'
+CONFIG_FILEPATH = './configs/superpoint_coco.yaml'
+WEIGHTS_FILEPATH= '../pretrained_models/weights.pkl.npy'
 
 if __name__ == "__main__":
     with open(CONFIG_FILEPATH, 'r') as fr:

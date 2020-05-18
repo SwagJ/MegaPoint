@@ -8,7 +8,7 @@ from tqdm import tqdm
 
 import experiment
 from superpoint.settings import EXPER_PATH
-tf.compat.v1.disable_eager_execution()
+# tf.compat.v1.disable_eager_execution()
 
 if __name__ == '__main__':
 
@@ -33,20 +33,18 @@ if __name__ == '__main__':
 
     with experiment._init_graph(config, with_dataset=True) as (net, dataset):
         if net.trainable:
-            net.load(str(checkpoint))
-        test_set = dataset.get_test_set()
+            net.load_weights(str(checkpoint))
+        test_set = dataset.get_tf_datasets()['test']
 
         pbar = tqdm(total=config['eval_iter'] if config['eval_iter'] > 0 else None)
         i = 0
-        while True:
-            try:
-                data = next(test_set)
-            except dataset.end_set:
-                break
+        for data in test_set:
             data1 = {'image': data['image']}
-            data2 = {'image': data['warped_image']}
-            prob1 = net.predict(data1, keys='prob_nms')
-            prob2 = net.predict(data2, keys='prob_nms')
+            data2 = {'image': data['warped/image']}
+            out1 = net.predict(data1)
+            pred1 = {'prob_nms' : out1['output_2'], 'descriptors' : out1['output_3']}
+            out2 = net.predict(data2)
+            pred2 = {'prob_nms' : out2['output_2'], 'descriptors' : out2['output_3']}
             pred = {'prob': prob1, 'warped_prob': prob2,
                     'homography': data['homography']}
 

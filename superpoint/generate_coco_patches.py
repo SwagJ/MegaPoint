@@ -8,6 +8,11 @@ import argparse
 import yaml
 from pathlib import Path
 
+
+# Still using compat.v1 modules here.
+# There is no neural network deployed
+# in the patches generation process.
+#
 tf.compat.v1.disable_eager_execution()
 
 from models.homographies import (sample_homography, flat2mat,

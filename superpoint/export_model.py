@@ -1,4 +1,5 @@
 import tensorflow as tf
+import os
 import yaml
 import argparse
 import logging
@@ -12,7 +13,6 @@ import tensorflow as tf  # noqa: E402
 from superpoint.models import get_model  # noqa: E402
 from superpoint.settings import EXPER_PATH  # noqa: E402
 
-tf.compat.v1.disable_eager_execution()
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -31,13 +31,10 @@ if __name__ == '__main__':
     checkpoint_path = Path(EXPER_PATH, export_name)
 
     with get_model(config['model']['name'])(
-            data_shape={'image': [None, None, None, 1]},
             **config['model']) as net:
 
-        net.load(str(checkpoint_path))
+        net.load_weights(str(checkpoint_path))
 
-        tf.saved_model.simple_save(
-                net.sess,
-                str(export_dir),
+        net.save(os.path.join(str(export_dir), 'model.ckpt'),
                 inputs=net.pred_in,
                 outputs=net.pred_out)

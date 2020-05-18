@@ -4,8 +4,10 @@ import tensorflow as tf
 import yaml
 
 from datasets import coco as coco
+from datasets import megadepth as megadepth
 from models import super_point
 
+# CONFIG_FILEPATH = 'configs/superpoint_coco.yaml'
 CONFIG_FILEPATH = 'configs/superpoint_coco.yaml'
 
 # tf.compat.v1.disable_eager_execution()
@@ -16,10 +18,11 @@ with open(CONFIG_FILEPATH, 'r') as fr:
 
 # with tf.device('/cpu:0'):
 # conf['training'] = True
-dataset = coco.Coco(**conf['data'])
+# dataset = coco.Coco(**conf['data'])
+dataset = megadepth.Megadepth(**conf['data'])
 # d_train = dataset.data
 d_train = \
-    dataset.get_tf_datasets()['training'].batch(1) # cannot add larger batch
+    dataset.get_tf_datasets()['training'].batch(conf['model']['batch_size'])
 # d_val = dataset.get_tf_datasets()['validation'].batch(1) # inputs are not the same due to keypoints
 
 #def custom_fit(x,batch_size,steps)
@@ -52,17 +55,17 @@ for d in d_train:
 # model.compile(optimizer='sgd', loss='binary_crossentropy')
 # model.fit(d_train, steps_per_epoch=10)
 
-conf['model']['training'] = True
-sp = super_point.SuperPoint(conf['model'], training=True)
-sp.trainable = True
-sp.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=conf['model']['learning_rate']),
-            loss=super_point.SuperPointLoss(conf['model']))
+# conf['model']['training'] = True
+# sp = super_point.SuperPoint(conf['model'], training=True)
+# sp.trainable = True
+# sp.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=conf['model']['learning_rate']),
+#             loss=super_point.SuperPointLoss(conf['model']))
         #    metrics=[super_point.SuperPointMetrics()])
-sp.set_compiled_loss()
+# sp.set_compiled_loss()
 
-sp.fit(x=d_train, steps_per_epoch=10,
-        max_queue_size=20,
-        workers=4)
+# sp.fit(x=d_train, steps_per_epoch=10,
+#         max_queue_size=20,
+#         workers=4)
 # workers = 0
 
 

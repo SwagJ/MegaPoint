@@ -8,14 +8,10 @@ class VGGBlock(tf.keras.Model):
         self.batch_normalization = batch_normalization
         if initializer:
             self.conv = tf.keras.layers.Conv2D(filters, kernel_size, kernel_regularizer=tf.keras.regularizers.l2(kernel_reg), data_format=data_format,
-                                               kernel_initializer=initializer.conv2d_kernel(path),
-                                               bias_initializer=initializer.conv2d_bias(path)) # 'conv'
+                                               **initializer.conv2d(path)) # 'conv'
             if batch_normalization:
                 self.bn = tf.keras.layers.BatchNormalization(trainable=training, fused=True, axis=1 if data_format == 'channels_first' else -1,
-                                                        beta_initializer=initializer.BN_beta(path),
-                                                        gamma_initializer=initializer.BN_gamma(path),
-                                                        moving_mean_initializer=initializer.BN_mean(path),
-                                                        moving_variance_initializer=initializer.BN_variance(path)) # 'bn'
+                                                        **initializer.BN(path)) # 'bn'
         else:
             self.conv = tf.keras.layers.Conv2D(filters, kernel_size, kernel_regularizer=tf.keras.regularizers.l2(kernel_reg), data_format=data_format) # 'conv'
             if batch_normalization:

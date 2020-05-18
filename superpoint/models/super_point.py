@@ -120,10 +120,22 @@ class SuperPoint(tf.keras.Model):
         # [_logits, _prob, _descriptors_raw, _desc_processed,  # 0 1 2 3
         # _logits_warped, _prob_warped, _descriptors_raw_warped, _desc_processed_warped, # 4 5 6 7 
         # pred, _results_prob_nms] # 8 9
-        return ret_list 
+        return ret_list
+    
     def set_compiled_loss(self):
+        """That is a highly risky function, since it bypasses the container architecture of
+           the tf keras loss.
+        """
         self.compiled_loss = SuperPointLoss(self.config, hasWarped=True)
         self.compiled_loss.metrics = [SuperPointMetrics()]
+    
+    def comppileWrapper(self):
+        """This function call keras compile with arguments comming from the configuration file and
+            adds a loss function by calling set_compiled_loss
+        """
+        self.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=self.config['learning_rate']),
+            loss=SuperPointLoss(self.config))
+        self.set_compiled_loss()
 
 
 class SuperPointLoss(object):

@@ -9,7 +9,7 @@ from tqdm import tqdm
 import experiment
 from settings import EXPER_PATH
 
-tf.compat.v1.disable_eager_execution()
+# tf.compat.v1.disable_eager_execution()
 
 if __name__ == '__main__':
 
@@ -43,32 +43,28 @@ if __name__ == '__main__':
 
     with experiment._init_graph(config, with_dataset=True) as (net, dataset):
         if net.trainable:
-            net.load(str(checkpoint))
-        test_set = dataset.get_test_set()
+            net.load_weights(str(checkpoint))
+        test_set = dataset.get_tf_datasets()['test'].batch(batch_size)
+        
+        i = 0
+        for _ in test_set:
+            if (i == config.get('skip', 0)):
+                break
 
-        for _ in tqdm(range(config.get('skip', 0))):
-            next(test_set)
 
         pbar = tqdm(total=config['eval_iter'] if config['eval_iter'] > 0 else None)
         i = 0
-        while True:
+        for _data in test_set:
             # Gather dataset
-            data = []
-            try:
-                for _ in range(batch_size):
-                    data.append(next(test_set))
-            except (StopIteration, dataset.end_set):
-                if not data:
-                    break
-                data += [data[-1] for _ in range(batch_size - len(data))]  # add dummy
-            data = dict(zip(data[0], zip(*[d.values() for d in data])))
+            data = dict(zip(_data[0], zip(*[d.values() for d in _data])))
 
             # Predict
+            out = net.predict(data)
             if args.pred_only:
-                p = net.predict(data, keys='pred', batch=True)
-                pred = {'points': [np.array(np.where(e)).T for e in p]}
+                p = {'pred' : out['output_9']}
+                pred = {'points': [np.array(np.where(e)).T for e in p['pred']]}
             else:
-                pred = net.predict(data, keys='*', batch=True)
+                pred = out
 
             # Export
             d2l = lambda d: [dict(zip(d, e)) for e in zip(*d.values())]  # noqa: E731

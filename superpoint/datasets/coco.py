@@ -140,7 +140,7 @@ class Coco(BaseDataset):
             if config['augmentation']['homographic']['enable']:
                 assert not config['warped_pair']['enable']  # doesn't support hom. aug.
                 data = data.map(lambda d: pipeline.homographic_augmentation(
-                    d, warped_pair_enable=False, **config['augmentation']['homographic']))
+                    d, warped_pair_enable=config['warped_pair']['enable'], **config['augmentation']['homographic']))
         
         # Generate the keypoint map
         if has_keypoints:
@@ -157,19 +157,26 @@ class Coco(BaseDataset):
         
 
 
-        dataIn = data.map(lambda d: ({
+
+        if(config['warped_pair']['enable'] and is_training):
+            dataIn = data.map(lambda d: ({
                 'input_1': d['image'],
                 'input_2': d['warped/image']}))
-        dataOut = data.map(lambda d: ({
-                'output_1': d['keypoint_map'],
-                'output_2': d['valid_mask'],
-                'output_3': d['warped/keypoint_map'],
-                'output_4': d['warped/valid_mask'],
-                'output_5': d['warped/homography']}))
-        
+            dataOut = data.map(lambda d: ({
+                    'output_1': d['keypoint_map'],
+                    'output_2': d['valid_mask'],
+                    'output_3': d['warped/keypoint_map'],
+                    'output_4': d['warped/valid_mask'],
+                    'output_5': d['warped/homography']}))
+        else:
+            dataIn = data.map(lambda d: ({
+                    'input_1': d['image']}))
+            dataOut = data.map(lambda d: ({
+                    'output_1': d['keypoint_map'],
+                    'output_2': d['valid_mask']}))
         data = tf.data.Dataset.zip((dataIn, dataOut))
 
-        return data       
+        return data
         
 
 class CocoSequence(tf.keras.utils.Sequence):
