@@ -292,17 +292,25 @@ def layer_predictor(depth, semantic, og, batch_size=0):
         raise NotImplementedError("layer predictor is not implemented for batches > 1")
     
     #calculate class average
-    depth_avg = []
-    classed_pixel = []
-    for i in range(len(unique_label)):
-        mask = tf.math.equal(semantic,unique_label[i])
-        fl_mask = tf.cast(mask, dtype=tf.float32)
-        masked_depth = tf.boolean_mask(depth, mask)
-        masked_og = tf.stack([tf.math.multiply(fl_mask, og[...,j]) for j in range(3)], axis=-1)
-        
-        depth_avg.append(tf.math.reduce_mean(masked_depth))
-        classed_pixel.append(masked_og)
-    classed_pixel = tf.stack(classed_pixel, axis=0)
+
+	num_class = tf.size(unique_label)
+	unique_labels = tf.expand_dims(unique_label,axis=1)
+	unique_labels = tf.expand_dims(unique_labels,axis=2)
+
+	mask = tf.cast((semantic == unique_labels),dtype=tf.float32)
+
+
+
+	total = tf.math.count_nonzero((tf.reshape(mask,(num_class,-1))),axis=1)
+	total = tf.cast(total,dtype=tf.float32)
+	print(total)
+	enlarged_depth = tf.concat(num_class*[tf.expand_dims(depth,0)],axis=0)
+
+	masked_depth = tf.math.multiply(mask,enlarged_depth)
+	mask_stack = tf.stack([mask]*3,axis=3)
+	enlarged_og = tf.stack([og]*num_class,axis=0)
+	classed_pixel = tf.math.multiply(mask_stack,enlarged_og)
+	depth_avg = tf.math.divide(tf.math.reduce_sum(tf.reshape(masked_depth,(num_class,-1)),axis=1),total)
 
     #print(len(classed_pixel))
     index = tf.argsort(depth_avg)
