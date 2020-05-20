@@ -18,6 +18,7 @@ class GreatPoint(tf.keras.Model):
             initializerPaths = GreatPoint.defaultInitializerPaths
         
         self.IMG_MEAN = np.array((103.939, 116.779, 123.68), dtype=np.float32)
+        self.CROP_SIZE = [473, 473]
         
         self.training = training
         self.config = config
@@ -30,11 +31,19 @@ class GreatPoint(tf.keras.Model):
 
     def call(self, input):
         image = input['input_1']
-        
+
         depth = self.depth_net(image)
-        channels = tf.unstack(image, axis=-1)
-        bgr_image = tf.stack([channels[2], channels[1], channels[0]], axis=-1)
-        semantics = self.psp_net50(bgr_image*255 - self.IMG_MEAN)
+        #channels = tf.unstack(image, axis=-1)
+        #bgr_image = tf.stack([channels[2], channels[1], channels[0]], axis=-1)
+        #semantics = self.psp_net50(bgr_image*255 - self.IMG_MEAN)
+        img = tf.squeeze(image,axis=0)
+        img_shape = tf.shape(img)
+        h, w = (tf.maximum(self.CROP_SIZE[0], img_shape[0]), tf.maximum(self.CROP_SIZE[1], img_shape[1]))
+        pad_image = self._psp_img_preprocess(img, h, w)
+        raw_output = self.psp_net50(pad_image)
+        raw_output_up = tf.image.resize(raw_output, size=[h, w])
+        raw_output_up = tf.image.crop_to_bounding_box(raw_output_up, 0, 0, img_shape[0], img_shape[1])
+        semantics = tf.argmax(raw_output_up, axis=3)
 
         image0, image1, image2 = utils.layer_predictor(depth, semantics, image, batch_size=self.config['batch_size'])
         
@@ -95,3 +104,17 @@ class GreatPoint(tf.keras.Model):
         self.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=self.config['learning_rate']),
             loss=super_point.SuperPointLoss(self.config))
         self.set_compiled_loss()
+
+    def _psp_img_preprocess(self, img, h, w):
+        """Preprocess image for PSPNet
+        """
+        # Convert RGB to BGR
+        img_r, img_g, img_b = tf.split(axis=2, num_or_size_splits=3, value=img)
+        img = tf.cast(tf.concat(axis=2, values=[img_b, img_g, img_r]), dtype=tf.float32)
+        # Extract mean.
+        img -= self.IMG_MEAN
+
+        pad_img = tf.image.pad_to_bounding_box(img, 0, 0, h, w)
+        pad_img = tf.expand_dims(pad_img, 0)
+
+        return pad_img

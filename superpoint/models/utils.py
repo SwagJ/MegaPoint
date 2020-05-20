@@ -303,12 +303,14 @@ def layer_predictor(depth, semantic, og, batch_size=0):
 
     total = tf.math.count_nonzero((tf.reshape(mask,(num_class,-1))),axis=1)
     total = tf.cast(total,dtype=tf.float32)
-    print(total)
+    print("total:{}".format(total))
     enlarged_depth = tf.concat(num_class*[tf.expand_dims(depth,0)],axis=0)
+    enlarged_depth = tf.cast(enlarged_depth, dtype=tf.float32)
 
     masked_depth = tf.math.multiply(mask,enlarged_depth)
     mask_stack = tf.stack([mask]*3,axis=3)
     enlarged_og = tf.stack([og]*num_class,axis=0)
+    enlarged_og = tf.cast(enlarged_og,dtype=tf.float32)
     classed_pixel = tf.math.multiply(mask_stack,enlarged_og)
     depth_avg = tf.math.divide(tf.math.reduce_sum(tf.reshape(masked_depth,(num_class,-1)),axis=1),total)
 
