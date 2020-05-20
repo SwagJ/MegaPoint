@@ -17,6 +17,20 @@ import tensorflow as tf  # noqa: E402
 
 # tf.compat.v1.disable_eager_execution()
 
+outputs_to_names = {
+    'output_1'  : '',
+    'output_2'  : '',
+    'output_3'  : '',
+    'output_4'  : '',
+    'output_5'  : '',
+    'output_6'  : '',
+    'output_7'  : '',
+    'output_8'  : '',
+    'output_9'  : '',
+    'output_10' : ''
+}
+
+
 def train(config, n_iter, output_dir, checkpoint_name='model.ckpt', numpyWeightsPaths=None):
     gpus= tf.config.experimental.list_physical_devices('GPU')
     tf.config.experimental.set_memory_growth(gpus[0], True)

@@ -272,9 +272,9 @@ def layer_predictor(depth, semantic, og, batch_size=0):
     Returns:
         [type] -- [description]
     """
-	# print("Semantic shape:",np.shape(semantic))
-	# print("OG shape:",np.shape(og))
-	# print("Depth shape:",np.shape(depth))
+    # print("Semantic shape:",np.shape(semantic))
+    # print("OG shape:",np.shape(og))
+    # print("Depth shape:",np.shape(depth))
     if batch_size == 0:
         semantic_flat = tf.reshape(semantic, [-1])
         unique_label, _ = tf.unique(semantic_flat)
@@ -293,24 +293,24 @@ def layer_predictor(depth, semantic, og, batch_size=0):
     
     #calculate class average
 
-	num_class = tf.size(unique_label)
-	unique_labels = tf.expand_dims(unique_label,axis=1)
-	unique_labels = tf.expand_dims(unique_labels,axis=2)
+    num_class = tf.size(unique_label)
+    unique_labels = tf.expand_dims(unique_label,axis=1)
+    unique_labels = tf.expand_dims(unique_labels,axis=2)
 
-	mask = tf.cast((semantic == unique_labels),dtype=tf.float32)
+    mask = tf.cast((semantic == unique_labels),dtype=tf.float32)
 
 
 
-	total = tf.math.count_nonzero((tf.reshape(mask,(num_class,-1))),axis=1)
-	total = tf.cast(total,dtype=tf.float32)
-	print(total)
-	enlarged_depth = tf.concat(num_class*[tf.expand_dims(depth,0)],axis=0)
+    total = tf.math.count_nonzero((tf.reshape(mask,(num_class,-1))),axis=1)
+    total = tf.cast(total,dtype=tf.float32)
+    print(total)
+    enlarged_depth = tf.concat(num_class*[tf.expand_dims(depth,0)],axis=0)
 
-	masked_depth = tf.math.multiply(mask,enlarged_depth)
-	mask_stack = tf.stack([mask]*3,axis=3)
-	enlarged_og = tf.stack([og]*num_class,axis=0)
-	classed_pixel = tf.math.multiply(mask_stack,enlarged_og)
-	depth_avg = tf.math.divide(tf.math.reduce_sum(tf.reshape(masked_depth,(num_class,-1)),axis=1),total)
+    masked_depth = tf.math.multiply(mask,enlarged_depth)
+    mask_stack = tf.stack([mask]*3,axis=3)
+    enlarged_og = tf.stack([og]*num_class,axis=0)
+    classed_pixel = tf.math.multiply(mask_stack,enlarged_og)
+    depth_avg = tf.math.divide(tf.math.reduce_sum(tf.reshape(masked_depth,(num_class,-1)),axis=1),total)
 
     #print(len(classed_pixel))
     index = tf.argsort(depth_avg)
