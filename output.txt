@@ -1,73 +1,121 @@
-tensor: superpoint/descriptor/conv1/bn/beta (float32) [256]
-tensor: superpoint/descriptor/conv1/bn/gamma (float32) [256]
-tensor: superpoint/descriptor/conv1/bn/moving_mean (float32) [256]
-tensor: superpoint/descriptor/conv1/bn/moving_variance (float32) [256]
-tensor: superpoint/descriptor/conv1/conv/bias (float32) [256]
-tensor: superpoint/descriptor/conv1/conv/kernel (float32) [3, 3, 128, 256]
-tensor: superpoint/descriptor/conv2/bn/beta (float32) [256]
-tensor: superpoint/descriptor/conv2/bn/gamma (float32) [256]
-tensor: superpoint/descriptor/conv2/bn/moving_mean (float32) [256]
-tensor: superpoint/descriptor/conv2/bn/moving_variance (float32) [256]
-tensor: superpoint/descriptor/conv2/conv/bias (float32) [256]
-tensor: superpoint/descriptor/conv2/conv/kernel (float32) [1, 1, 256, 256]
-tensor: superpoint/detector/conv1/bn/beta (float32) [256]
-tensor: superpoint/detector/conv1/bn/gamma (float32) [256]
-tensor: superpoint/detector/conv1/bn/moving_mean (float32) [256]
-tensor: superpoint/detector/conv1/bn/moving_variance (float32) [256]
-tensor: superpoint/detector/conv1/conv/bias (float32) [256]
-tensor: superpoint/detector/conv1/conv/kernel (float32) [3, 3, 128, 256]
-tensor: superpoint/detector/conv2/bn/beta (float32) [65]
-tensor: superpoint/detector/conv2/bn/gamma (float32) [65]
-tensor: superpoint/detector/conv2/bn/moving_mean (float32) [65]
-tensor: superpoint/detector/conv2/bn/moving_variance (float32) [65]
-tensor: superpoint/detector/conv2/conv/bias (float32) [65]
-tensor: superpoint/detector/conv2/conv/kernel (float32) [1, 1, 256, 65]
-tensor: superpoint/vgg/conv1_1/bn/beta (float32) [64]
-tensor: superpoint/vgg/conv1_1/bn/gamma (float32) [64]
-tensor: superpoint/vgg/conv1_1/bn/moving_mean (float32) [64]
-tensor: superpoint/vgg/conv1_1/bn/moving_variance (float32) [64]
-tensor: superpoint/vgg/conv1_1/conv/bias (float32) [64]
-tensor: superpoint/vgg/conv1_1/conv/kernel (float32) [3, 3, 1, 64]
-tensor: superpoint/vgg/conv1_2/bn/beta (float32) [64]
-tensor: superpoint/vgg/conv1_2/bn/gamma (float32) [64]
-tensor: superpoint/vgg/conv1_2/bn/moving_mean (float32) [64]
-tensor: superpoint/vgg/conv1_2/bn/moving_variance (float32) [64]
-tensor: superpoint/vgg/conv1_2/conv/bias (float32) [64]
-tensor: superpoint/vgg/conv1_2/conv/kernel (float32) [3, 3, 64, 64]
-tensor: superpoint/vgg/conv2_1/bn/beta (float32) [64]
-tensor: superpoint/vgg/conv2_1/bn/gamma (float32) [64]
-tensor: superpoint/vgg/conv2_1/bn/moving_mean (float32) [64]
-tensor: superpoint/vgg/conv2_1/bn/moving_variance (float32) [64]
-tensor: superpoint/vgg/conv2_1/conv/bias (float32) [64]
-tensor: superpoint/vgg/conv2_1/conv/kernel (float32) [3, 3, 64, 64]
-tensor: superpoint/vgg/conv2_2/bn/beta (float32) [64]
-tensor: superpoint/vgg/conv2_2/bn/gamma (float32) [64]
-tensor: superpoint/vgg/conv2_2/bn/moving_mean (float32) [64]
-tensor: superpoint/vgg/conv2_2/bn/moving_variance (float32) [64]
-tensor: superpoint/vgg/conv2_2/conv/bias (float32) [64]
-tensor: superpoint/vgg/conv2_2/conv/kernel (float32) [3, 3, 64, 64]
-tensor: superpoint/vgg/conv3_1/bn/beta (float32) [128]
-tensor: superpoint/vgg/conv3_1/bn/gamma (float32) [128]
-tensor: superpoint/vgg/conv3_1/bn/moving_mean (float32) [128]
-tensor: superpoint/vgg/conv3_1/bn/moving_variance (float32) [128]
-tensor: superpoint/vgg/conv3_1/conv/bias (float32) [128]
-tensor: superpoint/vgg/conv3_1/conv/kernel (float32) [3, 3, 64, 128]
-tensor: superpoint/vgg/conv3_2/bn/beta (float32) [128]
-tensor: superpoint/vgg/conv3_2/bn/gamma (float32) [128]
-tensor: superpoint/vgg/conv3_2/bn/moving_mean (float32) [128]
-tensor: superpoint/vgg/conv3_2/bn/moving_variance (float32) [128]
-tensor: superpoint/vgg/conv3_2/conv/bias (float32) [128]
-tensor: superpoint/vgg/conv3_2/conv/kernel (float32) [3, 3, 128, 128]
-tensor: superpoint/vgg/conv4_1/bn/beta (float32) [128]
-tensor: superpoint/vgg/conv4_1/bn/gamma (float32) [128]
-tensor: superpoint/vgg/conv4_1/bn/moving_mean (float32) [128]
-tensor: superpoint/vgg/conv4_1/bn/moving_variance (float32) [128]
-tensor: superpoint/vgg/conv4_1/conv/bias (float32) [128]
-tensor: superpoint/vgg/conv4_1/conv/kernel (float32) [3, 3, 128, 128]
-tensor: superpoint/vgg/conv4_2/bn/beta (float32) [128]
-tensor: superpoint/vgg/conv4_2/bn/gamma (float32) [128]
-tensor: superpoint/vgg/conv4_2/bn/moving_mean (float32) [128]
-tensor: superpoint/vgg/conv4_2/bn/moving_variance (float32) [128]
-tensor: superpoint/vgg/conv4_2/conv/bias (float32) [128]
-tensor: superpoint/vgg/conv4_2/conv/kernel (float32) [3, 3, 128, 128]
-# Total number of params: 1307269
+(AIenv3) ➜  superpoint git:(tfkeras) ✗ python -m pdb great_point_test.py
+r> /media/terabyte/projects/SUPERPOINT/SuperPointIoannis/superpoint/great_point_test.py(1)<module>()
+-> import os, sys
+(Pdb) r
+/home/sniper/programs/AIenv3/lib/python3.6/site-packages/tensorboard/compat/tensorflow_stub/dtypes.py:541: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_qint8 = np.dtype([("qint8", np.int8, 1)])
+/home/sniper/programs/AIenv3/lib/python3.6/site-packages/tensorboard/compat/tensorflow_stub/dtypes.py:542: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_quint8 = np.dtype([("quint8", np.uint8, 1)])
+/home/sniper/programs/AIenv3/lib/python3.6/site-packages/tensorboard/compat/tensorflow_stub/dtypes.py:543: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_qint16 = np.dtype([("qint16", np.int16, 1)])
+/home/sniper/programs/AIenv3/lib/python3.6/site-packages/tensorboard/compat/tensorflow_stub/dtypes.py:544: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_quint16 = np.dtype([("quint16", np.uint16, 1)])
+/home/sniper/programs/AIenv3/lib/python3.6/site-packages/tensorboard/compat/tensorflow_stub/dtypes.py:545: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_qint32 = np.dtype([("qint32", np.int32, 1)])
+/home/sniper/programs/AIenv3/lib/python3.6/site-packages/tensorboard/compat/tensorflow_stub/dtypes.py:550: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  np_resource = np.dtype([("resource", np.ubyte, 1)])
+/media/terabyte/projects/SUPERPOINT/SuperPointIoannis/superpoint
+/media/terabyte/projects/SUPERPOINT/SuperPointIoannis/superpoint
+2020-05-20 01:37:30.771918: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcuda.so.1
+2020-05-20 01:37:30.792538: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-05-20 01:37:30.792880: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1561] Found device 0 with properties: 
+pciBusID: 0000:08:00.0 name: GeForce 840M computeCapability: 5.0
+coreClock: 1.124GHz coreCount: 3 deviceMemorySize: 1.96GiB deviceMemoryBandwidth: 13.41GiB/s
+2020-05-20 01:37:30.793463: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudart.so.10.1
+2020-05-20 01:37:30.800450: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcublas.so.10
+2020-05-20 01:37:30.816259: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcufft.so.10
+2020-05-20 01:37:30.818525: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcurand.so.10
+2020-05-20 01:37:30.826609: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusolver.so.10
+2020-05-20 01:37:30.829498: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusparse.so.10
+2020-05-20 01:37:30.848246: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudnn.so.7
+2020-05-20 01:37:30.848482: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-05-20 01:37:30.849193: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-05-20 01:37:30.849708: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1703] Adding visible gpu devices: 0
+2020-05-20 01:37:30.850826: I tensorflow/core/platform/cpu_feature_guard.cc:143] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+2020-05-20 01:37:30.879022: I tensorflow/core/platform/profile_utils/cpu_utils.cc:102] CPU Frequency: 2394570000 Hz
+2020-05-20 01:37:30.879422: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x7f55b4000b20 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+2020-05-20 01:37:30.879458: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+2020-05-20 01:37:30.981300: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-05-20 01:37:30.981818: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x4dbe840 initialized for platform CUDA (this does not guarantee that XLA will be used). Devices:
+2020-05-20 01:37:30.981851: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): GeForce 840M, Compute Capability 5.0
+2020-05-20 01:37:30.982384: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-05-20 01:37:30.982758: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1561] Found device 0 with properties: 
+pciBusID: 0000:08:00.0 name: GeForce 840M computeCapability: 5.0
+coreClock: 1.124GHz coreCount: 3 deviceMemorySize: 1.96GiB deviceMemoryBandwidth: 13.41GiB/s    
+2020-05-20 01:37:30.982840: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudart.so.10.1
+2020-05-20 01:37:30.982867: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcublas.so.10
+2020-05-20 01:37:30.982899: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcufft.so.10
+2020-05-20 01:37:30.982927: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcurand.so.10
+2020-05-20 01:37:30.982946: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusolver.so.10
+2020-05-20 01:37:30.982963: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusparse.so.10
+2020-05-20 01:37:30.982981: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudnn.so.7
+2020-05-20 01:37:30.983062: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-05-20 01:37:30.983416: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-05-20 01:37:30.983720: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1703] Adding visible gpu devices: 0
+2020-05-20 01:37:30.984264: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudart.so.10.1
+2020-05-20 01:37:30.985512: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1102] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-20 01:37:30.985559: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1108]      0 
+2020-05-20 01:37:30.985579: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1121] 0:   N 
+2020-05-20 01:37:30.985800: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-05-20 01:37:30.986291: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-05-20 01:37:30.986825: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1247] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 1116 MB memory) -> physical GPU (device: 0, name: GeForce 840M, pci bus id: 0000:08:00.0, compute capability: 5.0)
+--Return--
+> /media/terabyte/projects/SUPERPOINT/SuperPointIoannis/superpoint/great_point_test.py(27)<module>()->None
+-> gp.predict(x=X)
+(Pdb) c
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/pdb.py", line 1667, in main
+    pdb._runscript(mainpyfile)
+  File "/usr/lib/python3.6/pdb.py", line 1548, in _runscript
+    self.run(statement)
+  File "/usr/lib/python3.6/bdb.py", line 434, in run
+    exec(cmd, globals, locals)
+  File "<string>", line 1, in <module>
+  File "/media/terabyte/projects/SUPERPOINT/SuperPointIoannis/superpoint/great_point_test.py", line 27, in <module>
+    gp.predict(x=X)
+  File "/home/sniper/programs/AIenv3/lib/python3.6/site-packages/tensorflow/python/keras/engine/training.py", line 88, in _method_wrapper
+    return method(self, *args, **kwargs)
+  File "/home/sniper/programs/AIenv3/lib/python3.6/site-packages/tensorflow/python/keras/engine/training.py", line 1268, in predict
+    tmp_batch_outputs = predict_function(iterator)
+  File "/home/sniper/programs/AIenv3/lib/python3.6/site-packages/tensorflow/python/eager/def_function.py", line 580, in __call__
+    result = self._call(*args, **kwds)
+  File "/home/sniper/programs/AIenv3/lib/python3.6/site-packages/tensorflow/python/eager/def_function.py", line 627, in _call
+    self._initialize(args, kwds, add_initializers_to=initializers)
+  File "/home/sniper/programs/AIenv3/lib/python3.6/site-packages/tensorflow/python/eager/def_function.py", line 506, in _initialize
+    *args, **kwds))
+  File "/home/sniper/programs/AIenv3/lib/python3.6/site-packages/tensorflow/python/eager/function.py", line 2446, in _get_concrete_function_internal_garbage_collected
+    graph_function, _, _ = self._maybe_define_function(args, kwargs)
+  File "/home/sniper/programs/AIenv3/lib/python3.6/site-packages/tensorflow/python/eager/function.py", line 2777, in _maybe_define_function
+    graph_function = self._create_graph_function(args, kwargs)
+  File "/home/sniper/programs/AIenv3/lib/python3.6/site-packages/tensorflow/python/eager/function.py", line 2667, in _create_graph_function
+    capture_by_value=self._capture_by_value),
+  File "/home/sniper/programs/AIenv3/lib/python3.6/site-packages/tensorflow/python/framework/func_graph.py", line 981, in func_graph_from_py_func
+    func_outputs = python_func(*func_args, **func_kwargs)
+  File "/home/sniper/programs/AIenv3/lib/python3.6/site-packages/tensorflow/python/eager/def_function.py", line 441, in wrapped_fn
+    return weak_wrapped_fn().__wrapped__(*args, **kwds)
+  File "/home/sniper/programs/AIenv3/lib/python3.6/site-packages/tensorflow/python/framework/func_graph.py", line 968, in wrapper
+    raise e.ag_error_metadata.to_exception(e)
+ValueError: in user code:
+
+    /home/sniper/programs/AIenv3/lib/python3.6/site-packages/tensorflow/python/keras/engine/training.py:1147 predict_function  *
+        outputs = self.distribute_strategy.run(
+    /media/terabyte/projects/SUPERPOINT/SuperPointIoannis/superpoint/models/great_point.py:33 call  *
+        semantics = self.psp_net50(image)
+    /media/terabyte/projects/SUPERPOINT/SuperPointIoannis/superpoint/models/PSP_net50.py:769 call  *
+        output_conv5_3_pool1 = tf.nn.avg_pool(output_conv5_3_relu, [60, 60], [60, 60], padding='VALID', name='conv5_3_pool1')
+    /home/sniper/programs/AIenv3/lib/python3.6/site-packages/tensorflow/python/ops/nn_ops.py:3653 avg_pool_v2  **
+        name=name)
+    /home/sniper/programs/AIenv3/lib/python3.6/site-packages/tensorflow/python/ops/gen_nn_ops.py:84 avg_pool
+        data_format=data_format, name=name)
+    /home/sniper/programs/AIenv3/lib/python3.6/site-packages/tensorflow/python/framework/op_def_library.py:744 _apply_op_helper
+        attrs=attr_protos, op_def=op_def)
+    /home/sniper/programs/AIenv3/lib/python3.6/site-packages/tensorflow/python/framework/func_graph.py:595 _create_op_internal
+        compute_device)
+    /home/sniper/programs/AIenv3/lib/python3.6/site-packages/tensorflow/python/framework/ops.py:3327 _create_op_internal
+        op_def=op_def)
+    /home/sniper/programs/AIenv3/lib/python3.6/site-packages/tensorflow/python/framework/ops.py:1817 __init__
+        control_input_ops, op_def)
+    /home/sniper/programs/AIenv3/lib/python3.6/site-packages/tensorflow/python/framework/ops.py:1657 _create_c_op
+        raise ValueError(str(e))
+
+    ValueError: Negative dimension size caused by subtracting 60 from 30 for '{{node GreatPoint/psp_net50/conv5_3_pool1}} = AvgPool[T=DT_FLOAT, data_format="NHWC", ksize=[1, 60, 60, 1], padding="VALID", strides=[1, 60, 60, 1]](GreatPoint/psp_net50/conv5_3_relu)' with input shapes: [?,30,40,2048].
