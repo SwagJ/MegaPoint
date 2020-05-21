@@ -18,7 +18,7 @@ class GreatPoint(tf.keras.Model):
             initializerPaths = GreatPoint.defaultInitializerPaths
         
         self.IMG_MEAN = np.array((103.939, 116.779, 123.68), dtype=np.float32)
-        self.CROP_SIZE = [473, 473]
+        self.CROP_SIZE = [480, 640]
         
         self.training = training
         self.config = config
@@ -26,13 +26,14 @@ class GreatPoint(tf.keras.Model):
         self.depth_net.trainable = False
         self.psp_net50 = PSP_net50.PSPNet50(num_classes=3, checkpoint_npy_path=initializerPaths['PSP_net50'])
         self.psp_net50.trainable = False
-        self.super_point = super_point.SuperPoint(config, training=training, npyWeightsPath=initializerPaths['super_point']) 
+        self.super_point = super_point.SuperPoint(config, training=training, npyWeightsPath=initializerPaths['super_point'], name='superpoint') 
         self.super_point.trainable = training
 
     def call(self, input):
         image = input['input_1']
-
-        depth = self.depth_net(image)
+        depth_shape = tf.concat([[self.config['batch_size']], tf.shape(image)[1:-1], [1]], axis=-1)
+        
+        depth = tf.reshape(self.depth_net(image), depth_shape)
         #channels = tf.unstack(image, axis=-1)
         #bgr_image = tf.stack([channels[2], channels[1], channels[0]], axis=-1)
         #semantics = self.psp_net50(bgr_image*255 - self.IMG_MEAN)
@@ -64,10 +65,9 @@ class GreatPoint(tf.keras.Model):
             # pair7 = {'input_1': image2, 'input_2': warped_image0}
             # pair8 = {'input_1': image2, 'input_2': warped_image1}
             pair9 = {'input_1': image2, 'input_2': warped_image2}
-
-            s1 = self.super_point(pair1)
-            s2 = self.super_point(pair5)
-            s3 = self.super_point(pair9)
+            # s1 = self.super_point(pair1)
+            # s2 = self.super_point(pair5)
+            # s3 = self.super_point(pair9)
             # s4 = self.super_point(pair1)
             # s5 = self.super_point(pair1)
             # s6 = self.super_point(pair1)
@@ -75,9 +75,13 @@ class GreatPoint(tf.keras.Model):
             # s8 = self.super_point(pair1)
             # s9 = self.super_point(pair1)
         else:
-            s1 = self.super_point({'input_1' : image0})
-            s2 = self.super_point({'input_1' : image1})
-            s3 = self.super_point({'input_1' : image2})
+            pair1 = {'input_1': image0}
+            pair5 = {'input_1': image1}
+            pair9 = {'input_1': image2}
+
+        s1 = self.super_point(pair1)
+        s2 = self.super_point(pair5)
+        s3 = self.super_point(pair9)
         
         ret_list = {}
         keys = s1.keys()

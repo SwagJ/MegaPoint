@@ -275,15 +275,17 @@ def layer_predictor(depth, semantic, og, batch_size=0):
     # print("Semantic shape:",np.shape(semantic))
     # print("OG shape:",np.shape(og))
     # print("Depth shape:",np.shape(depth))
+    output_shape = tf.shape(og)
+    
     if batch_size == 0:
         semantic_flat = tf.reshape(semantic, [-1])
-        unique_label, _ = tf.unique(semantic_flat)
+        unique_label, _, _ = tf.unique_with_counts(semantic_flat)
     elif batch_size == 1:
         depth = tf.squeeze(depth)
         semantic = tf.squeeze(semantic)
         og = tf.squeeze(og)        
         semantic_flat = tf.reshape(semantic, [-1])
-        unique_label, _ = tf.unique(semantic_flat)
+        unique_label, _, _ = tf.unique_with_counts(semantic_flat)
     else:
         # semantic_flat = tf.reshape(semantic, [batch_size, -1])
         # semantic_flat_unstacked = tf.unstack(semantic_flat, axis=0)
@@ -292,23 +294,26 @@ def layer_predictor(depth, semantic, og, batch_size=0):
         raise NotImplementedError("layer predictor is not implemented for batches > 1")
     
     #calculate class average
-
     num_class = tf.size(unique_label)
     unique_labels = tf.expand_dims(unique_label,axis=1)
     unique_labels = tf.expand_dims(unique_labels,axis=2)
-
+    # unique_labels = tf.expand_dims(unique_labels,axis=-1)
+    # unique_labels = tf.reshape(unique_label, 
+    #                            tf.concat([tf.shape(semantic)[:-1],[1]], axis=-1))
     mask = tf.cast((semantic == unique_labels),dtype=tf.float32)
 
 
 
     total = tf.math.count_nonzero((tf.reshape(mask,(num_class,-1))),axis=1)
     total = tf.cast(total,dtype=tf.float32)
-    print("total:{}".format(total))
+    
     enlarged_depth = tf.concat(num_class*[tf.expand_dims(depth,0)],axis=0)
     enlarged_depth = tf.cast(enlarged_depth, dtype=tf.float32)
 
     masked_depth = tf.math.multiply(mask,enlarged_depth)
-    mask_stack = tf.stack([mask]*3,axis=3)
+
+    mask_stack = tf.stack([mask, mask, mask],axis=3)
+    
     enlarged_og = tf.stack([og]*num_class,axis=0)
     enlarged_og = tf.cast(enlarged_og,dtype=tf.float32)
     classed_pixel = tf.math.multiply(mask_stack,enlarged_og)
@@ -317,7 +322,7 @@ def layer_predictor(depth, semantic, og, batch_size=0):
     #print(len(classed_pixel))
     index = tf.argsort(depth_avg)
     #print(index)
-    num_class = len(unique_label)
+    num_class = tf.size(unique_label)
     start_idx = num_class // 4
     end_idx = num_class - num_class // 4
     foreground_idx = tf.squeeze(index[0:start_idx])
@@ -337,9 +342,18 @@ def layer_predictor(depth, semantic, og, batch_size=0):
     layer1 = foreground + background
     layer2 = midground + background
     
-    if batch_size == 1:
-        layer0 = layer0[tf.newaxis,...]
-        layer1 = layer1[tf.newaxis,...]
-        layer2 = layer2[tf.newaxis,...]
+    fore_mask = tf.gather(mask_stack,foreground_idx, axis=0)
+    mid_mask = tf.gather(mask_stack,midground_idx, axis=0)
+    back_mask = tf.gather(mask_stack, background_idx, axis=0)
+
+    foreground_mask = tf.reduce_sum(fore_mask, axis=0)
+    midground_mask = tf.reduce_sum(mid_mask, axis=0)
+    background_mask = tf.reduce_sum(back_mask, axis=0)
+    # = original image input shape
+    
+
+    layer0 = tf.reshape(layer0, output_shape)
+    layer1 = tf.reshape(layer1, output_shape)
+    layer2 = tf.reshape(layer2, output_shape)
     
     return layer0, layer1, layer2
