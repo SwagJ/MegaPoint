@@ -367,7 +367,7 @@ class Hourglass(tf.keras.Model):
                 out = self.conv1(out)
 
             #post-processing
-            out = tf.squeeze(out) # (1, 384, 512, 1)
+            out = tf.squeeze(out, axis=-1) # (1, 384, 512, 1)
             out = tf.math.exp(out)
             pred_inv_depth = tf.math.divide(1.0, out)
             pred_inv_depth = tf.math.divide(pred_inv_depth, tf.reduce_max(pred_inv_depth))

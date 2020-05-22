@@ -31,27 +31,34 @@ class GreatPoint(tf.keras.Model):
 
     def call(self, input):
         image = input['input_1']
-        depth_shape = tf.concat([[self.config['batch_size']], tf.shape(image)[1:-1], [1]], axis=-1)
+        depth_shape = [self.config['batch_size'], self.CROP_SIZE[0], self.CROP_SIZE[1]]
         
-        depth = tf.reshape(self.depth_net(image), depth_shape)
+        depth = tf.reshape(self.depth_net(image), depth_shape) 
         #channels = tf.unstack(image, axis=-1)
         #bgr_image = tf.stack([channels[2], channels[1], channels[0]], axis=-1)
         #semantics = self.psp_net50(bgr_image*255 - self.IMG_MEAN)
         img = tf.squeeze(image,axis=0)
+        # if self.config['batch_size'] != 0:
         img_shape = tf.shape(img)
-        h, w = (tf.maximum(self.CROP_SIZE[0], img_shape[0]), tf.maximum(self.CROP_SIZE[1], img_shape[1]))
+        h, w = (tf.maximum(self.CROP_SIZE[0], image[1]),
+                tf.maximum(self.CROP_SIZE[1], image[2]))
         pad_image = self._psp_img_preprocess(img, h, w)
         raw_output = self.psp_net50(pad_image)
         raw_output_up = tf.image.resize(raw_output, size=[h, w])
         raw_output_up = tf.image.crop_to_bounding_box(raw_output_up, 0, 0, img_shape[0], img_shape[1])
         semantics = tf.argmax(raw_output_up, axis=3)
-
+        
         image0, image1, image2 = utils.layer_predictor(depth, semantics, image, batch_size=self.config['batch_size'])
         
         if self.training:
             warped_image = input['input_2']
-            warped_depth = self.depth_net(warped_image)
-            warped_semantics = self.psp_net50(warped_image)
+            warped_depth = tf.reshape(self.depth_net(warped_image), depth_shape)
+            pad_image = self._psp_img_preprocess(img, h, w)
+            raw_output = self.psp_net50(warped_image)
+            raw_output_up = tf.image.resize(raw_output, size=[h, w])
+            raw_output_up = tf.image.crop_to_bounding_box(raw_output_up, 0, 0, img_shape[0], img_shape[1])
+            warped_semantics = tf.argmax(raw_output_up, axis=3)
+
             warped_image0, warped_image1, warped_image2 = utils.layer_predictor(warped_depth, warped_semantics, warped_image,
                                                            batch_size=self.config['batch_size'])
             pair1 = {'input_1': image0, 'input_2': warped_image0}
