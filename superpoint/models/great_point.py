@@ -37,24 +37,24 @@ class GreatPoint(tf.keras.Model):
         #channels = tf.unstack(image, axis=-1)
         #bgr_image = tf.stack([channels[2], channels[1], channels[0]], axis=-1)
         #semantics = self.psp_net50(bgr_image*255 - self.IMG_MEAN)
-        img = tf.squeeze(image,axis=0)
+        #img = tf.squeeze(image,axis=0)
         # if self.config['batch_size'] != 0:
-        img_shape = tf.shape(img)
+        #img_shape = tf.shape(img)
         h, w = (tf.maximum(self.CROP_SIZE[0], image.shape[1]),
                 tf.maximum(self.CROP_SIZE[1], image.shape[2]))
-        pad_image = self._psp_img_preprocess(img, h, w)
+        pad_image = self._psp_img_preprocess(image, h, w)
         raw_output = self.psp_net50(pad_image)
         raw_output_up = tf.image.resize(raw_output, size=[h, w])
         raw_output_up = tf.image.crop_to_bounding_box(raw_output_up, 0, 0, image.shape[1], image.shape[2])
         semantics = tf.argmax(raw_output_up, axis=3)
-        
+
         image0, image1, image2 = utils.layer_predictor(depth, semantics, image, batch_size=self.config['batch_size'])
         
         if self.training:
             warped_image = input['input_2']
             warped_depth = tf.reshape(self.depth_net(warped_image), depth_shape)
-            pad_image = self._psp_img_preprocess(img, h, w)
-            raw_output = self.psp_net50(warped_image)
+            pad_image = self._psp_img_preprocess(warped_image, h, w)
+            raw_output = self.psp_net50(pad_image)
             raw_output_up = tf.image.resize(raw_output, size=[h, w])
             raw_output_up = tf.image.crop_to_bounding_box(raw_output_up, 0, 0, image.shape[1], image.shape[2])
             warped_semantics = tf.argmax(raw_output_up, axis=3)
@@ -120,12 +120,12 @@ class GreatPoint(tf.keras.Model):
         """Preprocess image for PSPNet
         """
         # Convert RGB to BGR
-        img_r, img_g, img_b = tf.split(axis=2, num_or_size_splits=3, value=img)
-        img = tf.cast(tf.concat(axis=2, values=[img_b, img_g, img_r]), dtype=tf.float32)
+        img_r, img_g, img_b = tf.split(axis=3, num_or_size_splits=3, value=img)
+        img = tf.cast(tf.concat(axis=3, values=[img_b, img_g, img_r]), dtype=tf.float32)
         # Extract mean.
         img -= self.IMG_MEAN
 
         pad_img = tf.image.pad_to_bounding_box(img, 0, 0, h, w)
-        pad_img = tf.expand_dims(pad_img, 0)
+        #pad_img = tf.expand_dims(pad_img, 0)
 
         return pad_img
