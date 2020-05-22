@@ -18,7 +18,7 @@ class GreatPoint(tf.keras.Model):
             initializerPaths = GreatPoint.defaultInitializerPaths
         
         self.IMG_MEAN = np.array((103.939, 116.779, 123.68), dtype=np.float32)
-        self.CROP_SIZE = [480, 640]
+        self.CROP_SIZE = [int(480), int(640)]
         
         self.training = training
         self.config = config
@@ -40,12 +40,12 @@ class GreatPoint(tf.keras.Model):
         img = tf.squeeze(image,axis=0)
         # if self.config['batch_size'] != 0:
         img_shape = tf.shape(img)
-        h, w = (tf.maximum(self.CROP_SIZE[0], image[1]),
-                tf.maximum(self.CROP_SIZE[1], image[2]))
+        h, w = (tf.maximum(self.CROP_SIZE[0], image.shape[1]),
+                tf.maximum(self.CROP_SIZE[1], image.shape[2]))
         pad_image = self._psp_img_preprocess(img, h, w)
         raw_output = self.psp_net50(pad_image)
         raw_output_up = tf.image.resize(raw_output, size=[h, w])
-        raw_output_up = tf.image.crop_to_bounding_box(raw_output_up, 0, 0, img_shape[0], img_shape[1])
+        raw_output_up = tf.image.crop_to_bounding_box(raw_output_up, 0, 0, image.shape[1], image.shape[2])
         semantics = tf.argmax(raw_output_up, axis=3)
         
         image0, image1, image2 = utils.layer_predictor(depth, semantics, image, batch_size=self.config['batch_size'])
@@ -56,11 +56,11 @@ class GreatPoint(tf.keras.Model):
             pad_image = self._psp_img_preprocess(img, h, w)
             raw_output = self.psp_net50(warped_image)
             raw_output_up = tf.image.resize(raw_output, size=[h, w])
-            raw_output_up = tf.image.crop_to_bounding_box(raw_output_up, 0, 0, img_shape[0], img_shape[1])
+            raw_output_up = tf.image.crop_to_bounding_box(raw_output_up, 0, 0, image.shape[1], image.shape[2])
             warped_semantics = tf.argmax(raw_output_up, axis=3)
 
             warped_image0, warped_image1, warped_image2 = utils.layer_predictor(warped_depth, warped_semantics, warped_image,
-                                                           batch_size=self.config['batch_size'])
+                                                                    batch_size=self.config['batch_size'])
             pair1 = {'input_1': image0, 'input_2': warped_image0}
             # pair2 = {'input_1': image0, 'input_2': warped_image1}
             # pair3 = {'input_1': image0, 'input_2': warped_image2}
