@@ -24,7 +24,7 @@ class GreatPoint(tf.keras.Model):
         self.config = config
         self.depth_net = hourglass.Hourglass(weightsPath=initializerPaths['hourglass'], training=False, normalize=False)
         self.depth_net.trainable = False
-        self.psp_net50 = PSP_net50.PSPNet50(num_classes=3, checkpoint_npy_path=initializerPaths['PSP_net50'])
+        self.psp_net50 = PSP_net50.PSPNet50(num_classes=150, checkpoint_npy_path=initializerPaths['PSP_net50'])
         self.psp_net50.trainable = False
         self.super_point = super_point.SuperPoint(config, training=training, npyWeightsPath=initializerPaths['super_point'], name='superpoint') 
         self.super_point.trainable = training
