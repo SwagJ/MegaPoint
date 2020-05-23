@@ -3,23 +3,26 @@ import tensorflow as tf
 class VGGBlock(tf.keras.Model):
     def __init__(self, filters, kernel_size, name,
                  data_format, training=False,
-                 batch_normalization=True, kernel_reg=0., initializer=None, path='', **params):
+                 batch_normalization=True, kernel_reg=0., initializer=None, path='', padding='SAME', activation=tf.nn.relu, **params):
         super(VGGBlock, self).__init__()
         self.batch_normalization = batch_normalization
         if initializer:
-            self.conv = tf.keras.layers.Conv2D(filters, kernel_size, kernel_regularizer=tf.keras.regularizers.l2(kernel_reg), data_format=data_format,
-                                               **initializer.conv2d(path)) # 'conv'
+            self.conv = tf.keras.layers.Conv2D(filters, kernel_size, padding=padding, 
+                activation=activation, kernel_regularizer=tf.keras.regularizers.l2(kernel_reg), 
+                data_format=data_format, **initializer.conv2d(path)) # 'conv'
             if batch_normalization:
-                self.bn = tf.keras.layers.BatchNormalization(trainable=training, fused=True, axis=1 if data_format == 'channels_first' else -1,
+                self.bn = tf.keras.layers.BatchNormalization(trainable=training, center=True, fused=True, axis=1 if data_format == 'channels_first' else -1,
                                                         **initializer.BN(path)) # 'bn'
         else:
-            self.conv = tf.keras.layers.Conv2D(filters, kernel_size, kernel_regularizer=tf.keras.regularizers.l2(kernel_reg), data_format=data_format) # 'conv'
+            self.conv = tf.keras.layers.Conv2D(filters, kernel_size, padding=padding, activation=activation, kernel_regularizer=tf.keras.regularizers.l2(kernel_reg), data_format=data_format) # 'conv'
             if batch_normalization:
-                self.bn = tf.keras.layers.BatchNormalization(trainable=training, fused=True, axis=1 if data_format == 'channels_first' else -1) # 'bn'
+                self.bn = tf.keras.layers.BatchNormalization(trainable=training, center=True, fused=True, axis=1 if data_format == 'channels_first' else -1) # 'bn'
     def call(self, inputs):
         out = self.conv(inputs)
+        print("after conv2d", out)
         if self.batch_normalization:
             out = self.bn(out)
+            print("after bn", out)
         return out
 
 class VGGBackbone(tf.keras.Model):
@@ -62,15 +65,17 @@ class VGGBackbone(tf.keras.Model):
         _x = self.conv1_1(x)
         _x = self.conv1_2(_x)
         _x = self.pool1(_x)
-        
+
         _x = self.conv2_1(_x)
         _x = self.conv2_2(_x)
         _x = self.pool2(_x)
-        
+
         _x = self.conv3_1(_x)
         _x = self.conv3_2(_x)
         _x = self.pool2(_x)
-                
+        
         _x = self.conv4_1(_x)
         _x = self.conv4_2(_x)
+        
+        
         return _x
