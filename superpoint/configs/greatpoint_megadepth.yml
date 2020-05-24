@@ -1,8 +1,8 @@
 data:
-    name: 'coco'
+    name: 'megadepth'
     cache_in_memory: false
     validation_size: 96
-    labels: magic-point_coco-export1  # use your own labels here
+    labels: mp_synth-v11_export_ha2  # use your own labels here
     preprocessing:
         blur_size: 21
         resize: [360, 480]  # Should be multiples of 8
@@ -37,10 +37,8 @@ data:
             max_angle: 1.57
             allow_artifacts: true
         valid_border_margin: 3
-    batch_size: 1
 model:
-    name: 'super_point'
-    input_size: [480, 640]
+    name: 'great_point'
     batch_size: 1
     eval_batch_size: 1
     learning_rate: 0.0001
@@ -51,6 +49,5 @@ model:
     detection_threshold: 0.001
     nms: 4
     top_k: 600
-    training: true
 train_iter: 600000
 validation_interval: 5000
