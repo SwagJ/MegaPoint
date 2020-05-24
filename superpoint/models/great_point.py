@@ -18,7 +18,7 @@ class GreatPoint(tf.keras.Model):
             initializerPaths = GreatPoint.defaultInitializerPaths
         
         self.IMG_MEAN = np.array((103.939, 116.779, 123.68), dtype=np.float32)
-        self.CROP_SIZE = [int(480), int(640)]
+        self.CROP_SIZE = config['input_size']
         
         self.training = training
         self.config = config

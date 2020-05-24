@@ -1,4 +1,5 @@
 import tensorflow as tf
+import numpy as np
 
 from .backbones.vgg import VGGBackbone
 from . import utils
@@ -138,7 +139,8 @@ class SuperPoint(tf.keras.Model):
         self.training = training
         self.config=utils._extend_dict(config, default_config)
         if npyWeightsPath:
-            initializer = ConstantWeightsInitializer(npyWeightsPath)
+            initializer = ConstantWeightsInitializer(
+                np.load(npyWeightsPath, allow_pickle=True)[()])
         else:
             initializer = None
         # for image input
@@ -192,7 +194,7 @@ class SuperPoint(tf.keras.Model):
         self.compiled_loss = SuperPointLoss(self.config, hasWarped=True)
         self.compiled_loss.metrics = [SuperPointMetrics()]
     
-    def comppileWrapper(self):
+    def compileWrapper(self):
         """This function call keras compile with arguments comming from the configuration file and
             adds a loss function by calling set_compiled_loss
         """

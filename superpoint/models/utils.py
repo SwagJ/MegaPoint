@@ -26,7 +26,7 @@ class DetectorHead(tf.keras.Model):
         super(DetectorHead, self).__init__()
         self.config = _correct_dict(DetectorHead.params_conv, config)
         self.config['grid_size'] = config['grid_size']
-
+        print('padding=', self.config['padding'])
         self.cfirst = (config['data_format'] == 'channels_first')
         self.cindex = 1 if self.cfirst else -1
         _path = path + 'detector/'
@@ -39,7 +39,7 @@ class DetectorHead(tf.keras.Model):
     def call(self, features):
         _x = self.conv1(features)
         logits = self.conv2(_x)
-
+        
         prob = tf.nn.softmax(logits, axis=self.cindex)
         # Strip the extra “no interest point” dustbin
         prob = prob[:, :-1, :, :] if self.cfirst else prob[:, :, :, :-1]
@@ -75,7 +75,6 @@ class DetectorHeadLoss(tf.keras.losses.Loss):
         
         # labels = tf.compat.v1.Print(labels,[tf.shape(labels), tf.shape(logits), tf.shape(logits)[-1], tf.rank(logits), tf.shape(valid_mask)], "labels, logits, valid_mask =")
         #  output_stream="file:///media/terabyte/projects/SUPERPOINT/SuperPointIoannis/superpoint.info")
-        
         loss = tf.compat.v1.losses.sparse_softmax_cross_entropy(
             labels=labels, logits=logits, weights=valid_mask)
         
