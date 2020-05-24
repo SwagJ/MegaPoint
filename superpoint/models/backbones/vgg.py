@@ -19,10 +19,8 @@ class VGGBlock(tf.keras.Model):
                 self.bn = tf.keras.layers.BatchNormalization(trainable=training, center=True, fused=True, axis=1 if data_format == 'channels_first' else -1) # 'bn'
     def call(self, inputs):
         out = self.conv(inputs)
-        print("after conv2d", out)
         if self.batch_normalization:
             out = self.bn(out)
-            print("after bn", out)
         return out
 
 class VGGBackbone(tf.keras.Model):
