@@ -15,41 +15,77 @@ logging.basicConfig(format='[%(asctime)s %(levelname)s] %(message)s',
                     datefmt='%m/%d/%Y %H:%M:%S', level=logging.INFO)
 import tensorflow as tf  # noqa: E402
 
-tf.compat.v1.disable_eager_execution()
+# tf.compat.v1.disable_eager_execution()
 
-def train(config, n_iter, output_dir, checkpoint_name='model.ckpt'):
+outputs_to_names = {
+    'output_1'  : 'logits',
+    'output_2'  : 'prob',
+    'output_3'  : 'description_raw',
+    'output_4'  : 'desc_processed',
+    'output_5'  : 'warped_logits',
+    'output_6'  : 'warped_prob',
+    'output_7'  : 'warped_descriptors_raw',
+    'output_8'  : 'warped_desc_processed',
+    'output_9'  : 'pred',
+    'output_10' : 'prob_nms'
+}
+
+
+def train(config, n_iter, output_dir, checkpoint_name='model.ckpt', numpyWeightsPaths=None):
     gpus= tf.config.experimental.list_physical_devices('GPU')
-    tf.config.experimental.set_memory_growth(gpus[0], True)
+    if (len(gpus) > 0):
+        tf.config.experimental.set_memory_growth(gpus[0], True)
     checkpoint_path = os.path.join(output_dir, checkpoint_name)
-    with _init_graph(config) as net:
-        try:
-            net.train(n_iter, output_dir=output_dir,
-                      validation_interval=config.get('validation_interval', 100),
-                      save_interval=config.get('save_interval', None),
-                      checkpoint_path=checkpoint_path,
-                      keep_checkpoints=config.get('keep_checkpoints', 1))
-        except KeyboardInterrupt:
-            logging.info('Got Keyboard Interrupt, saving model and closing.')
-        net.save(os.path.join(output_dir, checkpoint_name))
+    net, dataset = _init_graph(config, with_dataset=True)
+    try:
+        dtrain = dataset.get_tf_datasets()['training'].batch(config['model']['batch_size'])
+        dval = dataset.get_tf_datasets()['validation'].batch(config['model']['batch_size'])
+        validation_freq = config.get('validation_interval', 500)
+        num_epochs = n_iter // validation_freq
+        steps_per_epoch = n_iter // num_epochs
+        if numpyWeightsPaths:
+            pass
+        elif os.path.exists(checkpoint_path):
+            net.load_weights(checkpoint_path)
+        net.fit(x=dtrain, validation_data=dval, steps_per_epoch=steps_per_epoch, 
+                validation_freq=validation_freq, validation_steps=100,
+                max_queue_size=20,
+                callbacks=[tf.keras.callbacks.ModelCheckpoint(filepath=checkpoint_path),
+                            tf.keras.callbacks.TensorBoard(log_dir=output_dir, 
+                                                            histogram_freq=2,
+                                                            write_images=True)])
+    except KeyboardInterrupt:
+        logging.info('Got Keyboard Interrupt, saving model and closing.')
+    net.save(checkpoint_path)
 
 
 def evaluate(config, output_dir, n_iter=None):
-    with _init_graph(config) as net:
-        net.load(output_dir)
-        results = net.evaluate(config.get('eval_set', 'test'), max_iterations=n_iter)
-    return results
+    net, dataset = _init_graph(config, with_dataset=True)
+    dval = dataset.get_tf_datasets()['validation'].batch(config['model']['batch_size'])
+    checkpoint_path = os.path.join(output_dir, 'model.ckpt')
+    net.load_weights(checkpoint_path)
+    results = net.evaluate(x=dval, steps=n_iter, return_dict=True)
+
+    # filter the results to proper names
+    final_results = {}
+    for res_key in results.keys():
+        final_results[output_to_names[res_key]] = results[res_key]
+    
+    return final_results
 
 
 def predict(config, output_dir, n_iter):
     pred = []
     data = []
-    with _init_graph(config, with_dataset=True) as (net, dataset):
-        if net.trainable:
-            net.load(output_dir)
-        test_set = dataset.get_test_set()
-        for _ in range(n_iter):
-            data.append(next(test_set))
-            pred.append(net.predict(data[-1], keys='*'))
+    net, dataset = _init_graph(config, with_dataset=True)
+    if net.trainable:
+        checkpoint_path = os.path.join(output_dir, 'model.ckpt')
+        net.load_weights(checkpoint_path)
+    test_set = dataset.get_tf_datasets()['test'].batch(config['model']['batch_size'])
+    for d in test_set:
+        data.append(d)
+        res = net.predict(x=d)
+        pred.append({outputs_to_names[k]:res[k] for k in res.keys()})
     return pred, data
 
 
@@ -64,23 +100,19 @@ def get_num_gpus():
     else:
         return 0
 
-@contextmanager
-def _init_graph(config, with_dataset=False):
+
+def _init_graph(config, with_dataset=False, numpyWeightsPaths=None):
     set_seed(config.get('seed', int.from_bytes(os.urandom(4), byteorder='big')))
     n_gpus = get_num_gpus()
     logging.info('Number of GPUs detected: {}'.format(n_gpus))
 
     dataset = get_dataset(config['data']['name'])(**config['data'])
     model = get_model(config['model']['name'])(
-            data={} if with_dataset else dataset.get_tf_datasets(),
-            n_gpus=n_gpus, **config['model'])
-    model.__enter__()
-    if with_dataset:
-        yield model, dataset
-    else:
-        yield model
-    model.__exit__()
-    tf.compat.v1.reset_default_graph()
+            config['model'], training = config['model']['training'])
+    model.trainable = config['model']['training']
+    model.compileWrapper()
+
+    return model, dataset
 
 
 def _cli_train(config, output_dir, args):
@@ -142,12 +174,12 @@ if __name__ == '__main__':
     p_train.set_defaults(func=_cli_pred)
 
     args = parser.parse_args()
-    with open(args.config, 'r') as f:
-        config = yaml.load(f)
+    with open(args.config, 'r') as fr:
+        config = yaml.load(fr)
     output_dir = os.path.join(EXPER_PATH, args.exper_name)
     if not os.path.exists(output_dir):
         os.mkdir(output_dir)
 
-    with capture_outputs(os.path.join(output_dir, 'log')):
-        logging.info('Running command {}'.format(args.command.upper()))
-        args.func(config, output_dir, args)
+    # with capture_outputs(os.path.join(output_dir, 'log')):
+    #     logging.info('Running command {}'.format(args.command.upper()))
+    args.func(config, output_dir, args)
