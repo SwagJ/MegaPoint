@@ -22,7 +22,7 @@ class GreatPoint(tf.keras.Model):
                 if not p in initializerPaths:
                     initializerPaths[p] = None
         self.IMG_MEAN = np.array((103.939, 116.779, 123.68), dtype=np.float32)
-        self.CROP_SIZE = config['input_size']
+        self.CROP_SIZE = [2*s for s in config['input_size']]
         
         self.training = training
         self.config = config
@@ -35,24 +35,21 @@ class GreatPoint(tf.keras.Model):
 
     def call(self, input):
         image = input['input_1']
-        print("input image size:", image.shape)
-        print(image)
+
         
         depth = self.depth_net(image)
-        print("depth shape:",depth.shape)
-        depth_save = tf.squeeze(depth,0)
+
         
 
         img_shape = tf.cast(tf.shape(image),dtype=tf.int32)
-        print("image shape:",image.shape)
+
         pad_image = self._psp_img_preprocess(image, self.CROP_SIZE[0], self.CROP_SIZE[1])
         raw_output = self.psp_net50(pad_image)
-        print("raw_output shape:",raw_output.shape)
+
         raw_output = tf.image.resize(raw_output, size=[image.shape[1],image.shape[2]])
         semantics = tf.argmax(raw_output, axis=3)
-        semantics_save = tf.squeeze(semantics,0)
         
-        print("semantics reshape:",semantics.shape)
+
         if self.config['batch_size'] == 1 or self.config['batch_size'] == 0:
             depth = tf.squeeze(depth,0)
             semantics = tf.squeeze(semantics,0)
@@ -80,15 +77,15 @@ class GreatPoint(tf.keras.Model):
         if self.training:
             warped_image = input['input_2']
             warped_depth = self.depth_net(warped_image)
-            print("depth shape for wrap:",warped_depth.shape)
+
             warped_img_shape = tf.cast(tf.shape(warped_image),dtype=tf.int32)
-            print("image shape for wrap:",warped_img_shape)
+
             warped_pad_image = self._psp_img_preprocess(warped_image, self.CROP_SIZE[0], self.CROP_SIZE[1])
             warped_raw_output = self.psp_net50(warped_pad_image)
-            print("raw_output shape for warp:",warped_raw_output.shape)
+
             warped_raw_output = tf.image.resize(warped_raw_output, size=[warped_image.shape[1],warped_image.shape[2]])
             warped_semantics = tf.argmax(warped_raw_output, axis=3)
-            print("semantics reshape for warp:",warped_semantics.shape)
+
 
             if self.config['batch_size'] == 1 or self.config['batch_size'] == 0:
                 warped_depth = tf.squeeze(warped_depth,0)
@@ -136,7 +133,7 @@ class GreatPoint(tf.keras.Model):
             pair5 = {'input_1': image1}
             pair9 = {'input_1': image2}
 
-        print('image0 ', image0)
+
         s1 = self.super_point(pair1)
         s2 = self.super_point(pair5)
         s3 = self.super_point(pair9)
@@ -153,7 +150,6 @@ class GreatPoint(tf.keras.Model):
         # ret_list['image0'] = image0
         # ret_list['image1'] = image1
         # ret_list['image2'] = image2
-        # return depth_save,semantics_save,image0_save,image1_save,image2_save
         return ret_list
 
     def set_compiled_loss(self):
