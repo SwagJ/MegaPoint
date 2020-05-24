@@ -5,7 +5,7 @@ data:
     labels: mp_synth-v11_export_ha2  # use your own labels here
     preprocessing:
         blur_size: 21
-        resize: [360, 480]  # Should be multiples of 8
+        resize: [480, 640]  # Should be multiples of 8
     augmentation:
         photometric:
             enable: true
@@ -39,6 +39,7 @@ data:
         valid_border_margin: 3
 model:
     name: 'great_point'
+    input_size: [480, 640]
     batch_size: 1
     eval_batch_size: 1
     learning_rate: 0.0001
