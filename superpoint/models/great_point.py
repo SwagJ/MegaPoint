@@ -31,6 +31,7 @@ class GreatPoint(tf.keras.Model):
 
     def call(self, input):
         image = input['input_1']
+
         depth_shape = [self.config['batch_size'], self.CROP_SIZE[0], self.CROP_SIZE[1]]
         
         depth = tf.reshape(self.depth_net(image), depth_shape) 
@@ -48,7 +49,8 @@ class GreatPoint(tf.keras.Model):
         raw_output_up = tf.image.crop_to_bounding_box(raw_output_up, 0, 0, image.shape[1], image.shape[2])
         semantics = tf.argmax(raw_output_up, axis=3)
 
-        image0, image1, image2 = utils.layer_predictor(depth, semantics, image, batch_size=self.config['batch_size'])
+        _image = tf.image.rgb_to_grayscale(image)
+        image0, image1, image2 = utils.layer_predictor(depth, semantics, _image, batch_size=self.config['batch_size'])
         
         if self.training:
             warped_image = input['input_2']
@@ -59,7 +61,8 @@ class GreatPoint(tf.keras.Model):
             raw_output_up = tf.image.crop_to_bounding_box(raw_output_up, 0, 0, image.shape[1], image.shape[2])
             warped_semantics = tf.argmax(raw_output_up, axis=3)
 
-            warped_image0, warped_image1, warped_image2 = utils.layer_predictor(warped_depth, warped_semantics, warped_image,
+            _warped_image = tf.image.rgb_to_grayscale(warped_image)
+            warped_image0, warped_image1, warped_image2 = utils.layer_predictor(warped_depth, warped_semantics, _warped_image,
                                                                     batch_size=self.config['batch_size'])
             pair1 = {'input_1': image0, 'input_2': warped_image0}
             # pair2 = {'input_1': image0, 'input_2': warped_image1}
