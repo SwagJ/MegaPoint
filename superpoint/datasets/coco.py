@@ -4,7 +4,7 @@ from pathlib import Path
 
 from .base_dataset import BaseDataset
 from .utils import pipeline
-from superpoint.settings import DATA_PATH, EXPER_PATH
+from settings import DATA_PATH, EXPER_PATH
 
 
 class Coco(BaseDataset):
@@ -90,8 +90,7 @@ class Coco(BaseDataset):
         names = tf.data.Dataset.from_tensor_slices(files['names'])
         images = tf.data.Dataset.from_tensor_slices(files['image_paths'])
         images = images.map(_read_image)
-        images = images.map(lambda im: tf.image.resize(im, self.config['preprocessing']['resize'],
-                                method=tf.image.ResizeMethod.GAUSSIAN))
+        images = images.map(_preprocess)
         
         data = tf.data.Dataset.zip({'image': images, 'name': names})
         
@@ -178,17 +177,17 @@ class Coco(BaseDataset):
 
         return data
         
-
-class CocoSequence(tf.keras.utils.Sequence):
-    def __init__(self, data, batch_size):
-        self.batch_size = batch_size
-        self.data = data
-    def __len__(self):
-        return self.batch_size
-    def __getitem__(self, idx):
-        assert idx == 0
-        for d in self.data:
-            return d
-    def __iter__(self):
-        for d in self.data:
-            yield d
+# TODO:  To be removed
+# class CocoSequence(tf.keras.utils.Sequence):
+#     def __init__(self, data, batch_size):
+#         self.batch_size = batch_size
+#         self.data = data
+#     def __len__(self):
+#         return self.batch_size
+#     def __getitem__(self, idx):
+#         assert idx == 0
+#         for d in self.data:
+#             return d
+#     def __iter__(self):
+#         for d in self.data:
+#             yield d
