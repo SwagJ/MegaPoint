@@ -80,7 +80,11 @@ class Megadepth(BaseDataset):
         def _preprocess(image):
             image = tf.image.rgb_to_grayscale(image)
             if config['preprocessing']['resize']:
-                image = pipeline.ratio_preserving_resize(image,**config['preprocessing'])
+                target_size = self.config['preprocessing']['resize']
+                image = tf.image.resize(image, target_size,
+                                        method=tf.image.ResizeMethod.GAUSSIAN,
+                                        preserve_aspect_ratio=True)
+                image = tf.image.resize_with_crop_or_pad(image, target_size[0], target_size[1])
             return image
 
         # Python function
@@ -115,14 +119,20 @@ class Megadepth(BaseDataset):
         if config['warped_pair']['enable']:
             assert has_keypoints
             warped = data.map(lambda d: pipeline.homographic_augmentation(
-                d, add_homography=True, **config['warped_pair']))
+                d['image'], d['keypoints'], warped_pair_enable=True, add_homography=True, **config['warped_pair']))
+          
             if is_training and config['augmentation']['photometric']['enable']:
-                warped = warped.map(lambda d: pipeline.photometric_augmentation(
-                    d, **config['augmentation']['photometric']))
-            warped = warped.map(pipeline.add_keypoint_map)
+                warped = warped.map(lambda w: {**w, 
+                            'warped/image': pipeline.photometric_augmentation(
+                                w['warped/image'], **config['augmentation']['photometric'])})
+            
+            warped = warped.map(lambda w: {**w, 
+                                            'warped/keypoint_map': pipeline.add_keypoint_map(w['warped/image'],
+                                                                                             w['warped/keypoints'])})
+            
             # Merge with the original data
             data = tf.data.Dataset.zip((data, warped))
-            data = data.map(lambda d, w: {**d, 'warped': w})
+            data = data.map(lambda d, w: {**d, **w})
 
         # Data augmentation
         if has_keypoints and is_training:
@@ -136,27 +146,34 @@ class Megadepth(BaseDataset):
 
         # Generate the keypoint map
         if has_keypoints:
-            data = data.map(pipeline.add_keypoint_map)
+            data = data.map(lambda d: {**d, 
+                                        'keypoint_map' : pipeline.add_keypoint_map(d['image'],
+                                                                                   d['keypoints'])})
         data = data.map(
             lambda d: {**d, 'image': tf.cast(d['image'], tf.float32) / 255.})
+        
         if config['warped_pair']['enable']:
-            data = data.map(
+            data = data.map_parallel(
                 lambda d: {
-                    **d, 'warped': {**d['warped'],
-                                    'image': tf.cast(d['warped']['image'], tf.float32) / 255.}})
+                    **d, 'warped/image': tf.cast(d['warped/image'], tf.float32) / 255.})
 
-
-
-        #     dataIn = data.map(lambda d: ({
-        #         'input_1': d['image'],
-        #         'input_2': d['warped']['image']}))
-        #     dataOut = data.map(lambda d: ({
-        #             'output_1': d['keypoint_map'],
-        #             'output_2': d['valid_mask'],
-        #             'output_3': d['warped']['keypoint_map'],
-        #             'output_4': d['warped']['valid_mask'],
-        #             'output_5': d['warped']['homography']}))
-        # else:
+        if(config['warped_pair']['enable'] and is_training):
+            dataIn = data.map(lambda d: ({
+                'input_1': d['image'],
+                'input_2': d['warped/image']}))
+            dataOut = data.map(lambda d: ({
+                    'output_1': d['keypoint_map'],
+                    'output_2': d['valid_mask'],
+                    'output_3': d['warped/keypoint_map'],
+                    'output_4': d['warped/valid_mask'],
+                    'output_5': d['warped/homography']}))
+        else:
+            dataIn = data.map(lambda d: ({
+                    'input_1': d['image']}))
+            dataOut = data.map(lambda d: ({
+                    'output_1': d['keypoint_map'],
+                    'output_2': d['valid_mask']}))
+        data = tf.data.Dataset.zip((dataIn, dataOut))
             
 
         return data
