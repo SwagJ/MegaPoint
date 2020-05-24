@@ -14,9 +14,13 @@ class GreatPoint(tf.keras.Model):
     }
     def __init__(self, config, training, initializerPaths=None, path='', name='GreatPoint'):
         super(GreatPoint, self).__init__(name=name)
-        if initializerPaths == None:
+        if initializerPaths == None and not 'initializerPaths' in config.keys() :
             initializerPaths = GreatPoint.defaultInitializerPaths
-        
+        elif 'initializerPaths' in config.keys():
+            initializerPaths = config['initializerPaths']
+            for p in GreatPoint.defaultInitializerPaths.keys():
+                if not p in initializerPaths:
+                    initializerPaths[p] = None
         self.IMG_MEAN = np.array((103.939, 116.779, 123.68), dtype=np.float32)
         self.CROP_SIZE = config['input_size']
         
@@ -31,39 +35,82 @@ class GreatPoint(tf.keras.Model):
 
     def call(self, input):
         image = input['input_1']
-
-        depth_shape = [self.config['batch_size'], self.CROP_SIZE[0], self.CROP_SIZE[1]]
+        print("input image size:", image.shape)
+        print(image)
         
-        depth = tf.reshape(self.depth_net(image), depth_shape) 
-        #channels = tf.unstack(image, axis=-1)
-        #bgr_image = tf.stack([channels[2], channels[1], channels[0]], axis=-1)
-        #semantics = self.psp_net50(bgr_image*255 - self.IMG_MEAN)
-        #img = tf.squeeze(image,axis=0)
-        # if self.config['batch_size'] != 0:
-        #img_shape = tf.shape(img)
-        h, w = (tf.maximum(self.CROP_SIZE[0], image.shape[1]),
-                tf.maximum(self.CROP_SIZE[1], image.shape[2]))
-        pad_image = self._psp_img_preprocess(image, h, w)
+        depth = self.depth_net(image)
+        print("depth shape:",depth.shape)
+        depth_save = tf.squeeze(depth,0)
+        
+
+        img_shape = tf.cast(tf.shape(image),dtype=tf.int32)
+        print("image shape:",image.shape)
+        pad_image = self._psp_img_preprocess(image, self.CROP_SIZE[0], self.CROP_SIZE[1])
         raw_output = self.psp_net50(pad_image)
-        raw_output_up = tf.image.resize(raw_output, size=[h, w])
-        raw_output_up = tf.image.crop_to_bounding_box(raw_output_up, 0, 0, image.shape[1], image.shape[2])
-        semantics = tf.argmax(raw_output_up, axis=3)
-
-        _image = tf.image.rgb_to_grayscale(image)
-        image0, image1, image2 = utils.layer_predictor(depth, semantics, _image, batch_size=self.config['batch_size'])
+        print("raw_output shape:",raw_output.shape)
+        raw_output = tf.image.resize(raw_output, size=[image.shape[1],image.shape[2]])
+        semantics = tf.argmax(raw_output, axis=3)
+        semantics_save = tf.squeeze(semantics,0)
         
+        print("semantics reshape:",semantics.shape)
+        if self.config['batch_size'] == 1 or self.config['batch_size'] == 0:
+            depth = tf.squeeze(depth,0)
+            semantics = tf.squeeze(semantics,0)
+            grayImage = tf.image.rgb_to_grayscale(image)
+            layerShape = tf.shape(grayImage)
+            image = tf.squeeze(image,0)
+            image0, image1, image2 = utils.layer_predictor(depth, semantics, grayImage)
+
+        else:
+            image0_list,image1_list,image2_list = [],[],[]
+            for k in range(image.shape[0]):
+                depth_i = tf.gather_nd(depth,k)
+                semantics_i = tf.gather_nd(semantics,k)
+                image_i = tf.gather_nd(image,k)
+                image0_i, image1_i, image2_i = utils.layer_predictor(depth_i, semantics_i, image_i)
+                image0_list.append(image0_i)
+                image1_list.append(image1_i)
+                image2_list.append(image2_i)
+
+            image0 = tf.concat(image0_list,axis=0)
+            image1 = tf.concat(image1_list,axis=0)
+            image2 = tf.concat(image2_list,axis=0)
+        
+            
         if self.training:
             warped_image = input['input_2']
-            warped_depth = tf.reshape(self.depth_net(warped_image), depth_shape)
-            pad_image = self._psp_img_preprocess(warped_image, h, w)
-            raw_output = self.psp_net50(pad_image)
-            raw_output_up = tf.image.resize(raw_output, size=[h, w])
-            raw_output_up = tf.image.crop_to_bounding_box(raw_output_up, 0, 0, image.shape[1], image.shape[2])
-            warped_semantics = tf.argmax(raw_output_up, axis=3)
+            warped_depth = self.depth_net(warped_image)
+            print("depth shape for wrap:",warped_depth.shape)
+            warped_img_shape = tf.cast(tf.shape(warped_image),dtype=tf.int32)
+            print("image shape for wrap:",warped_img_shape)
+            warped_pad_image = self._psp_img_preprocess(warped_image, self.CROP_SIZE[0], self.CROP_SIZE[1])
+            warped_raw_output = self.psp_net50(warped_pad_image)
+            print("raw_output shape for warp:",warped_raw_output.shape)
+            warped_raw_output = tf.image.resize(warped_raw_output, size=[warped_image.shape[1],warped_image.shape[2]])
+            warped_semantics = tf.argmax(warped_raw_output, axis=3)
+            print("semantics reshape for warp:",warped_semantics.shape)
 
-            _warped_image = tf.image.rgb_to_grayscale(warped_image)
-            warped_image0, warped_image1, warped_image2 = utils.layer_predictor(warped_depth, warped_semantics, _warped_image,
-                                                                    batch_size=self.config['batch_size'])
+            if self.config['batch_size'] == 1 or self.config['batch_size'] == 0:
+                warped_depth = tf.squeeze(warped_depth,0)
+                warped_semantics = tf.squeeze(warped_semantics,0)
+                warped_grayImage = tf.image.rgb_to_grayscale(warped_image)
+                warped_image = tf.squeeze(warped_image,0)
+                warped_image0, warped_image1, warped_image2 = utils.layer_predictor(warped_depth, warped_semantics, warped_grayImage)
+            else:
+                warped_image0_list,warped_image1_list,warped_image2_list = [],[],[]
+                for k in range(image.shape[0]):
+                    warped_depth_i = tf.gather_nd(warped_depth,k)
+                    warped_semantics_i = tf.gather_nd(warped_semantics,k)
+                    warped_image_i = tf.gather_nd(warped_image,k)
+                    warped_image0_i, warped_image1_i, warped_image2_i = utils.layer_predictor(warped_depth_i, warped_semantics_i, warped_image_i)
+                    warped_image0_list.append(warped_image0_i)
+                    warped_image1_list.append(warped_image1_i)
+                    warped_image2_list.append(warped_image2_i)
+
+                warped_image0 = tf.concat(warped_image0_list,axis=0)
+                warped_image1 = tf.concat(warped_image1_list,axis=0)
+                warped_image2 = tf.concat(warped_image2_list,axis=0)
+
             pair1 = {'input_1': image0, 'input_2': warped_image0}
             # pair2 = {'input_1': image0, 'input_2': warped_image1}
             # pair3 = {'input_1': image0, 'input_2': warped_image2}
@@ -89,6 +136,7 @@ class GreatPoint(tf.keras.Model):
             pair5 = {'input_1': image1}
             pair9 = {'input_1': image2}
 
+        print('image0 ', image0)
         s1 = self.super_point(pair1)
         s2 = self.super_point(pair5)
         s3 = self.super_point(pair9)
@@ -102,6 +150,10 @@ class GreatPoint(tf.keras.Model):
         if self.training:
             ret_list['output_6'] = ret_list['output_6'] / 3
         
+        # ret_list['image0'] = image0
+        # ret_list['image1'] = image1
+        # ret_list['image2'] = image2
+        # return depth_save,semantics_save,image0_save,image1_save,image2_save
         return ret_list
 
     def set_compiled_loss(self):

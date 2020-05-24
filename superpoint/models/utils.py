@@ -255,110 +255,7 @@ def box_nms(prob, size, iou=0.1, min_prob=0.01, keep_top_k=0):
         prob = tf.scatter_nd(tf.cast(pts, dtype=tf.int32), scores, tf.shape(prob))
     return prob
 
-
-# def layer_predictor(depth, semantic, og, batch_size=0):
-#     """ The layer predictor function takes input a depth field of an image og
-#         and a semantic desciription for the image.
-
-#     Arguments:
-#         depth {tf tensor} -- A 2D Tensor where each element is the depth of the corresponding pixel in the original image
-#         semantic {tf tensor} -- A 2D Tensor where each element is the class of the corresponding pixel in the original image
-#         og {tf tensor} -- The original image tensor 3D.
-    
-#     Note:
-#         batched version is not suppported yet
-
-#     Returns:
-#         [type] -- [description]
-#     """
-#     # print("Semantic shape:",np.shape(semantic))
-#     # print("OG shape:",np.shape(og))
-#     # print("Depth shape:",np.shape(depth))
-#     output_shape = tf.shape(og)
-#     print(semantic)
-#     print(depth)
-#     if batch_size == 0:
-#         semantic_flat = tf.reshape(semantic, [-1])
-#         unique_label, _, _ = tf.unique_with_counts(semantic_flat)
-#     elif batch_size == 1:
-#         depth = tf.squeeze(depth)
-#         semantic = tf.squeeze(semantic)
-#         og = tf.squeeze(og)        
-#         semantic_flat = tf.reshape(semantic, [-1])
-#         unique_label, _, _ = tf.unique_with_counts(semantic_flat)
-#     else:
-#         # semantic_flat = tf.reshape(semantic, [batch_size, -1])
-#         # semantic_flat_unstacked = tf.unstack(semantic_flat, axis=0)
-#         # for k in range(batch_size):
-#         #     _unique_label, _ = tf.unique(semantic_flat_unstacked[k])
-#         raise NotImplementedError("layer predictor is not implemented for batches > 1")
-    
-#     #calculate class average
-#     num_class = tf.size(unique_label)
-#     unique_labels = tf.expand_dims(unique_label,axis=1)
-#     unique_labels = tf.expand_dims(unique_labels,axis=2)
-#     # unique_labels = tf.expand_dims(unique_labels,axis=-1)
-#     # unique_labels = tf.reshape(unique_label, 
-#     #                            tf.concat([tf.shape(semantic)[:-1],[1]], axis=-1))
-#     mask = tf.cast(tf.equal(semantic, unique_labels),dtype=tf.float32)
-
-
-
-#     total = tf.math.count_nonzero((tf.reshape(mask,(num_class,-1))),axis=1)
-#     total = tf.cast(total,dtype=tf.float32)
-    
-#     enlarged_depth = tf.concat(num_class*[tf.expand_dims(depth,0)],axis=0)
-#     enlarged_depth = tf.cast(enlarged_depth, dtype=tf.float32)
-
-#     masked_depth = tf.math.multiply(mask,enlarged_depth)
-
-#     mask_stack = tf.stack([mask, mask, mask],axis=3)
-    
-#     enlarged_og = tf.stack([og]*num_class,axis=0)
-#     enlarged_og = tf.cast(enlarged_og,dtype=tf.float32)
-#     classed_pixel = tf.math.multiply(mask_stack,enlarged_og)
-#     depth_avg = tf.math.divide(tf.math.reduce_sum(tf.reshape(masked_depth,(num_class,-1)),axis=1),total)
-
-#     #print(len(classed_pixel))
-#     index = tf.argsort(depth_avg)
-#     #print(index)
-#     num_class = tf.size(unique_label)
-#     start_idx = num_class // 4
-#     end_idx = num_class - num_class // 4
-#     foreground_idx = tf.squeeze(index[0:start_idx])
-#     midground_idx = tf.squeeze(index[start_idx:end_idx])
-#     background_idx = tf.squeeze(index[end_idx:num_class])
-#     #print(len(foreground_idx))
-
-#     fore_class = tf.gather(classed_pixel, foreground_idx, axis=0)
-#     mid_class = tf.gather(classed_pixel, midground_idx, axis=0)
-#     back_class = tf.gather(classed_pixel, background_idx, axis=0)
-
-#     foreground = tf.reduce_sum(fore_class, axis=0)
-#     midground = tf.reduce_sum(mid_class, axis=0)
-#     background = tf.reduce_sum(back_class, axis=0)
-
-#     layer0 = foreground + midground
-#     layer1 = foreground + background
-#     layer2 = midground + background
-    
-#     fore_mask = tf.gather(mask_stack,foreground_idx, axis=0)
-#     mid_mask = tf.gather(mask_stack,midground_idx, axis=0)
-#     back_mask = tf.gather(mask_stack, background_idx, axis=0)
-
-#     foreground_mask = tf.reduce_sum(fore_mask, axis=0)
-#     midground_mask = tf.reduce_sum(mid_mask, axis=0)
-#     background_mask = tf.reduce_sum(back_mask, axis=0)
-#     # = original image input shape
-    
-
-#     layer0 = tf.reshape(layer0, output_shape)
-#     layer1 = tf.reshape(layer1, output_shape)
-#     layer2 = tf.reshape(layer2, output_shape)
-    
-#     return layer0, layer1, layer2
-
-def layer_predictor(depth, semantic, og, batch_size=0):
+def layer_predictor(depth, semantic, og):
     """ The layer predictor function takes input a depth field of an image og
         and a semantic desciription for the image.
     Arguments:
@@ -371,98 +268,68 @@ def layer_predictor(depth, semantic, og, batch_size=0):
     Returns:
         [type] -- [description]
     """
-    # print("Semantic shape:",np.shape(semantic))
-    # print("OG shape:",np.shape(og))
-    # print("Depth shape:",np.shape(depth))
     output_shape = tf.shape(og)
-    # print("SHAPES")
-    # print(semantic)
-    # print(tf.shape(depth))
-    # print(depth.shape)
-    if batch_size == 0:
-        semantic_flat = tf.reshape(semantic, [-1])
-        unique_label, _, _ = tf.unique_with_counts(semantic_flat)
-    elif batch_size == 1:
-        depth = tf.squeeze(depth)
-        semantic = tf.squeeze(semantic)
-        og = tf.squeeze(og, axis=0)
-        semantic_flat = tf.reshape(semantic, [-1])
-        unique_label, _, _ = tf.unique_with_counts(semantic_flat)
-    else:
-        # semantic_flat = tf.reshape(semantic, [batch_size, -1])
-        # semantic_flat_unstacked = tf.unstack(semantic_flat, axis=0)
-        # for k in range(batch_size):
-        #     _unique_label, _ = tf.unique(semantic_flat_unstacked[k])
-        raise NotImplementedError("layer predictor is not implemented for batches > 1")
+
+    flat_og = tf.reshape(og, [-1])
+    flat_semantic = tf.reshape(semantic, [-1])
+    flat_depth = tf.reshape(depth, [-1])
     
-    #calculate class average
-    num_class = tf.size(unique_label)
-    unique_labels = tf.expand_dims(unique_label,axis=1)
-    unique_labels = tf.expand_dims(unique_labels,axis=2)
-    # unique_labels = tf.expand_dims(unique_labels,axis=-1)
-    # unique_labels = tf.reshape(unique_label, 
-    #                            tf.concat([tf.shape(semantic)[:-1],[1]], axis=-1))
-    mask = tf.cast((semantic == unique_labels),dtype=tf.float32)
-
-
-
-    total = tf.math.count_nonzero((tf.reshape(mask,(num_class,-1))),axis=1)
-    total = tf.cast(total,dtype=tf.float32)
+    # find all unique labels of the segmented image
+    # also find their indices
+    # unique_label has the values of the unique labels
+    # un_label_idx holds the label index of each element in flat_semantic
+    # unique_label[un_label_idx[i]] = flat_semantic[i]
+    unique_label, un_label_idx = tf.unique(flat_semantic)
     
-    enlarged_depth = tf.concat(num_class*[tf.expand_dims(depth,0)],axis=0)
-    enlarged_depth = tf.cast(enlarged_depth, dtype=tf.float32)
+    # The number of unique labels
+    num_unique_labels = tf.size(unique_label)
 
-    masked_depth = tf.math.multiply(mask,enlarged_depth)
-
-    mask_stack = tf.stack([mask, mask, mask], axis=3)
+    # un_label_idx[i] point the label index in unique_label that the i-th element has
+    # shape(depth) = shape(semantic) --> size(depth) = size(semantic) and 
+    # also flat_depth[i] corresponds to flat_semantic[i]
+    # un_label_idx[i] is the index of the label index for each depth in flat_depth also 
+    # unsorted_segment_mean gets for k = 0,..., num_unique_labels-1 the 
+    # mean_j(flat_depth[j], for un_label_idx[j] = k), j=0,...,size(flat_depth)
+    mean_depth_per_label = tf.math.unsorted_segment_mean(flat_depth, un_label_idx, num_unique_labels)
     
-    enlarged_og = tf.stack([og]*num_class,axis=0)
-    enlarged_og = tf.cast(enlarged_og,dtype=tf.float32)
-    # classed_pixel = tf.math.multiply(mask, enlarged_og)
-    print(mask, mask_stack, enlarged_og, num_class)
-    classed_pixel = tf.math.multiply(mask_stack, enlarged_og)
-    depth_avg = tf.math.divide(tf.math.reduce_sum(tf.reshape(masked_depth,(num_class,-1)),axis=1),total)
+    # get the indices for sorting the mean_depth_per_label
+    index = tf.argsort(mean_depth_per_label)
 
-    #print(len(classed_pixel))
-    index = tf.argsort(depth_avg)
-    #print(index)
-    num_class = tf.size(unique_label)
-    start_idx = num_class // 4
-    end_idx = num_class - num_class // 4
-    foreground_idx = tf.squeeze(index[0:start_idx])
-    midground_idx = tf.squeeze(index[start_idx:end_idx])
-    background_idx = tf.squeeze(index[end_idx:num_class])
-    #print(len(foreground_idx))
+    # This seperates the sorted indices to 3 pieces
+    # in order to extract objects in image 
+    # with these pieces
+    start_idx = num_unique_labels // 4
+    end_idx = num_unique_labels - (num_unique_labels // 4)
+
+    foreground_idx = tf.reshape(index[0:start_idx], [-1,1])
+    midground_idx = tf.reshape(index[start_idx:end_idx], [-1,1])
+    background_idx = tf.reshape(index[end_idx:num_unique_labels], [-1, 1])
+
     
-    print(classed_pixel)
-
-    fore_class = tf.gather(classed_pixel, foreground_idx, axis=0)
-    mid_class = tf.gather(classed_pixel, midground_idx, axis=0)
-    back_class = tf.gather(classed_pixel, background_idx, axis=0)
-
-    foreground = tf.reduce_sum(fore_class, axis=0)
-    midground = tf.reduce_sum(mid_class, axis=0)
-    background = tf.reduce_sum(back_class, axis=0)
-
-    layer0 = foreground + midground
-    layer1 = foreground + background
-    layer2 = midground + background
+    # In case a label does not match to the `layer` idx
+    # replaces it with zeros, see tf.where below
+    z = tf.zeros_like(flat_og)
     
-    fore_mask = tf.gather(mask_stack,foreground_idx, axis=0)
-    mid_mask = tf.gather(mask_stack,midground_idx, axis=0)
-    back_mask = tf.gather(mask_stack, background_idx, axis=0)
-    # fore_mask = tf.gather(mask, foreground_idx, axis=0)
-    # mid_mask = tf.gather(mask, midground_idx, axis=0)
-    # back_mask = tf.gather(mask, background_idx, axis=0)
+    # This checks if un_label_idx is one of `layer`_idx values.
+    # `layer` can be one of foreground, midground, background
+    # fore_mask[i] = un_label_idx[i] in foreground_idx 
+    # = any_j(un_label_idx[i] == foreground_idx[j])
+    # Note: j is on axis 0
+    fore_mask = tf.math.reduce_any(tf.equal(un_label_idx, foreground_idx) ,axis=0 )
+    mid_mask  = tf.math.reduce_any(tf.equal(un_label_idx, midground_idx) ,axis=0 )
+    back_mask = tf.math.reduce_any(tf.equal(un_label_idx, background_idx) ,axis=0 )    
 
-    foreground_mask = tf.reduce_sum(fore_mask, axis=0)
-    midground_mask = tf.reduce_sum(mid_mask, axis=0)
-    background_mask = tf.reduce_sum(back_mask, axis=0)
-    # = original image input shape
-    
 
-    layer0 = tf.reshape(layer0, output_shape)
-    layer1 = tf.reshape(layer1, output_shape)
-    layer2 = tf.reshape(layer2, output_shape)
+    foreground_flat = tf.where(fore_mask, flat_og, z)
+    midground_flat = tf.where(mid_mask, flat_og, z)
+    background_flat = tf.where(back_mask, flat_og, z)
     
+    layer0_flat = foreground_flat + midground_flat
+    layer1_flat = foreground_flat + background_flat
+    layer2_flat = midground_flat + background_flat
+
+    layer0 = tf.reshape(layer0_flat, output_shape)
+    layer1 = tf.reshape(layer1_flat, output_shape)
+    layer2 = tf.reshape(layer2_flat, output_shape)
+
     return layer0, layer1, layer2

@@ -13,7 +13,7 @@ from pathlib import Path
 # There is no neural network deployed
 # in the patches generation process.
 #
-tf.compat.v1.disable_eager_execution()
+# tf.compat.v1.disable_eager_execution()
 
 from models.homographies import (sample_homography, flat2mat,
                                             invert_homography)
