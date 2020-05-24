@@ -90,7 +90,8 @@ class Coco(BaseDataset):
         names = tf.data.Dataset.from_tensor_slices(files['names'])
         images = tf.data.Dataset.from_tensor_slices(files['image_paths'])
         images = images.map(_read_image)
-        images = images.map(_preprocess)
+        images = images.map(lambda im: tf.image.resize(im, self.config['preprocessing']['resize'],
+                                method=tf.image.ResizeMethod.GAUSSIAN))
         
         data = tf.data.Dataset.zip({'image': images, 'name': names})
         
@@ -177,17 +178,17 @@ class Coco(BaseDataset):
 
         return data
         
-# TODO:  To be removed
-# class CocoSequence(tf.keras.utils.Sequence):
-#     def __init__(self, data, batch_size):
-#         self.batch_size = batch_size
-#         self.data = data
-#     def __len__(self):
-#         return self.batch_size
-#     def __getitem__(self, idx):
-#         assert idx == 0
-#         for d in self.data:
-#             return d
-#     def __iter__(self):
-#         for d in self.data:
-#             yield d
+
+class CocoSequence(tf.keras.utils.Sequence):
+    def __init__(self, data, batch_size):
+        self.batch_size = batch_size
+        self.data = data
+    def __len__(self):
+        return self.batch_size
+    def __getitem__(self, idx):
+        assert idx == 0
+        for d in self.data:
+            return d
+    def __iter__(self):
+        for d in self.data:
+            yield d

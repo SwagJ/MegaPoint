@@ -78,7 +78,7 @@ class Megadepth(BaseDataset):
             return tf.cast(image, tf.float32)
 
         def _preprocess(image):
-            image = tf.image.rgb_to_grayscale(image)
+            # image = tf.image.rgb_to_grayscale(image)
             if config['preprocessing']['resize']:
                 target_size = self.config['preprocessing']['resize']
                 image = tf.image.resize(image, target_size,
