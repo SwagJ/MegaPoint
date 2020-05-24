@@ -385,7 +385,7 @@ def layer_predictor(depth, semantic, og, batch_size=0):
     elif batch_size == 1:
         depth = tf.squeeze(depth)
         semantic = tf.squeeze(semantic)
-        og = tf.squeeze(og)        
+        og = tf.squeeze(og, axis=0)
         semantic_flat = tf.reshape(semantic, [-1])
         unique_label, _, _ = tf.unique_with_counts(semantic_flat)
     else:
@@ -414,12 +414,13 @@ def layer_predictor(depth, semantic, og, batch_size=0):
 
     masked_depth = tf.math.multiply(mask,enlarged_depth)
 
-    # mask_stack = tf.stack([mask, mask, mask],axis=3)
+    mask_stack = tf.stack([mask, mask, mask], axis=3)
     
     enlarged_og = tf.stack([og]*num_class,axis=0)
     enlarged_og = tf.cast(enlarged_og,dtype=tf.float32)
-    # classed_pixel = tf.math.multiply(mask_stack,enlarged_og)
-    classed_pixel = tf.math.multiply(mask, enlarged_og)
+    # classed_pixel = tf.math.multiply(mask, enlarged_og)
+    print(mask, mask_stack, enlarged_og, num_class)
+    classed_pixel = tf.math.multiply(mask_stack, enlarged_og)
     depth_avg = tf.math.divide(tf.math.reduce_sum(tf.reshape(masked_depth,(num_class,-1)),axis=1),total)
 
     #print(len(classed_pixel))
@@ -432,6 +433,8 @@ def layer_predictor(depth, semantic, og, batch_size=0):
     midground_idx = tf.squeeze(index[start_idx:end_idx])
     background_idx = tf.squeeze(index[end_idx:num_class])
     #print(len(foreground_idx))
+    
+    print(classed_pixel)
 
     fore_class = tf.gather(classed_pixel, foreground_idx, axis=0)
     mid_class = tf.gather(classed_pixel, midground_idx, axis=0)
@@ -445,12 +448,12 @@ def layer_predictor(depth, semantic, og, batch_size=0):
     layer1 = foreground + background
     layer2 = midground + background
     
-    # fore_mask = tf.gather(mask_stack,foreground_idx, axis=0)
-    # mid_mask = tf.gather(mask_stack,midground_idx, axis=0)
-    # back_mask = tf.gather(mask_stack, background_idx, axis=0)
-    fore_mask = tf.gather(mask, foreground_idx, axis=0)
-    mid_mask = tf.gather(mask, midground_idx, axis=0)
-    back_mask = tf.gather(mask, background_idx, axis=0)
+    fore_mask = tf.gather(mask_stack,foreground_idx, axis=0)
+    mid_mask = tf.gather(mask_stack,midground_idx, axis=0)
+    back_mask = tf.gather(mask_stack, background_idx, axis=0)
+    # fore_mask = tf.gather(mask, foreground_idx, axis=0)
+    # mid_mask = tf.gather(mask, midground_idx, axis=0)
+    # back_mask = tf.gather(mask, background_idx, axis=0)
 
     foreground_mask = tf.reduce_sum(fore_mask, axis=0)
     midground_mask = tf.reduce_sum(mid_mask, axis=0)
