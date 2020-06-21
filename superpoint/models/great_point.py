@@ -143,9 +143,9 @@ class GreatPoint(tf.keras.Model):
         for k in keys:
             ret_list[k] = s1[k] + s2[k] + s3[k]
         
-        ret_list['output_2'] = ret_list['output_2'] / 3
+        ret_list['output_2'] = ret_list['output_2'] * 0.5
         if self.training:
-            ret_list['output_6'] = ret_list['output_6'] / 3
+            ret_list['output_6'] = ret_list['output_6'] * 0.5
         
         # ret_list['image0'] = image0
         # ret_list['image1'] = image1
