@@ -269,7 +269,7 @@ def layer_predictor(depth, semantic, og):
         [type] -- [description]
     """
     output_shape = tf.shape(og)
-
+    # print(og.shape)
     flat_og = tf.reshape(og, [-1])
     flat_semantic = tf.reshape(semantic, [-1])
     flat_depth = tf.reshape(depth, [-1])

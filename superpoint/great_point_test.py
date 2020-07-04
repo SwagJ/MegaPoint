@@ -32,7 +32,7 @@ gp = great_point.GreatPoint(conf['model'], training=True)
 # print(gp.predict(X))
 gp.comppileWrapper()
 # sp.predict(X)
-# y = gp.predict(x=X)
+y = gp.predict(x=X)
 # print(y)
 # gp.set_compiled_loss()
 

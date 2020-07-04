@@ -54,24 +54,29 @@ class GreatPoint(tf.keras.Model):
             depth = tf.squeeze(depth,0)
             semantics = tf.squeeze(semantics,0)
             grayImage = tf.image.rgb_to_grayscale(image)
+
             layerShape = tf.shape(grayImage)
             image = tf.squeeze(image,0)
             image0, image1, image2 = utils.layer_predictor(depth, semantics, grayImage)
 
         else:
             image0_list,image1_list,image2_list = [],[],[]
-            for k in range(image.shape[0]):
-                depth_i = tf.gather_nd(depth,k)
-                semantics_i = tf.gather_nd(semantics,k)
-                image_i = tf.gather_nd(image,k)
+            batch_size = self.config['batch_size']
+            grayImages = tf.image.rgb_to_grayscale(image)
+            # print("Image shape=", grayImages.shape)
+            # depth = tf.reshape(depth, [batch_size, 240, 320])
+            for i in range(batch_size):
+                depth_i = tf.squeeze(depth[i,:,:])
+                semantics_i = tf.squeeze(semantics[i,:,:])
+                image_i = grayImages[i,:,:]
                 image0_i, image1_i, image2_i = utils.layer_predictor(depth_i, semantics_i, image_i)
                 image0_list.append(image0_i)
                 image1_list.append(image1_i)
                 image2_list.append(image2_i)
 
-            image0 = tf.concat(image0_list,axis=0)
-            image1 = tf.concat(image1_list,axis=0)
-            image2 = tf.concat(image2_list,axis=0)
+            image0 = tf.stack(image0_list,axis=0)
+            image1 = tf.stack(image1_list,axis=0)
+            image2 = tf.stack(image2_list,axis=0)
         
             
         if self.training:
@@ -95,19 +100,20 @@ class GreatPoint(tf.keras.Model):
                 warped_image0, warped_image1, warped_image2 = utils.layer_predictor(warped_depth, warped_semantics, warped_grayImage)
             else:
                 warped_image0_list,warped_image1_list,warped_image2_list = [],[],[]
-                for k in range(image.shape[0]):
-                    warped_depth_i = tf.gather_nd(warped_depth,k)
-                    warped_semantics_i = tf.gather_nd(warped_semantics,k)
-                    warped_image_i = tf.gather_nd(warped_image,k)
+                warped_grayImage = tf.image.rgb_to_grayscale(warped_image)
+                for i in range(self.config['batch_size']):
+                    warped_depth_i = tf.squeeze(warped_depth[i,:,:])
+                    warped_semantics_i = tf.squeeze(warped_semantics[i,:,:])
+                    warped_image_i = tf.squeeze(warped_grayImage[i,:,:])
                     warped_image0_i, warped_image1_i, warped_image2_i = utils.layer_predictor(warped_depth_i, warped_semantics_i, warped_image_i)
                     warped_image0_list.append(warped_image0_i)
                     warped_image1_list.append(warped_image1_i)
                     warped_image2_list.append(warped_image2_i)
 
-                warped_image0 = tf.concat(warped_image0_list,axis=0)
-                warped_image1 = tf.concat(warped_image1_list,axis=0)
-                warped_image2 = tf.concat(warped_image2_list,axis=0)
-
+                warped_image0 = tf.expand_dims(tf.stack(warped_image0_list,axis=0), -1) 
+                warped_image1 = tf.expand_dims(tf.stack(warped_image1_list,axis=0), -1) 
+                warped_image2 = tf.expand_dims(tf.stack(warped_image2_list,axis=0), -1) 
+            # print("pair shapes", image0.shape, warped_image0.shape)
             pair1 = {'input_1': image0, 'input_2': warped_image0}
             # pair2 = {'input_1': image0, 'input_2': warped_image1}
             # pair3 = {'input_1': image0, 'input_2': warped_image2}
