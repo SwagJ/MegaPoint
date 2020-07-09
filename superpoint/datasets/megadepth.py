@@ -40,7 +40,6 @@ class Megadepth(BaseDataset):
     def _init_dataset(self, **config):
 
         image_paths = []
-
         
         base_path = Path(DATA_PATH, 'MegaDepth_v1/')
         for sub_dir in list(base_path.iterdir()):
@@ -62,6 +61,7 @@ class Megadepth(BaseDataset):
             label_paths = []
             for n in names:
                 p = Path(EXPER_PATH, config['labels'], '{}.npz'.format(n))
+                # print(p)
                 assert p.exists(), 'Image {} has no corresponding label {}'.format(n, p)
                 label_paths.append(str(p))
             files['label_paths'] = label_paths
@@ -133,12 +133,11 @@ class Megadepth(BaseDataset):
             # Merge with the original data
             data = tf.data.Dataset.zip((data, warped))
             data = data.map(lambda d, w: {**d, **w})
-
         # Data augmentation
         if has_keypoints and is_training:
             if config['augmentation']['photometric']['enable']:
-                data = data.map(lambda d: pipeline.photometric_augmentation(
-                    d['image'], **config['augmentation']['photometric']))
+                data = data.map(lambda d: {**d, 'image' : pipeline.photometric_augmentation(
+                    d['image'], **config['augmentation']['photometric'])})
             if config['augmentation']['homographic']['enable']:
                 assert not config['warped_pair']['enable']  # doesn't support hom. aug.
                 data = data.map(lambda d: pipeline.homographic_augmentation(
@@ -153,7 +152,7 @@ class Megadepth(BaseDataset):
             lambda d: {**d, 'image': tf.cast(d['image'], tf.float32) / 255.})
         
         if config['warped_pair']['enable']:
-            data = data.map_parallel(
+            data = data.map(
                 lambda d: {
                     **d, 'warped/image': tf.cast(d['warped/image'], tf.float32) / 255.})
 
@@ -174,6 +173,6 @@ class Megadepth(BaseDataset):
                     'output_1': d['keypoint_map'],
                     'output_2': d['valid_mask']}))
         data = tf.data.Dataset.zip((dataIn, dataOut))
-            
+        
 
         return data
