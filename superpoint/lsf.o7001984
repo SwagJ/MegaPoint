@@ -1,0 +1,77 @@
+Sender: LSF System <lsfadmin@lo-s4-081>
+Subject: Job 7001984: <python experiment.py train configs/greatpoint_coco.yaml megapoint_coco> in cluster <leonhard> Exited
+
+Job <python experiment.py train configs/greatpoint_coco.yaml megapoint_coco> was submitted from host <lo-login-01> by user <yiflu> in cluster <leonhard> at Fri Jul 10 13:43:40 2020
+Job was executed on host(s) <lo-s4-081>, in queue <gpu.120h>, as user <yiflu> in cluster <leonhard> at Fri Jul 10 13:50:11 2020
+</cluster/home/yiflu> was used as the home directory.
+</cluster/scratch/yiflu/SuperPoint/superpoint> was used as the working directory.
+Started at Fri Jul 10 13:50:11 2020
+Terminated at Fri Jul 10 13:51:54 2020
+Results reported at Fri Jul 10 13:51:54 2020
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+python experiment.py train configs/greatpoint_coco.yaml megapoint_coco
+------------------------------------------------------------
+
+Exited with exit code 139.
+
+Resource usage summary:
+
+    CPU time :                                   24.76 sec.
+    Max Memory :                                 3596 MB
+    Average Memory :                             683.83 MB
+    Total Requested Memory :                     65536.00 MB
+    Delta Memory :                               61940.00 MB
+    Max Swap :                                   -
+    Max Processes :                              3
+    Max Threads :                                21
+    Run time :                                   106 sec.
+    Turnaround time :                            494 sec.
+
+The output (if any) follows:
+
+2020-07-10 13:50:18.506062: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcuda.so.1
+2020-07-10 13:50:18.564336: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1561] Found device 0 with properties: 
+pciBusID: 0000:1d:00.0 name: GeForce RTX 2080 Ti computeCapability: 7.5
+coreClock: 1.545GHz coreCount: 68 deviceMemorySize: 10.73GiB deviceMemoryBandwidth: 573.69GiB/s
+2020-07-10 13:50:18.566420: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudart.so.10.1
+2020-07-10 13:50:18.573432: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcublas.so.10
+2020-07-10 13:50:18.584238: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcufft.so.10
+2020-07-10 13:50:18.589507: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcurand.so.10
+2020-07-10 13:50:18.853166: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusolver.so.10
+2020-07-10 13:50:18.861628: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusparse.so.10
+2020-07-10 13:50:18.888437: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudnn.so.7
+2020-07-10 13:50:18.893397: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1703] Adding visible gpu devices: 0
+experiment.py:178: YAMLLoadWarning: calling yaml.load() without Loader=... is deprecated, as the default Loader is unsafe. Please read https://msg.pyyaml.org/load for full details.
+  config = yaml.load(fr)
+[07/10/2020 13:50:18 INFO] Number of GPUs detected: 1
+2020-07-10 13:51:34.906901: I tensorflow/core/platform/cpu_feature_guard.cc:143] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 AVX512F FMA
+2020-07-10 13:51:34.917897: I tensorflow/core/platform/profile_utils/cpu_utils.cc:102] CPU Frequency: 2600000000 Hz
+2020-07-10 13:51:34.918045: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x4336740 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+2020-07-10 13:51:34.918059: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+2020-07-10 13:51:35.069705: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x43a8b30 initialized for platform CUDA (this does not guarantee that XLA will be used). Devices:
+2020-07-10 13:51:35.069741: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): GeForce RTX 2080 Ti, Compute Capability 7.5
+2020-07-10 13:51:35.075051: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1561] Found device 0 with properties: 
+pciBusID: 0000:1d:00.0 name: GeForce RTX 2080 Ti computeCapability: 7.5
+coreClock: 1.545GHz coreCount: 68 deviceMemorySize: 10.73GiB deviceMemoryBandwidth: 573.69GiB/s
+2020-07-10 13:51:35.075104: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudart.so.10.1
+2020-07-10 13:51:35.075117: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcublas.so.10
+2020-07-10 13:51:35.075130: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcufft.so.10
+2020-07-10 13:51:35.075139: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcurand.so.10
+2020-07-10 13:51:35.075149: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusolver.so.10
+2020-07-10 13:51:35.075159: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusparse.so.10
+2020-07-10 13:51:35.075169: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudnn.so.7
+2020-07-10 13:51:35.078225: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1703] Adding visible gpu devices: 0
+2020-07-10 13:51:35.079623: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudart.so.10.1
+2020-07-10 13:51:35.081699: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1102] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-07-10 13:51:35.081712: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1108]      0 
+2020-07-10 13:51:35.081723: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1121] 0:   N 
+2020-07-10 13:51:35.085650: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1247] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 10176 MB memory) -> physical GPU (device: 0, name: GeForce RTX 2080 Ti, pci bus id: 0000:1d:00.0, compute capability: 7.5)
+2020-07-10 13:51:49.210258: I tensorflow/core/profiler/lib/profiler_session.cc:159] Profiler session started.
+2020-07-10 13:51:49.210441: I tensorflow/core/profiler/internal/gpu/cupti_tracer.cc:1363] Profiler found 1 GPUs
+2020-07-10 13:51:49.221123: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcupti.so.10.1
+2020-07-10 13:51:49.404320: I tensorflow/core/profiler/internal/gpu/cupti_tracer.cc:1479] CUPTI activity buffer flushed
+/cluster/shadow/.lsbatch/1594381420.7001984: line 8: 173301 Segmentation fault      (core dumped) python experiment.py train configs/greatpoint_coco.yaml megapoint_coco
