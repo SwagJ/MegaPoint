@@ -165,7 +165,7 @@ class GreatPoint(tf.keras.Model):
         self.compiled_loss = super_point.SuperPointLoss(self.config, hasWarped=True)
         self.compiled_loss.metrics = [super_point.SuperPointMetrics()]
     
-    def comppileWrapper(self):
+    def compileWrapper(self):
         """This function call keras compile with arguments comming from the configuration file and
             adds a loss function by calling set_compiled_loss
         """

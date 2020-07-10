@@ -50,5 +50,9 @@ model:
     detection_threshold: 0.001
     nms: 4
     top_k: 600
+    initializerPaths:
+        hourgrlass: 'D:/projects/SP2/weights_hourglass.npy'
+        PSP_net50:  'D:/projects/SP2/weights_psp_net50.npy'
+    training: true
 train_iter: 600000
 validation_interval: 5000
