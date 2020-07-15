@@ -34,6 +34,8 @@ def train(config, n_iter, output_dir, checkpoint_name='model.ckpt'):
 
 
 def evaluate(config, output_dir, n_iter=None):
+    gpus= tf.config.experimental.list_physical_devices('GPU')
+    tf.config.experimental.set_memory_growth(gpus[0], True)
     with _init_graph(config) as net:
         net.load(output_dir)
         results = net.evaluate(config.get('eval_set', 'test'), max_iterations=n_iter)
@@ -43,6 +45,8 @@ def evaluate(config, output_dir, n_iter=None):
 def predict(config, output_dir, n_iter):
     pred = []
     data = []
+    gpus= tf.config.experimental.list_physical_devices('GPU')
+    tf.config.experimental.set_memory_growth(gpus[0], True)
     with _init_graph(config, with_dataset=True) as (net, dataset):
         if net.trainable:
             net.load(output_dir)
@@ -144,7 +148,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
     with open(args.config, 'r') as f:
         config = yaml.load(f)
-    output_dir = os.path.join(EXPER_PATH, args.exper_name)
+    output_dir = os.path.join(EXPER_PATH + '/outputs/', args.exper_name)
     if not os.path.exists(output_dir):
         os.mkdir(output_dir)
 

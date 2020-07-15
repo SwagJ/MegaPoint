@@ -2,7 +2,7 @@ data:
     name: 'coco'
     cache_in_memory: false
     validation_size: 96
-    labels: outputs/mp_synth-v11_export_ha2  # use your own labels here
+    labels: outputs/magic-point_coco-export  # use your own labels here
     augmentation:
         photometric:
             enable: true
@@ -36,8 +36,8 @@ data:
         valid_border_margin: 3
 model:
     name: 'super_point'
-    batch_size: 2
-    eval_batch_size: 2
+    batch_size: 1
+    eval_batch_size: 1
     learning_rate: 0.0001
     lambda_d: 0.05
     positive_margin: 1

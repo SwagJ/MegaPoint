@@ -292,6 +292,7 @@ def warp_points(points, homography):
     H = tf.expand_dims(homography, axis=0) if len(homography.shape) == 1 else homography
 
     # Get the points to the homogeneous format
+    #tf.print(tf.shape,[tf.shape])
     num_points = tf.shape(points)[0]
     points = tf.cast(points, tf.float32)[:, ::-1]
     points = tf.concat([points, tf.ones([num_points, 1], dtype=tf.float32)], -1)

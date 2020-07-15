@@ -99,3 +99,5 @@ def ratio_preserving_resize(image, **config):
     image = tf.image.resize(image, tf.compat.v1.to_int32(new_size),
                                    method=tf.image.ResizeMethod.BILINEAR)
     return tf.image.resize_with_crop_or_pad(image, target_size[0], target_size[1])
+
+

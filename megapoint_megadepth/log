@@ -1,0 +1,706 @@
+[07/13/2020 17:39:42 INFO] Running command TRAIN
+2020-07-13 17:39:42.530196: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcuda.so.1
+2020-07-13 17:39:42.987698: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-07-13 17:39:42.988003: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1561] Found device 0 with properties: 
+pciBusID: 0000:01:00.0 name: GeForce RTX 2060 SUPER computeCapability: 7.5
+coreClock: 1.83GHz coreCount: 34 deviceMemorySize: 7.79GiB deviceMemoryBandwidth: 417.29GiB/s
+2020-07-13 17:39:42.990898: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudart.so.10.1
+2020-07-13 17:39:42.991921: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcublas.so.10
+2020-07-13 17:39:42.992908: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcufft.so.10
+2020-07-13 17:39:42.993283: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcurand.so.10
+2020-07-13 17:39:42.994319: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusolver.so.10
+2020-07-13 17:39:42.994893: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusparse.so.10
+2020-07-13 17:39:42.997370: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudnn.so.7
+2020-07-13 17:39:42.997465: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-07-13 17:39:42.997796: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-07-13 17:39:42.998048: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1703] Adding visible gpu devices: 0
+[07/13/2020 17:39:42 INFO] Number of GPUs detected: 1
+[07/13/2020 17:40:29 INFO] Running command TRAIN
+2020-07-13 17:40:29.750261: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcuda.so.1
+2020-07-13 17:40:30.207116: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-07-13 17:40:30.207479: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1561] Found device 0 with properties: 
+pciBusID: 0000:01:00.0 name: GeForce RTX 2060 SUPER computeCapability: 7.5
+coreClock: 1.83GHz coreCount: 34 deviceMemorySize: 7.79GiB deviceMemoryBandwidth: 417.29GiB/s
+2020-07-13 17:40:30.207633: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudart.so.10.1
+2020-07-13 17:40:30.208655: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcublas.so.10
+2020-07-13 17:40:30.209643: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcufft.so.10
+2020-07-13 17:40:30.209824: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcurand.so.10
+2020-07-13 17:40:30.210831: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusolver.so.10
+2020-07-13 17:40:30.211429: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusparse.so.10
+2020-07-13 17:40:30.213649: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudnn.so.7
+2020-07-13 17:40:30.213725: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-07-13 17:40:30.214016: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-07-13 17:40:30.214320: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1703] Adding visible gpu devices: 0
+[07/13/2020 17:40:30 INFO] Number of GPUs detected: 1
+[07/13/2020 19:31:38 INFO] Running command TRAIN
+2020-07-13 19:31:38.545664: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcuda.so.1
+2020-07-13 19:31:39.013245: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-07-13 19:31:39.013565: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1561] Found device 0 with properties: 
+pciBusID: 0000:01:00.0 name: GeForce RTX 2060 SUPER computeCapability: 7.5
+coreClock: 1.83GHz coreCount: 34 deviceMemorySize: 7.79GiB deviceMemoryBandwidth: 417.29GiB/s
+2020-07-13 19:31:39.013702: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudart.so.10.1
+2020-07-13 19:31:39.014765: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcublas.so.10
+2020-07-13 19:31:39.015821: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcufft.so.10
+2020-07-13 19:31:39.015994: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcurand.so.10
+2020-07-13 19:31:39.017059: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusolver.so.10
+2020-07-13 19:31:39.017753: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusparse.so.10
+2020-07-13 19:31:39.020059: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudnn.so.7
+2020-07-13 19:31:39.020213: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-07-13 19:31:39.020547: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-07-13 19:31:39.020810: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1703] Adding visible gpu devices: 0
+[07/13/2020 19:31:39 INFO] Number of GPUs detected: 1
+[07/13/2020 19:32:17 INFO] Running command TRAIN
+2020-07-13 19:32:17.369478: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcuda.so.1
+2020-07-13 19:32:17.828960: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-07-13 19:32:17.829270: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1561] Found device 0 with properties: 
+pciBusID: 0000:01:00.0 name: GeForce RTX 2060 SUPER computeCapability: 7.5
+coreClock: 1.83GHz coreCount: 34 deviceMemorySize: 7.79GiB deviceMemoryBandwidth: 417.29GiB/s
+2020-07-13 19:32:17.829433: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudart.so.10.1
+2020-07-13 19:32:17.830538: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcublas.so.10
+2020-07-13 19:32:17.831617: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcufft.so.10
+2020-07-13 19:32:17.831825: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcurand.so.10
+2020-07-13 19:32:17.833002: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusolver.so.10
+2020-07-13 19:32:17.833637: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusparse.so.10
+2020-07-13 19:32:17.835983: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudnn.so.7
+2020-07-13 19:32:17.836102: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-07-13 19:32:17.836423: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-07-13 19:32:17.836687: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1703] Adding visible gpu devices: 0
+[07/13/2020 19:32:17 INFO] Number of GPUs detected: 1
+[07/13/2020 19:32:21 WARNING] From /disk_ssd/SuperPoint/superpoint/datasets/utils/pipeline.py:99: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.cast` instead.
+[07/13/2020 19:32:22 WARNING] From /disk_ssd/SuperPoint/superpoint/datasets/megadepth_megapoint.py:151: py_func (from tensorflow.python.ops.script_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+tf.py_func is deprecated in TF V2. Instead, there are two
+    options available in V2.
+    - tf.py_function takes a python function which manipulates tf eager
+    tensors instead of numpy arrays. It's easy to convert a tf eager tensor to
+    an ndarray (just call tensor.numpy()) but having access to eager tensors
+    means `tf.py_function`s can use accelerators such as GPUs as well as
+    being differentiable using a gradient tape.
+    - tf.numpy_function maintains the semantics of the deprecated tf.py_func
+    (it is not differentiable, and manipulates numpy arrays). It drops the
+    stateful argument making all functions stateful.
+    
+2020-07-13 19:32:23.772570: I tensorflow/core/platform/cpu_feature_guard.cc:143] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+2020-07-13 19:32:23.796522: I tensorflow/core/platform/profile_utils/cpu_utils.cc:102] CPU Frequency: 3199980000 Hz
+2020-07-13 19:32:23.797420: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x7f221c000b60 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+2020-07-13 19:32:23.797459: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+2020-07-13 19:32:23.867362: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-07-13 19:32:23.867739: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x55fa9b9be330 initialized for platform CUDA (this does not guarantee that XLA will be used). Devices:
+2020-07-13 19:32:23.867751: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): GeForce RTX 2060 SUPER, Compute Capability 7.5
+2020-07-13 19:32:23.867912: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-07-13 19:32:23.868254: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1561] Found device 0 with properties: 
+pciBusID: 0000:01:00.0 name: GeForce RTX 2060 SUPER computeCapability: 7.5
+coreClock: 1.83GHz coreCount: 34 deviceMemorySize: 7.79GiB deviceMemoryBandwidth: 417.29GiB/s
+2020-07-13 19:32:23.868307: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudart.so.10.1
+2020-07-13 19:32:23.868316: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcublas.so.10
+2020-07-13 19:32:23.868325: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcufft.so.10
+2020-07-13 19:32:23.868332: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcurand.so.10
+2020-07-13 19:32:23.868338: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusolver.so.10
+2020-07-13 19:32:23.868346: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusparse.so.10
+2020-07-13 19:32:23.868355: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudnn.so.7
+2020-07-13 19:32:23.868385: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-07-13 19:32:23.868656: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-07-13 19:32:23.868916: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1703] Adding visible gpu devices: 0
+2020-07-13 19:32:23.868950: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudart.so.10.1
+2020-07-13 19:32:23.869470: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1102] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-07-13 19:32:23.869479: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1108]      0 
+2020-07-13 19:32:23.869498: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1121] 0:   N 
+2020-07-13 19:32:23.869553: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-07-13 19:32:23.869856: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-07-13 19:32:23.870167: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1247] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 7410 MB memory) -> physical GPU (device: 0, name: GeForce RTX 2060 SUPER, pci bus id: 0000:01:00.0, compute capability: 7.5)
+/disk_ssd/SuperPoint/superpoint/datasets/megadepth_megapoint.py:83: UserWarning: Seed 1315869484 from outer graph might be getting used by function Dataset_map_lambda, if the random op has not been provided any seed. Explicitly set the seed in the function if this is not the intended behavior.
+  fn, num_parallel_calls=config['num_parallel_calls'])
+2020-07-13 19:32:37.537276: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-07-13 19:32:37.537564: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1561] Found device 0 with properties: 
+pciBusID: 0000:01:00.0 name: GeForce RTX 2060 SUPER computeCapability: 7.5
+coreClock: 1.83GHz coreCount: 34 deviceMemorySize: 7.79GiB deviceMemoryBandwidth: 417.29GiB/s
+2020-07-13 19:32:37.537594: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudart.so.10.1
+2020-07-13 19:32:37.537603: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcublas.so.10
+2020-07-13 19:32:37.537611: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcufft.so.10
+2020-07-13 19:32:37.537618: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcurand.so.10
+2020-07-13 19:32:37.537625: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusolver.so.10
+2020-07-13 19:32:37.537632: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusparse.so.10
+2020-07-13 19:32:37.537656: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudnn.so.7
+2020-07-13 19:32:37.537713: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-07-13 19:32:37.538006: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-07-13 19:32:37.538236: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1703] Adding visible gpu devices: 0
+2020-07-13 19:32:37.574891: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1102] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-07-13 19:32:37.574959: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1108]      0 
+2020-07-13 19:32:37.574981: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1121] 0:   N 
+2020-07-13 19:32:37.575337: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-07-13 19:32:37.577306: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-07-13 19:32:37.579180: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1247] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 7410 MB memory) -> physical GPU (device: 0, name: GeForce RTX 2060 SUPER, pci bus id: 0000:01:00.0, compute capability: 7.5)
+training
+image (None, None, 1)
+depth (None, None, 1)
+semantic (None, None, 1)
+name ()
+keypoints (None, 2)
+valid_mask (None, None)
+warped {'image': TensorShape([None, None, 1]), 'depth': TensorShape([None, None, 1]), 'semantic': TensorShape([None, None, 1]), 'name': TensorShape([]), 'keypoints': TensorShape([None, 2]), 'valid_mask': TensorShape([None, None]), 'homography': TensorShape([8]), 'keypoint_map': TensorShape([None, None])}
+keypoint_map (None, None)
+validation
+image (None, None, 1)
+depth (None, None, 1)
+semantic (None, None, 1)
+name ()
+keypoints (None, 2)
+valid_mask (None, None)
+warped {'image': TensorShape([None, None, 1]), 'depth': TensorShape([None, None, 1]), 'semantic': TensorShape([None, None, 1]), 'name': TensorShape([]), 'keypoints': TensorShape([None, 2]), 'valid_mask': TensorShape([None, None]), 'homography': TensorShape([8]), 'keypoint_map': TensorShape([None, None])}
+keypoint_map (None, None)
+test
+image (None, None, 1)
+depth (None, None, 1)
+semantic (None, None, 1)
+name ()
+keypoints (None, 2)
+valid_mask (None, None)
+warped {'image': TensorShape([None, None, 1]), 'depth': TensorShape([None, None, 1]), 'semantic': TensorShape([None, None, 1]), 'name': TensorShape([]), 'keypoints': TensorShape([None, 2]), 'valid_mask': TensorShape([None, None]), 'homography': TensorShape([8]), 'keypoint_map': TensorShape([None, None])}
+keypoint_map (None, None)
+[07/13/2020 19:32:39 WARNING] From /home/hashswan/.conda/envs/superpoint/lib/python3.7/site-packages/tensorflow/python/data/ops/iterator_ops.py:348: Iterator.output_types (from tensorflow.python.data.ops.iterator_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.compat.v1.data.get_output_types(iterator)`.
+[07/13/2020 19:32:39 WARNING] From /home/hashswan/.conda/envs/superpoint/lib/python3.7/site-packages/tensorflow/python/data/ops/iterator_ops.py:349: Iterator.output_shapes (from tensorflow.python.data.ops.iterator_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.compat.v1.data.get_output_shapes(iterator)`.
+[07/13/2020 19:32:39 WARNING] From /home/hashswan/.conda/envs/superpoint/lib/python3.7/site-packages/tensorflow/python/data/ops/iterator_ops.py:351: Iterator.output_classes (from tensorflow.python.data.ops.iterator_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.compat.v1.data.get_output_classes(iterator)`.
+
+ In Evalution:
+
+
+ Data is {'image': <tf.Tensor 'megapoint/train_data_sharding/stack:0' shape=(1, None, None, 1) dtype=float32>, 'depth': <tf.Tensor 'megapoint/train_data_sharding/stack_1:0' shape=(1, None, None, 1) dtype=float32>, 'semantic': <tf.Tensor 'megapoint/train_data_sharding/stack_2:0' shape=(1, None, None, 1) dtype=float32>, 'name': <tf.Tensor 'megapoint/train_data_sharding/stack_3:0' shape=(1,) dtype=string>, 'keypoints': <tf.Tensor 'megapoint/train_data_sharding/stack_4:0' shape=(1, None, 2) dtype=float32>, 'valid_mask': <tf.Tensor 'megapoint/train_data_sharding/stack_5:0' shape=(1, None, None) dtype=int32>, 'warped': {'image': <tf.Tensor 'megapoint/train_data_sharding/stack_6:0' shape=(1, None, None, 1) dtype=float32>, 'depth': <tf.Tensor 'megapoint/train_data_sharding/stack_7:0' shape=(1, None, None, 1) dtype=float32>, 'semantic': <tf.Tensor 'megapoint/train_data_sharding/stack_8:0' shape=(1, None, None, 1) dtype=float32>, 'name': <tf.Tensor 'megapoint/train_data_sharding/stack_9:0' shape=(1,) dtype=string>, 'keypoints': <tf.Tensor 'megapoint/train_data_sharding/stack_10:0' shape=(1, None, 2) dtype=float32>, 'valid_mask': <tf.Tensor 'megapoint/train_data_sharding/stack_11:0' shape=(1, None, None) dtype=int32>, 'homography': <tf.Tensor 'megapoint/train_data_sharding/stack_12:0' shape=(1, 8) dtype=float32>, 'keypoint_map': <tf.Tensor 'megapoint/train_data_sharding/stack_13:0' shape=(1, None, None) dtype=int32>}, 'keypoint_map': <tf.Tensor 'megapoint/train_data_sharding/stack_14:0' shape=(1, None, None) dtype=int32>}
+
+ OG SET: (1, 1, None, None),(1, 1, None, None),(1, 1, None, None)
+
+DEPTH AND ORIGINAL IMAGE:(1, 1, None, None), (1, 1, None, None), (1, 1, None, None)
+
+(1, 1, None, None)
+After expand_dims:(1, 1, None, None),(1, 1, None, None)
+
+mask shape:(1, 1, None, None), (1, 1, None, None)
+
+[07/13/2020 19:32:44 WARNING] From /disk_ssd/SuperPoint/superpoint/models/backbones/vgg.py:10: conv2d (from tensorflow.python.layers.convolutional) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.keras.layers.Conv2D` instead.
+[07/13/2020 19:32:44 WARNING] From /home/hashswan/.conda/envs/superpoint/lib/python3.7/site-packages/tensorflow/python/layers/convolutional.py:424: Layer.apply (from tensorflow.python.keras.engine.base_layer_v1) is deprecated and will be removed in a future version.
+Instructions for updating:
+Please use `layer.__call__` method instead.
+[07/13/2020 19:32:44 WARNING] From /home/hashswan/.conda/envs/superpoint/lib/python3.7/site-packages/tensorflow/python/ops/resource_variable_ops.py:1666: calling BaseResourceVariable.__init__ (from tensorflow.python.ops.resource_variable_ops) with constraint is deprecated and will be removed in a future version.
+Instructions for updating:
+If using Keras pass *_constraint arguments to layers.
+[07/13/2020 19:32:44 WARNING] From /disk_ssd/SuperPoint/superpoint/models/backbones/vgg.py:14: batch_normalization (from tensorflow.python.layers.normalization) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use keras.layers.BatchNormalization instead.  In particular, `tf.control_dependencies(tf.GraphKeys.UPDATE_OPS)` should not be used (consult the `tf.keras.layers.BatchNormalization` documentation).
+[07/13/2020 19:32:44 WARNING] From /disk_ssd/SuperPoint/superpoint/models/backbones/vgg.py:28: max_pooling2d (from tensorflow.python.layers.pooling) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use keras.layers.MaxPooling2D instead.
+
+ OG SET: (1, 1, None, None),(1, 1, None, None),(1, 1, None, None)
+
+masks shape:(1, None, None), (1, 1, None, None), (1, None, None)
+
+
+keypoint map shape: (1, None, None)
+
+
+ In Evalution:
+
+
+ Data is {'image': <tf.Tensor 'megapoint/eval_data_sharding/stack:0' shape=(1, None, None, 1) dtype=float32>, 'depth': <tf.Tensor 'megapoint/eval_data_sharding/stack_1:0' shape=(1, None, None, 1) dtype=float32>, 'semantic': <tf.Tensor 'megapoint/eval_data_sharding/stack_2:0' shape=(1, None, None, 1) dtype=float32>, 'name': <tf.Tensor 'megapoint/eval_data_sharding/stack_3:0' shape=(1,) dtype=string>, 'keypoints': <tf.Tensor 'megapoint/eval_data_sharding/stack_4:0' shape=(1, None, 2) dtype=float32>, 'valid_mask': <tf.Tensor 'megapoint/eval_data_sharding/stack_5:0' shape=(1, None, None) dtype=int32>, 'warped': {'image': <tf.Tensor 'megapoint/eval_data_sharding/stack_6:0' shape=(1, None, None, 1) dtype=float32>, 'depth': <tf.Tensor 'megapoint/eval_data_sharding/stack_7:0' shape=(1, None, None, 1) dtype=float32>, 'semantic': <tf.Tensor 'megapoint/eval_data_sharding/stack_8:0' shape=(1, None, None, 1) dtype=float32>, 'name': <tf.Tensor 'megapoint/eval_data_sharding/stack_9:0' shape=(1,) dtype=string>, 'keypoints': <tf.Tensor 'megapoint/eval_data_sharding/stack_10:0' shape=(1, None, 2) dtype=float32>, 'valid_mask': <tf.Tensor 'megapoint/eval_data_sharding/stack_11:0' shape=(1, None, None) dtype=int32>, 'homography': <tf.Tensor 'megapoint/eval_data_sharding/stack_12:0' shape=(1, 8) dtype=float32>, 'keypoint_map': <tf.Tensor 'megapoint/eval_data_sharding/stack_13:0' shape=(1, None, None) dtype=int32>}, 'keypoint_map': <tf.Tensor 'megapoint/eval_data_sharding/stack_14:0' shape=(1, None, None) dtype=int32>}
+
+Run Time Image Size: (1, 1, None, None)
+
+ In Evalution:
+
+
+ Data is {'image': <tf.Tensor 'megapoint/pred_data_sharding/stack:0' shape=(1, None, None, 1) dtype=float32>}
+
+Run Time Image Size: (1, 1, None, None)
+2020-07-13 19:32:46.363556: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-07-13 19:32:46.363880: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1561] Found device 0 with properties: 
+pciBusID: 0000:01:00.0 name: GeForce RTX 2060 SUPER computeCapability: 7.5
+coreClock: 1.83GHz coreCount: 34 deviceMemorySize: 7.79GiB deviceMemoryBandwidth: 417.29GiB/s
+2020-07-13 19:32:46.363912: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudart.so.10.1
+2020-07-13 19:32:46.363946: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcublas.so.10
+2020-07-13 19:32:46.363956: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcufft.so.10
+2020-07-13 19:32:46.363965: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcurand.so.10
+2020-07-13 19:32:46.363975: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusolver.so.10
+2020-07-13 19:32:46.363983: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusparse.so.10
+2020-07-13 19:32:46.363993: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudnn.so.7
+2020-07-13 19:32:46.364033: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-07-13 19:32:46.364355: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-07-13 19:32:46.364602: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1703] Adding visible gpu devices: 0
+2020-07-13 19:32:46.364633: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1102] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-07-13 19:32:46.364637: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1108]      0 
+2020-07-13 19:32:46.364641: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1121] 0:   N 
+2020-07-13 19:32:46.364688: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-07-13 19:32:46.364951: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:981] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-07-13 19:32:46.365203: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1247] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 7410 MB memory) -> physical GPU (device: 0, name: GeForce RTX 2060 SUPER, pci bus id: 0000:01:00.0, compute capability: 7.5)
+[07/13/2020 19:33:41 INFO] Start training
+2020-07-13 19:33:55.534976: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcublas.so.10
+2020-07-13 19:33:56.876310: I tensorflow/core/kernels/cuda_solvers.cc:180] Creating CudaSolver handles for stream 0x55fa9cc92d90
+2020-07-13 19:33:56.877048: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusolver.so.10
+2020-07-13 19:33:57.187143: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudnn.so.7
+2020-07-13 19:33:57.820777: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcublas.so.10
+2020-07-13 19:34:00.948776: I tensorflow/stream_executor/cuda/cuda_driver.cc:763] failed to allocate 4.00G (4294967296 bytes) from device: CUDA_ERROR_OUT_OF_MEMORY: out of memory
+[07/13/2020 19:34:02 INFO] Finished Training Iteration:    0
+[07/13/2020 19:37:23 INFO] Iter    0: loss 10.5972, precision 0.0098, recall 0.0071
+[07/13/2020 19:38:01 INFO] Finished Training Iteration:  200
+[07/13/2020 19:38:25 INFO] Finished Training Iteration:  400
+[07/13/2020 19:38:53 INFO] Finished Training Iteration:  600
+[07/13/2020 19:39:23 INFO] Finished Training Iteration:  800
+[07/13/2020 19:40:01 INFO] Saving checkpoint for iteration #1000
+[07/13/2020 19:40:13 INFO] Finished Training Iteration: 1000
+[07/13/2020 19:40:39 INFO] Finished Training Iteration: 1200
+[07/13/2020 19:41:09 INFO] Finished Training Iteration: 1400
+[07/13/2020 19:41:59 INFO] Finished Training Iteration: 1600
+[07/13/2020 19:42:51 INFO] Finished Training Iteration: 1800
+[07/13/2020 19:43:45 INFO] Saving checkpoint for iteration #2000
+[07/13/2020 19:43:45 WARNING] From /home/hashswan/.conda/envs/superpoint/lib/python3.7/site-packages/tensorflow/python/training/saver.py:971: remove_checkpoint (from tensorflow.python.training.checkpoint_management) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use standard file APIs to delete files with this prefix.
+[07/13/2020 19:43:46 INFO] Finished Training Iteration: 2000
+[07/13/2020 19:44:46 INFO] Finished Training Iteration: 2200
+[07/13/2020 19:45:47 INFO] Finished Training Iteration: 2400
+[07/13/2020 19:48:31 INFO] Iter 2500: loss 8.8450, precision 0.0075, recall 0.0054
+[07/13/2020 19:48:55 INFO] Finished Training Iteration: 2600
+[07/13/2020 19:49:32 INFO] Finished Training Iteration: 2800
+[07/13/2020 19:50:07 INFO] Saving checkpoint for iteration #3000
+[07/13/2020 19:50:07 INFO] Finished Training Iteration: 3000
+[07/13/2020 19:50:42 INFO] Finished Training Iteration: 3200
+[07/13/2020 19:51:19 INFO] Finished Training Iteration: 3400
+[07/13/2020 19:51:56 INFO] Finished Training Iteration: 3600
+[07/13/2020 19:52:42 INFO] Finished Training Iteration: 3800
+[07/13/2020 19:53:36 INFO] Saving checkpoint for iteration #4000
+[07/13/2020 19:53:37 INFO] Finished Training Iteration: 4000
+[07/13/2020 19:54:30 INFO] Finished Training Iteration: 4200
+[07/13/2020 19:55:26 INFO] Finished Training Iteration: 4400
+[07/13/2020 19:56:19 INFO] Finished Training Iteration: 4600
+[07/13/2020 19:57:10 INFO] Finished Training Iteration: 4800
+[07/13/2020 19:57:51 INFO] Saving checkpoint for iteration #5000
+[07/13/2020 19:57:52 INFO] Finished Training Iteration: 5000
+[07/13/2020 20:00:04 INFO] Iter 5000: loss 8.5965, precision 0.0072, recall 0.0051
+[07/13/2020 20:00:45 INFO] Finished Training Iteration: 5200
+[07/13/2020 20:01:26 INFO] Finished Training Iteration: 5400
+[07/13/2020 20:02:07 INFO] Finished Training Iteration: 5600
+[07/13/2020 20:02:52 INFO] Finished Training Iteration: 5800
+[07/13/2020 20:03:51 INFO] Saving checkpoint for iteration #6000
+[07/13/2020 20:03:51 INFO] Finished Training Iteration: 6000
+[07/13/2020 20:04:46 INFO] Finished Training Iteration: 6200
+[07/13/2020 20:05:33 INFO] Finished Training Iteration: 6400
+[07/13/2020 20:06:23 INFO] Finished Training Iteration: 6600
+[07/13/2020 20:07:12 INFO] Finished Training Iteration: 6800
+[07/13/2020 20:07:58 INFO] Saving checkpoint for iteration #7000
+[07/13/2020 20:07:59 INFO] Finished Training Iteration: 7000
+[07/13/2020 20:08:48 INFO] Finished Training Iteration: 7200
+[07/13/2020 20:09:36 INFO] Finished Training Iteration: 7400
+[07/13/2020 20:12:12 INFO] Iter 7500: loss 8.6221, precision 0.0076, recall 0.0053
+[07/13/2020 20:12:34 INFO] Finished Training Iteration: 7600
+[07/13/2020 20:13:17 INFO] Finished Training Iteration: 7800
+[07/13/2020 20:14:00 INFO] Saving checkpoint for iteration #8000
+[07/13/2020 20:14:00 INFO] Finished Training Iteration: 8000
+[07/13/2020 20:14:44 INFO] Finished Training Iteration: 8200
+[07/13/2020 20:15:28 INFO] Finished Training Iteration: 8400
+[07/13/2020 20:15:58 INFO] Finished Training Iteration: 8600
+[07/13/2020 20:16:24 INFO] Finished Training Iteration: 8800
+[07/13/2020 20:16:48 INFO] Saving checkpoint for iteration #9000
+[07/13/2020 20:16:48 INFO] Finished Training Iteration: 9000
+[07/13/2020 20:17:12 INFO] Finished Training Iteration: 9200
+[07/13/2020 20:17:36 INFO] Finished Training Iteration: 9400
+[07/13/2020 20:18:00 INFO] Finished Training Iteration: 9600
+[07/13/2020 20:18:24 INFO] Finished Training Iteration: 9800
+[07/13/2020 20:18:47 INFO] Saving checkpoint for iteration #10000
+[07/13/2020 20:18:47 INFO] Finished Training Iteration: 10000
+[07/13/2020 20:20:49 INFO] Iter 10000: loss 8.0069, precision 0.0076, recall 0.0053
+[07/13/2020 20:21:19 INFO] Finished Training Iteration: 10200
+[07/13/2020 20:21:49 INFO] Finished Training Iteration: 10400
+[07/13/2020 20:22:13 INFO] Finished Training Iteration: 10600
+[07/13/2020 20:22:43 INFO] Finished Training Iteration: 10800
+[07/13/2020 20:23:12 INFO] Saving checkpoint for iteration #11000
+[07/13/2020 20:23:12 INFO] Finished Training Iteration: 11000
+[07/13/2020 20:23:39 INFO] Finished Training Iteration: 11200
+[07/13/2020 20:24:07 INFO] Finished Training Iteration: 11400
+[07/13/2020 20:24:36 INFO] Finished Training Iteration: 11600
+[07/13/2020 20:25:10 INFO] Finished Training Iteration: 11800
+[07/13/2020 20:25:44 INFO] Saving checkpoint for iteration #12000
+[07/13/2020 20:25:45 INFO] Finished Training Iteration: 12000
+[07/13/2020 20:26:16 INFO] Finished Training Iteration: 12200
+[07/13/2020 20:26:48 INFO] Finished Training Iteration: 12400
+[07/13/2020 20:29:17 INFO] Iter 12500: loss 6.8365, precision 0.0072, recall 0.0050
+[07/13/2020 20:29:39 INFO] Finished Training Iteration: 12600
+[07/13/2020 20:30:15 INFO] Finished Training Iteration: 12800
+[07/13/2020 20:31:00 INFO] Saving checkpoint for iteration #13000
+[07/13/2020 20:31:01 INFO] Finished Training Iteration: 13000
+[07/13/2020 20:31:40 INFO] Finished Training Iteration: 13200
+[07/13/2020 20:32:05 INFO] Finished Training Iteration: 13400
+[07/13/2020 20:32:52 INFO] Finished Training Iteration: 13600
+[07/13/2020 20:33:42 INFO] Finished Training Iteration: 13800
+[07/13/2020 20:34:27 INFO] Saving checkpoint for iteration #14000
+[07/13/2020 20:34:27 INFO] Finished Training Iteration: 14000
+[07/13/2020 20:34:53 INFO] Finished Training Iteration: 14200
+[07/13/2020 20:35:18 INFO] Finished Training Iteration: 14400
+[07/13/2020 20:35:46 INFO] Finished Training Iteration: 14600
+[07/13/2020 20:36:21 INFO] Finished Training Iteration: 14800
+[07/13/2020 20:36:56 INFO] Saving checkpoint for iteration #15000
+[07/13/2020 20:36:56 INFO] Finished Training Iteration: 15000
+[07/13/2020 20:39:01 INFO] Iter 15000: loss 9.5529, precision 0.0094, recall 0.0067
+[07/13/2020 20:39:44 INFO] Finished Training Iteration: 15200
+[07/13/2020 20:40:29 INFO] Finished Training Iteration: 15400
+[07/13/2020 20:41:12 INFO] Finished Training Iteration: 15600
+[07/13/2020 20:41:56 INFO] Finished Training Iteration: 15800
+[07/13/2020 20:42:41 INFO] Saving checkpoint for iteration #16000
+[07/13/2020 20:42:42 INFO] Finished Training Iteration: 16000
+[07/13/2020 20:43:25 INFO] Finished Training Iteration: 16200
+[07/13/2020 20:44:08 INFO] Finished Training Iteration: 16400
+[07/13/2020 20:44:52 INFO] Finished Training Iteration: 16600
+[07/13/2020 20:45:21 INFO] Finished Training Iteration: 16800
+[07/13/2020 20:45:48 INFO] Saving checkpoint for iteration #17000
+[07/13/2020 20:45:48 INFO] Finished Training Iteration: 17000
+[07/13/2020 20:46:35 INFO] Finished Training Iteration: 17200
+[07/13/2020 20:46:53 INFO] Finished Training Iteration: 17400
+[07/13/2020 20:49:16 INFO] Iter 17500: loss 6.8345, precision 0.0077, recall 0.0055
+[07/13/2020 20:49:24 INFO] Finished Training Iteration: 17600
+[07/13/2020 20:49:41 INFO] Finished Training Iteration: 17800
+[07/13/2020 20:49:57 INFO] Saving checkpoint for iteration #18000
+[07/13/2020 20:49:57 INFO] Finished Training Iteration: 18000
+[07/13/2020 20:50:19 INFO] Finished Training Iteration: 18200
+[07/13/2020 20:50:52 INFO] Finished Training Iteration: 18400
+[07/13/2020 20:51:26 INFO] Finished Training Iteration: 18600
+[07/13/2020 20:52:06 INFO] Finished Training Iteration: 18800
+[07/13/2020 20:52:46 INFO] Saving checkpoint for iteration #19000
+[07/13/2020 20:52:47 INFO] Finished Training Iteration: 19000
+[07/13/2020 20:53:28 INFO] Finished Training Iteration: 19200
+[07/13/2020 20:54:09 INFO] Finished Training Iteration: 19400
+[07/13/2020 20:54:48 INFO] Finished Training Iteration: 19600
+[07/13/2020 20:55:27 INFO] Finished Training Iteration: 19800
+[07/13/2020 20:56:05 INFO] Saving checkpoint for iteration #20000
+[07/13/2020 20:56:05 INFO] Finished Training Iteration: 20000
+[07/13/2020 20:58:08 INFO] Iter 20000: loss 6.2280, precision 0.0094, recall 0.0067
+[07/13/2020 20:58:47 INFO] Finished Training Iteration: 20200
+[07/13/2020 20:59:25 INFO] Finished Training Iteration: 20400
+[07/13/2020 21:00:03 INFO] Finished Training Iteration: 20600
+[07/13/2020 21:00:48 INFO] Finished Training Iteration: 20800
+[07/13/2020 21:01:32 INFO] Saving checkpoint for iteration #21000
+[07/13/2020 21:01:32 INFO] Finished Training Iteration: 21000
+[07/13/2020 21:02:01 INFO] Finished Training Iteration: 21200
+[07/13/2020 21:02:46 INFO] Finished Training Iteration: 21400
+[07/13/2020 21:03:27 INFO] Finished Training Iteration: 21600
+[07/13/2020 21:04:11 INFO] Finished Training Iteration: 21800
+[07/13/2020 21:04:54 INFO] Saving checkpoint for iteration #22000
+[07/13/2020 21:04:54 INFO] Finished Training Iteration: 22000
+[07/13/2020 21:05:33 INFO] Finished Training Iteration: 22200
+[07/13/2020 21:06:13 INFO] Finished Training Iteration: 22400
+[07/13/2020 21:08:49 INFO] Iter 22500: loss 4.6167, precision 0.0081, recall 0.0058
+[07/13/2020 21:09:06 INFO] Finished Training Iteration: 22600
+[07/13/2020 21:09:45 INFO] Finished Training Iteration: 22800
+[07/13/2020 21:10:23 INFO] Saving checkpoint for iteration #23000
+[07/13/2020 21:10:23 INFO] Finished Training Iteration: 23000
+[07/13/2020 21:11:04 INFO] Finished Training Iteration: 23200
+[07/13/2020 21:11:45 INFO] Finished Training Iteration: 23400
+[07/13/2020 21:12:23 INFO] Finished Training Iteration: 23600
+[07/13/2020 21:13:04 INFO] Finished Training Iteration: 23800
+[07/13/2020 21:13:43 INFO] Saving checkpoint for iteration #24000
+[07/13/2020 21:13:43 INFO] Finished Training Iteration: 24000
+[07/13/2020 21:14:27 INFO] Finished Training Iteration: 24200
+[07/13/2020 21:15:26 INFO] Finished Training Iteration: 24400
+[07/13/2020 21:16:22 INFO] Finished Training Iteration: 24600
+[07/13/2020 21:16:52 INFO] Finished Training Iteration: 24800
+[07/13/2020 21:17:21 INFO] Saving checkpoint for iteration #25000
+[07/13/2020 21:17:21 INFO] Finished Training Iteration: 25000
+[07/13/2020 21:19:22 INFO] Iter 25000: loss 5.2726, precision 0.0078, recall 0.0057
+[07/13/2020 21:20:06 INFO] Finished Training Iteration: 25200
+[07/13/2020 21:20:55 INFO] Finished Training Iteration: 25400
+[07/13/2020 21:21:46 INFO] Finished Training Iteration: 25600
+[07/13/2020 21:22:34 INFO] Finished Training Iteration: 25800
+[07/13/2020 21:23:21 INFO] Saving checkpoint for iteration #26000
+[07/13/2020 21:23:21 INFO] Finished Training Iteration: 26000
+[07/13/2020 21:24:10 INFO] Finished Training Iteration: 26200
+[07/13/2020 21:24:51 INFO] Finished Training Iteration: 26400
+[07/13/2020 21:25:54 INFO] Finished Training Iteration: 26600
+[07/13/2020 21:26:33 INFO] Finished Training Iteration: 26800
+[07/13/2020 21:27:15 INFO] Saving checkpoint for iteration #27000
+[07/13/2020 21:27:16 INFO] Finished Training Iteration: 27000
+[07/13/2020 21:27:55 INFO] Finished Training Iteration: 27200
+[07/13/2020 21:28:22 INFO] Finished Training Iteration: 27400
+/disk_ssd/SuperPoint/superpoint/models/base_model.py:412: RuntimeWarning: Mean of empty slice
+  metrics = {m: np.nanmean(metrics[m], axis=0) for m in metrics}
+[07/13/2020 21:28:40 INFO] Iter 27500: loss 6.5017, precision nan, recall 0.0000
+[07/13/2020 21:28:55 INFO] Finished Training Iteration: 27600
+[07/13/2020 21:29:26 INFO] Finished Training Iteration: 27800
+[07/13/2020 21:29:57 INFO] Saving checkpoint for iteration #28000
+[07/13/2020 21:29:57 INFO] Finished Training Iteration: 28000
+[07/13/2020 21:30:30 INFO] Finished Training Iteration: 28200
+[07/13/2020 21:31:02 INFO] Finished Training Iteration: 28400
+[07/13/2020 21:31:35 INFO] Finished Training Iteration: 28600
+[07/13/2020 21:32:07 INFO] Finished Training Iteration: 28800
+[07/13/2020 21:32:39 INFO] Saving checkpoint for iteration #29000
+[07/13/2020 21:32:39 INFO] Finished Training Iteration: 29000
+[07/13/2020 21:33:05 INFO] Finished Training Iteration: 29200
+[07/13/2020 21:33:38 INFO] Finished Training Iteration: 29400
+[07/13/2020 21:34:16 INFO] Finished Training Iteration: 29600
+[07/13/2020 21:34:55 INFO] Finished Training Iteration: 29800
+[07/13/2020 21:35:28 INFO] Saving checkpoint for iteration #30000
+[07/13/2020 21:35:28 INFO] Finished Training Iteration: 30000
+[07/13/2020 21:37:44 INFO] Iter 30000: loss 6.2052, precision 0.0097, recall 0.0070
+[07/13/2020 21:38:17 INFO] Finished Training Iteration: 30200
+[07/13/2020 21:38:49 INFO] Finished Training Iteration: 30400
+[07/13/2020 21:39:24 INFO] Finished Training Iteration: 30600
+[07/13/2020 21:39:49 INFO] Finished Training Iteration: 30800
+[07/13/2020 21:40:24 INFO] Saving checkpoint for iteration #31000
+[07/13/2020 21:40:25 INFO] Finished Training Iteration: 31000
+[07/13/2020 21:41:13 INFO] Finished Training Iteration: 31200
+[07/13/2020 21:42:00 INFO] Finished Training Iteration: 31400
+[07/13/2020 21:42:42 INFO] Finished Training Iteration: 31600
+[07/13/2020 21:43:21 INFO] Finished Training Iteration: 31800
+[07/13/2020 21:44:00 INFO] Saving checkpoint for iteration #32000
+[07/13/2020 21:44:01 INFO] Finished Training Iteration: 32000
+[07/13/2020 21:44:55 INFO] Finished Training Iteration: 32200
+[07/13/2020 21:45:30 INFO] Finished Training Iteration: 32400
+[07/13/2020 21:45:46 INFO] Iter 32500: loss 6.4816, precision 0.0092, recall 0.0067
+[07/13/2020 21:45:59 INFO] Finished Training Iteration: 32600
+[07/13/2020 21:46:26 INFO] Finished Training Iteration: 32800
+[07/13/2020 21:46:52 INFO] Saving checkpoint for iteration #33000
+[07/13/2020 21:46:52 INFO] Finished Training Iteration: 33000
+[07/13/2020 21:47:20 INFO] Finished Training Iteration: 33200
+[07/13/2020 21:47:44 INFO] Finished Training Iteration: 33400
+[07/13/2020 21:48:07 INFO] Finished Training Iteration: 33600
+[07/13/2020 21:49:00 INFO] Finished Training Iteration: 33800
+[07/13/2020 21:49:52 INFO] Saving checkpoint for iteration #34000
+[07/13/2020 21:49:52 INFO] Finished Training Iteration: 34000
+[07/13/2020 21:50:19 INFO] Finished Training Iteration: 34200
+[07/13/2020 21:50:45 INFO] Finished Training Iteration: 34400
+[07/13/2020 21:51:13 INFO] Finished Training Iteration: 34600
+[07/13/2020 21:51:39 INFO] Finished Training Iteration: 34800
+[07/13/2020 21:52:11 INFO] Saving checkpoint for iteration #35000
+[07/13/2020 21:52:11 INFO] Finished Training Iteration: 35000
+[07/13/2020 21:52:26 INFO] Iter 35000: loss 6.2067, precision 0.0072, recall 0.0052
+[07/13/2020 21:53:01 INFO] Finished Training Iteration: 35200
+[07/13/2020 21:53:37 INFO] Finished Training Iteration: 35400
+[07/13/2020 21:54:21 INFO] Finished Training Iteration: 35600
+[07/13/2020 21:54:56 INFO] Finished Training Iteration: 35800
+[07/13/2020 21:55:38 INFO] Saving checkpoint for iteration #36000
+[07/13/2020 21:55:38 INFO] Finished Training Iteration: 36000
+[07/13/2020 21:56:34 INFO] Finished Training Iteration: 36200
+[07/13/2020 21:57:28 INFO] Finished Training Iteration: 36400
+[07/13/2020 21:58:24 INFO] Finished Training Iteration: 36600
+[07/13/2020 21:59:09 INFO] Finished Training Iteration: 36800
+[07/13/2020 21:59:45 INFO] Saving checkpoint for iteration #37000
+[07/13/2020 21:59:46 INFO] Finished Training Iteration: 37000
+[07/13/2020 22:00:25 INFO] Finished Training Iteration: 37200
+[07/13/2020 22:01:05 INFO] Finished Training Iteration: 37400
+[07/13/2020 22:01:27 INFO] Iter 37500: loss 7.5883, precision nan, recall 0.0000
+[07/13/2020 22:01:45 INFO] Finished Training Iteration: 37600
+[07/13/2020 22:02:24 INFO] Finished Training Iteration: 37800
+[07/13/2020 22:03:02 INFO] Saving checkpoint for iteration #38000
+[07/13/2020 22:03:02 INFO] Finished Training Iteration: 38000
+[07/13/2020 22:03:39 INFO] Finished Training Iteration: 38200
+[07/13/2020 22:04:17 INFO] Finished Training Iteration: 38400
+[07/13/2020 22:04:54 INFO] Finished Training Iteration: 38600
+[07/13/2020 22:05:34 INFO] Finished Training Iteration: 38800
+[07/13/2020 22:06:12 INFO] Saving checkpoint for iteration #39000
+[07/13/2020 22:06:12 INFO] Finished Training Iteration: 39000
+[07/13/2020 22:06:52 INFO] Finished Training Iteration: 39200
+[07/13/2020 22:07:31 INFO] Finished Training Iteration: 39400
+[07/13/2020 22:08:10 INFO] Finished Training Iteration: 39600
+[07/13/2020 22:08:50 INFO] Finished Training Iteration: 39800
+[07/13/2020 22:09:27 INFO] Saving checkpoint for iteration #40000
+[07/13/2020 22:09:27 INFO] Finished Training Iteration: 40000
+[07/13/2020 22:09:29 INFO] Iter 40000: loss 6.4653, precision nan, recall 0.0000
+[07/13/2020 22:10:06 INFO] Finished Training Iteration: 40200
+[07/13/2020 22:10:36 INFO] Finished Training Iteration: 40400
+[07/13/2020 22:11:05 INFO] Finished Training Iteration: 40600
+[07/13/2020 22:11:59 INFO] Finished Training Iteration: 40800
+[07/13/2020 22:12:49 INFO] Saving checkpoint for iteration #41000
+[07/13/2020 22:12:49 INFO] Finished Training Iteration: 41000
+[07/13/2020 22:13:19 INFO] Finished Training Iteration: 41200
+[07/13/2020 22:13:52 INFO] Finished Training Iteration: 41400
+[07/13/2020 22:14:23 INFO] Finished Training Iteration: 41600
+[07/13/2020 22:14:54 INFO] Finished Training Iteration: 41800
+[07/13/2020 22:15:38 INFO] Saving checkpoint for iteration #42000
+[07/13/2020 22:15:39 INFO] Finished Training Iteration: 42000
+[07/13/2020 22:16:47 INFO] Finished Training Iteration: 42200
+[07/13/2020 22:17:21 INFO] Finished Training Iteration: 42400
+[07/13/2020 22:17:38 INFO] Iter 42500: loss 5.7964, precision 0.0091, recall 0.0065
+[07/13/2020 22:17:47 INFO] Finished Training Iteration: 42600
+[07/13/2020 22:18:19 INFO] Finished Training Iteration: 42800
+[07/13/2020 22:18:58 INFO] Saving checkpoint for iteration #43000
+[07/13/2020 22:18:58 INFO] Finished Training Iteration: 43000
+[07/13/2020 22:19:43 INFO] Finished Training Iteration: 43200
+[07/13/2020 22:20:39 INFO] Finished Training Iteration: 43400
+[07/13/2020 22:21:36 INFO] Finished Training Iteration: 43600
+[07/13/2020 22:22:29 INFO] Finished Training Iteration: 43800
+[07/13/2020 22:23:19 INFO] Saving checkpoint for iteration #44000
+[07/13/2020 22:23:20 INFO] Finished Training Iteration: 44000
+[07/13/2020 22:24:07 INFO] Finished Training Iteration: 44200
+[07/13/2020 22:24:44 INFO] Finished Training Iteration: 44400
+[07/13/2020 22:25:19 INFO] Finished Training Iteration: 44600
+[07/13/2020 22:25:57 INFO] Finished Training Iteration: 44800
+[07/13/2020 22:26:31 INFO] Saving checkpoint for iteration #45000
+[07/13/2020 22:26:31 INFO] Finished Training Iteration: 45000
+[07/13/2020 22:26:33 INFO] Iter 45000: loss 6.4795, precision nan, recall 0.0000
+[07/13/2020 22:27:10 INFO] Finished Training Iteration: 45200
+[07/13/2020 22:27:48 INFO] Finished Training Iteration: 45400
+[07/13/2020 22:28:26 INFO] Finished Training Iteration: 45600
+[07/13/2020 22:29:04 INFO] Finished Training Iteration: 45800
+[07/13/2020 22:29:40 INFO] Saving checkpoint for iteration #46000
+[07/13/2020 22:29:40 INFO] Finished Training Iteration: 46000
+[07/13/2020 22:30:19 INFO] Finished Training Iteration: 46200
+[07/13/2020 22:30:56 INFO] Finished Training Iteration: 46400
+[07/13/2020 22:31:33 INFO] Finished Training Iteration: 46600
+[07/13/2020 22:32:08 INFO] Finished Training Iteration: 46800
+[07/13/2020 22:32:39 INFO] Saving checkpoint for iteration #47000
+[07/13/2020 22:32:40 INFO] Finished Training Iteration: 47000
+[07/13/2020 22:33:02 INFO] Finished Training Iteration: 47200
+[07/13/2020 22:33:25 INFO] Finished Training Iteration: 47400
+[07/13/2020 22:33:45 INFO] Iter 47500: loss 7.1519, precision 0.0094, recall 0.0067
+[07/13/2020 22:33:57 INFO] Finished Training Iteration: 47600
+[07/13/2020 22:34:34 INFO] Finished Training Iteration: 47800
+[07/13/2020 22:35:17 INFO] Saving checkpoint for iteration #48000
+[07/13/2020 22:35:17 INFO] Finished Training Iteration: 48000
+[07/13/2020 22:36:04 INFO] Finished Training Iteration: 48200
+[07/13/2020 22:36:37 INFO] Finished Training Iteration: 48400
+[07/13/2020 22:37:14 INFO] Finished Training Iteration: 48600
+[07/13/2020 22:37:45 INFO] Finished Training Iteration: 48800
+[07/13/2020 22:38:11 INFO] Saving checkpoint for iteration #49000
+[07/13/2020 22:38:11 INFO] Finished Training Iteration: 49000
+[07/13/2020 22:38:49 INFO] Finished Training Iteration: 49200
+[07/13/2020 22:39:40 INFO] Finished Training Iteration: 49400
+[07/13/2020 22:40:31 INFO] Finished Training Iteration: 49600
+[07/13/2020 22:41:18 INFO] Finished Training Iteration: 49800
+[07/13/2020 22:42:07 INFO] Saving checkpoint for iteration #50000
+[07/13/2020 22:42:07 INFO] Finished Training Iteration: 50000
+[07/13/2020 22:42:16 INFO] Iter 50000: loss 4.4498, precision 0.0092, recall 0.0067
+[07/13/2020 22:43:00 INFO] Finished Training Iteration: 50200
+[07/13/2020 22:43:30 INFO] Finished Training Iteration: 50400
+[07/13/2020 22:44:14 INFO] Finished Training Iteration: 50600
+[07/13/2020 22:44:58 INFO] Finished Training Iteration: 50800
+[07/13/2020 22:45:36 INFO] Saving checkpoint for iteration #51000
+[07/13/2020 22:45:36 INFO] Finished Training Iteration: 51000
+[07/13/2020 22:46:18 INFO] Finished Training Iteration: 51200
+[07/13/2020 22:47:00 INFO] Finished Training Iteration: 51400
+[07/13/2020 22:47:27 INFO] Finished Training Iteration: 51600
+[07/13/2020 22:48:19 INFO] Finished Training Iteration: 51800
+[07/13/2020 22:49:06 INFO] Saving checkpoint for iteration #52000
+[07/13/2020 22:49:07 INFO] Finished Training Iteration: 52000
+[07/13/2020 22:50:14 INFO] Finished Training Iteration: 52200
+[07/13/2020 22:51:04 INFO] Finished Training Iteration: 52400
+[07/13/2020 22:51:26 INFO] Iter 52500: loss 7.4348, precision nan, recall 0.0000
+[07/13/2020 22:51:53 INFO] Finished Training Iteration: 52600
+[07/13/2020 22:52:17 INFO] Finished Training Iteration: 52800
+[07/13/2020 22:52:47 INFO] Saving checkpoint for iteration #53000
+[07/13/2020 22:52:48 INFO] Finished Training Iteration: 53000
+[07/13/2020 22:53:36 INFO] Finished Training Iteration: 53200
+[07/13/2020 22:54:24 INFO] Finished Training Iteration: 53400
+[07/13/2020 22:55:12 INFO] Finished Training Iteration: 53600
+[07/13/2020 22:56:03 INFO] Finished Training Iteration: 53800
+[07/13/2020 22:56:50 INFO] Saving checkpoint for iteration #54000
+[07/13/2020 22:56:50 INFO] Finished Training Iteration: 54000
+[07/13/2020 22:57:38 INFO] Finished Training Iteration: 54200
+[07/13/2020 22:58:25 INFO] Finished Training Iteration: 54400
+[07/13/2020 22:59:14 INFO] Finished Training Iteration: 54600
+[07/13/2020 23:00:02 INFO] Finished Training Iteration: 54800
+[07/13/2020 23:00:50 INFO] Saving checkpoint for iteration #55000
+[07/13/2020 23:00:50 INFO] Finished Training Iteration: 55000
+[07/13/2020 23:00:52 INFO] Iter 55000: loss 6.8248, precision 0.0075, recall 0.0054
+[07/13/2020 23:01:41 INFO] Finished Training Iteration: 55200
+[07/13/2020 23:02:19 INFO] Finished Training Iteration: 55400
+[07/13/2020 23:02:45 INFO] Finished Training Iteration: 55600
+[07/13/2020 23:03:15 INFO] Finished Training Iteration: 55800
+[07/13/2020 23:03:44 INFO] Saving checkpoint for iteration #56000
+[07/13/2020 23:03:44 INFO] Finished Training Iteration: 56000
+[07/13/2020 23:04:11 INFO] Finished Training Iteration: 56200
+[07/13/2020 23:04:38 INFO] Finished Training Iteration: 56400
+[07/13/2020 23:05:08 INFO] Finished Training Iteration: 56600
+[07/13/2020 23:05:34 INFO] Finished Training Iteration: 56800
+[07/13/2020 23:06:04 INFO] Saving checkpoint for iteration #57000
+[07/13/2020 23:06:05 INFO] Finished Training Iteration: 57000
+[07/13/2020 23:06:36 INFO] Finished Training Iteration: 57200
+[07/13/2020 23:07:08 INFO] Finished Training Iteration: 57400
+[07/13/2020 23:07:26 INFO] Iter 57500: loss 8.0712, precision nan, recall 0.0000
+[07/13/2020 23:07:43 INFO] Finished Training Iteration: 57600
+[07/13/2020 23:08:15 INFO] Finished Training Iteration: 57800
+[07/13/2020 23:08:46 INFO] Saving checkpoint for iteration #58000
+[07/13/2020 23:08:46 INFO] Finished Training Iteration: 58000
+[07/13/2020 23:09:18 INFO] Finished Training Iteration: 58200
+[07/13/2020 23:09:51 INFO] Finished Training Iteration: 58400
+[07/13/2020 23:10:21 INFO] Finished Training Iteration: 58600
+[07/13/2020 23:10:55 INFO] Finished Training Iteration: 58800
+[07/13/2020 23:11:42 INFO] Saving checkpoint for iteration #59000
+[07/13/2020 23:11:42 INFO] Finished Training Iteration: 59000
+[07/13/2020 23:12:13 INFO] Finished Training Iteration: 59200
+[07/13/2020 23:12:41 INFO] Finished Training Iteration: 59400
+[07/13/2020 23:13:12 INFO] Finished Training Iteration: 59600
+[07/13/2020 23:13:39 INFO] Finished Training Iteration: 59800
+[07/13/2020 23:14:09 INFO] Saving checkpoint for iteration #60000
+[07/13/2020 23:14:10 INFO] Finished Training Iteration: 60000
+[07/13/2020 23:14:54 INFO] Iter 60000: loss 5.6288, precision 0.0075, recall 0.0054
+[07/13/2020 23:15:24 INFO] Finished Training Iteration: 60200
+[07/13/2020 23:15:55 INFO] Finished Training Iteration: 60400
+[07/13/2020 23:16:24 INFO] Finished Training Iteration: 60600
+[07/13/2020 23:17:02 INFO] Finished Training Iteration: 60800
+[07/13/2020 23:17:45 INFO] Saving checkpoint for iteration #61000
+[07/13/2020 23:17:45 INFO] Finished Training Iteration: 61000
+[07/13/2020 23:18:26 INFO] Finished Training Iteration: 61200
+[07/13/2020 23:19:07 INFO] Finished Training Iteration: 61400
+[07/13/2020 23:19:49 INFO] Finished Training Iteration: 61600
+[07/13/2020 23:20:27 INFO] Finished Training Iteration: 61800
+[07/13/2020 23:20:51 INFO] Saving checkpoint for iteration #62000
+[07/13/2020 23:20:51 INFO] Finished Training Iteration: 62000
+[07/13/2020 23:21:33 INFO] Finished Training Iteration: 62200
+[07/13/2020 23:22:22 INFO] Finished Training Iteration: 62400
+[07/13/2020 23:22:48 INFO] Iter 62500: loss 8.1891, precision nan, recall 0.0000
+[07/13/2020 23:23:14 INFO] Finished Training Iteration: 62600
+[07/13/2020 23:24:03 INFO] Finished Training Iteration: 62800
+[07/13/2020 23:24:54 INFO] Saving checkpoint for iteration #63000
+[07/13/2020 23:24:54 INFO] Finished Training Iteration: 63000
+[07/13/2020 23:25:43 INFO] Finished Training Iteration: 63200
+[07/13/2020 23:26:24 INFO] Finished Training Iteration: 63400
+[07/13/2020 23:27:01 INFO] Finished Training Iteration: 63600
+[07/13/2020 23:27:29 INFO] Finished Training Iteration: 63800
+[07/13/2020 23:27:53 INFO] Saving checkpoint for iteration #64000
+[07/13/2020 23:27:53 INFO] Finished Training Iteration: 64000
+[07/13/2020 23:28:22 INFO] Finished Training Iteration: 64200
+[07/13/2020 23:28:49 INFO] Finished Training Iteration: 64400
+[07/13/2020 23:29:19 INFO] Finished Training Iteration: 64600
+[07/13/2020 23:30:28 INFO] Finished Training Iteration: 64800
+[07/13/2020 23:31:52 INFO] Saving checkpoint for iteration #65000
+[07/13/2020 23:31:52 INFO] Finished Training Iteration: 65000
+[07/13/2020 23:32:06 INFO] Iter 65000: loss 4.6166, precision 0.0091, recall 0.0064
+[07/13/2020 23:32:52 INFO] Finished Training Iteration: 65200
+[07/13/2020 23:33:38 INFO] Finished Training Iteration: 65400
+[07/13/2020 23:34:41 INFO] Finished Training Iteration: 65600
+[07/13/2020 23:35:42 INFO] Finished Training Iteration: 65800
+[07/13/2020 23:36:18 INFO] Saving checkpoint for iteration #66000
+[07/13/2020 23:36:18 INFO] Finished Training Iteration: 66000
+[07/13/2020 23:37:02 INFO] Finished Training Iteration: 66200
+[07/13/2020 23:37:50 INFO] Finished Training Iteration: 66400
+[07/13/2020 23:38:36 INFO] Finished Training Iteration: 66600
+[07/13/2020 23:39:26 INFO] Finished Training Iteration: 66800
+[07/13/2020 23:40:15 INFO] Saving checkpoint for iteration #67000
+[07/13/2020 23:40:15 INFO] Finished Training Iteration: 67000
+[07/13/2020 23:41:04 INFO] Finished Training Iteration: 67200
+[07/13/2020 23:41:47 INFO] Finished Training Iteration: 67400
+[07/13/2020 23:43:33 INFO] Iter 67500: loss 4.2831, precision 0.0074, recall 0.0052
+[07/13/2020 23:43:55 INFO] Finished Training Iteration: 67600
+[07/13/2020 23:44:41 INFO] Finished Training Iteration: 67800
+[07/13/2020 23:45:25 INFO] Saving checkpoint for iteration #68000
+[07/13/2020 23:45:25 INFO] Finished Training Iteration: 68000
+[07/13/2020 23:46:12 INFO] Finished Training Iteration: 68200
+[07/13/2020 23:46:55 INFO] Finished Training Iteration: 68400
+[07/13/2020 23:47:40 INFO] Finished Training Iteration: 68600
+[07/13/2020 23:48:18 INFO] Finished Training Iteration: 68800
+[07/13/2020 23:48:54 INFO] Saving checkpoint for iteration #69000
+[07/13/2020 23:48:54 INFO] Finished Training Iteration: 69000
+[07/13/2020 23:49:30 INFO] Finished Training Iteration: 69200
+[07/13/2020 23:50:01 INFO] Finished Training Iteration: 69400
+[07/13/2020 23:50:30 INFO] Finished Training Iteration: 69600
+[07/13/2020 23:51:01 INFO] Finished Training Iteration: 69800
+[07/13/2020 23:51:34 INFO] Saving checkpoint for iteration #70000
+[07/13/2020 23:51:35 INFO] Finished Training Iteration: 70000
+[07/13/2020 23:51:36 INFO] Iter 70000: loss 5.9832, precision nan, recall 0.0000
+[07/13/2020 23:52:08 INFO] Got Keyboard Interrupt, saving model and closing.
+[07/13/2020 23:52:08 INFO] Saving checkpoint for iteration #70113

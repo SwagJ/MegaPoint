@@ -32,6 +32,7 @@ class SuperPoint(BaseModel):
         def net(image):
             if config['data_format'] == 'channels_first':
                 image = tf.transpose(image, [0, 3, 1, 2])
+            print(f"\nRun Time Image Size: {image.shape}")
             features = vgg_backbone(image, **config)
             detections = utils.detector_head(features, **config)
             descriptors = utils.descriptor_head(features, **config)

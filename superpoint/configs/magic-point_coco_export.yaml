@@ -3,8 +3,8 @@ data:
     cache_in_memory: false
     validation_size: 100
 model:
-    name: 'magic_point'
-    batch_size: 50
+    name: 'super_point'
+    batch_size: 1
     learning_rate: 0.001
     detection_threshold: 0.015  # 0.001
     nms: 4

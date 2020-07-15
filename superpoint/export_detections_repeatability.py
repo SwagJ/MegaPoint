@@ -18,6 +18,8 @@ if __name__ == '__main__':
     parser.add_argument('--export_name', type=str, default=None)
     args = parser.parse_args()
 
+    gpus= tf.config.experimental.list_physical_devices('GPU')
+    tf.config.experimental.set_memory_growth(gpus[0], True)
     experiment_name = args.experiment_name
     export_name = args.export_name if args.export_name else experiment_name
     with open(args.config, 'r') as f:

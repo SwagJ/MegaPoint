@@ -88,8 +88,8 @@ class BaseModel(metaclass=ABCMeta):
         raise NotImplementedError
 
     def __init__(self, data={}, n_gpus=1, data_shape=None, **config):
-        print(data)
-        print(config)
+        #print(data)
+        #print(config)
         self.datasets = data
         self.data_shape = data_shape
         self.n_gpus = n_gpus
@@ -152,6 +152,8 @@ class BaseModel(metaclass=ABCMeta):
                     worker_device=worker, ps_device='/cpu:0', ps_tasks=1)
             with tf.name_scope('{}_tower{}'.format(mode, i)) as scope:
                 with tf.compat.v1.device(device_setter):
+                    print(f"\n In Evalution:\n")
+                    print(f"\n Data is {shards[i]}")
                     net_outputs = self._model(shards[i], mode, **self.config)
                     if mode == Mode.TRAIN:
                         loss = self._loss(net_outputs, shards[i], **self.config)
@@ -228,11 +230,24 @@ class BaseModel(metaclass=ABCMeta):
             self.dataset_iterators_initializers = {}
             raw_output_shapes = {}
             raw_numpy_output_shapes = {}
+            #raw_numpy_output_test = {}
             with tf.device('/cpu:0'):
                 for n, d in self.datasets.items():
-                    print(d)
+                    print(n)
                     raw_output_shapes[n] = tf.compat.v1.data.get_output_shapes(d)
-                    raw_numpy_output_shapes[n] = {k:v.as_list() for k,v in raw_output_shapes[n].items()}
+                    #print(raw_output_shapes[n].items())
+                    tmp = {}
+                    #tmp_warp = {}
+                    for k,v in raw_output_shapes[n].items():
+                        print(k,v)
+                        if k != 'warped':
+                            tmp.update({k:v.as_list()})
+                        else:
+                            tmp.update({'warped':{k1:v1.as_list() for k1,v1 in v.items()}})
+                        raw_numpy_output_shapes[n] = tmp
+                    #print(raw_numpy_output_test[n])
+                    #raw_numpy_output_shapes[n] = {k:v.as_list() for k,v in raw_output_shapes[n].items()}
+                    #print(raw_numpy_output_shapes[n])
                 tf.compat.v1.disable_eager_execution()
                 d2 = None
                 for n, d in self.datasets.items():
@@ -296,7 +311,7 @@ class BaseModel(metaclass=ABCMeta):
                        tf.compat.v1.local_variables_initializer()])
 
     def train(self, iterations, validation_interval=100, output_dir=None, profile=False,
-              save_interval=None, checkpoint_path=None, keep_checkpoints=1):
+              save_interval=2500, checkpoint_path=None, keep_checkpoints=1):
         assert self.trainable, 'Model is not trainable.'
         assert 'training' in self.datasets, 'Training dataset is required.'
         if output_dir is not None:
@@ -319,7 +334,8 @@ class BaseModel(metaclass=ABCMeta):
                     [self.loss, self.summaries, self.trainer],
                     feed_dict={self.handle: self.dataset_handles['training']},
                     options=options, run_metadata=run_metadata)
-
+            if i % 200 == 0:
+                tf.compat.v1.logging.info('Finished Training Iteration: {:4d}'.format(i))
             if save_interval and checkpoint_path and (i+1) % save_interval == 0:
                 self.save(checkpoint_path)
             if 'validation' in self.datasets and i % validation_interval == 0:
@@ -341,6 +357,7 @@ class BaseModel(metaclass=ABCMeta):
                         with open(osp.join(output_dir,
                                            'profile_{}.json'.format(i)), 'w') as f:
                             f.write(chrome_trace)
+            
         tf.compat.v1.logging.info('Training finished')
 
     def predict(self, data, keys='pred', batch=False):

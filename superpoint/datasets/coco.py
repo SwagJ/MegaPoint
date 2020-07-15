@@ -83,6 +83,7 @@ class Coco(BaseDataset):
         images = tf.data.Dataset.from_tensor_slices(files['image_paths'])
         images = images.map(_read_image)
         images = images.map(_preprocess)
+        #stf.print(images)
         data = tf.data.Dataset.zip({'image': images, 'name': names})
 
         # Add keypoints
@@ -108,6 +109,7 @@ class Coco(BaseDataset):
             assert has_keypoints
             warped = data.map_parallel(lambda d: pipeline.homographic_augmentation(
                 d, add_homography=True, **config['warped_pair']))
+            tf.print(warped)
             if is_training and config['augmentation']['photometric']['enable']:
                 warped = warped.map_parallel(lambda d: pipeline.photometric_augmentation(
                     d, **config['augmentation']['photometric']))
