@@ -1,3 +1,6 @@
 [submodule "PSPNet_tf2_0"]
 	path = PSPNet_tf2_0
 	url = https://github.com/SwagJ/PSPNet_tf2_0.git
+[submodule "MegaDepth_tf2_0"]
+	path = MegaDepth_tf2_0
+	url = https://github.com/SwagJ/MegaDepth_tf2_0.git
