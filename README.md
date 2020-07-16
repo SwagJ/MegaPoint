@@ -9,7 +9,7 @@ To Submit Job on Leonhard Cluster, use the following command. For Details about 
 bsub -W 24:00 -n 8 -R "rusage[mem=4500,scratch=10000,ngpus_excl_p=1]" -R "select[gpu_model0==TeslaV100_SXM2_32GB]" ./train.sh bash
 ```
 
-[MS-COCO 2014](http://cocodataset.org/#download) and [HPatches](http://icvl.ee.ic.ac.uk/vbalnt/hpatches/hpatches-sequences-release.tar.gz) should be downloaded into `$DATA_DIR`. The Synthetic Shapes dataset will also be generated there. The folder structure should look like:
+[MS-COCO 2014](http://cocodataset.org/#download) and [HPatches](http://icvl.ee.ic.ac.uk/vbalnt/hpatches/hpatches-sequences-release.tar.gz) should be downloaded into `$DATA_DIR`. The Synthetic Shapes dataset will also be generated there. The folder structure should look like after semantic and depth generated:
 ```
 $DATA_DIR
 |-- COCO
@@ -41,7 +41,13 @@ All commands should be executed within the `superpoint/` subfolder. When trainin
 For semantics, run
 ```
 cd MegaDepth_Tensorflow
-python inference_
+python inference_mega_dataset.py --data_path DATA_PATH --dataset [coco/megadepth]
+```
+
+For depth, run 
+```
+cd PSPNet-fast
+python inference_eager_dataset.py --data_path DATA_PATH --dataset [coco/megadepth]
 ```
 
 ### 1) Training MagicPoint on Synthetic Shapes
@@ -57,7 +63,7 @@ python export_detections.py configs/magic-point_coco_export.yaml magic-point_syn
 ```
 This will save the pseudo-ground truth interest point labels to `$EXPER_DIR/outputs/magic-point_coco-export1/`. You might enable or disable the Homographic Adaptation in the configuration file.
 
-### 3) Training MagicPoint on MS-COCO
+### 3) Training GreatPoint on MS-COCO
 ```
 python experiment.py train configs/great-point_coco_train.yaml great-point_coco
 ```
@@ -78,27 +84,10 @@ python experiment.py train configs/megapoint_coco.yaml megapoint_coco
 
 ### 7) Evaluation of the descriptors with homography estimation on HPatches
 ```
-python export_descriptors.py configs/superpoint_hpatches.yaml superpoint_coco --export_name=superpoint_hpatches-v
+python export_descriptors.py configs/megapoint_hpatches.yaml megapoint_coco --export_name=megapoint_hpatches-v
 ```
 You will need to decide again whether you want to evaluate for viewpoint or illumination by setting the entry `data/alteration` in the configuration file. The predictions of the image pairs will be saved in `$EXPER_PATH/outputs/superpoint_hpatches-v/`. To proceed to the evaluation, head over to `notebooks/descriptors_evaluation_on_hpatches.ipynb`. You can also evaluate the repeatability of the classical detectors using the configuration file `classical-descriptors.yaml`.
 
-## Matching Features Demo with Pretrained Weights
-A set of pretrained weights is provided for you labeled `sp_v6`. You will need to extract the
-weights and place the directory in your experiments directory so that the path
-`$EXPER_PATH/saved_models/sp_v6` contains the weights. This can be easily done
-with the following command being run from the top level, `SuperPoint`, directory.
-```
-tar -xzvf pretrained_models/sp_v6.tgz $EXPER_PATH/saved_models/sp_v6
-```
-
-With the pretrained weights extracted, you can run the `match_features_demo.py`
-to compare SuperPoint and SIFT matches across two images:
-```
-python match_features_demo.py sp_v6 $DATA_PATH/HPatches/i_pool/1.ppm $DATA_PATH/i_pool/6.ppm
-```
-Note that you can also pass in additional arguments such as `--H`, `--W`,
-`--k_best` to specify the height and width to resize the images and the maximum
-number of keypoints you wish to keep from the detection process.
 
 ## Credits
-This implementation was developed by [Rémi Pautrat](https://github.com/rpautrat) and [Paul-Edouard Sarlin](https://github.com/Skydes). Please contact Rémi for any enquiry.
+This implementation was based on SuperPoint implemented by [Rémi Pautrat](https://github.com/rpautrat) and [Paul-Edouard Sarlin](https://github.com/Skydes).
