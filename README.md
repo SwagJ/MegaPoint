@@ -44,13 +44,13 @@ All commands should be executed within the `superpoint/` subfolder. When trainin
 ## To prepare depth and semantic for COCO and MegaDepth
 For semantics, run
 ```
-cd MegaDepth_Tensorflow
+cd MegaDepth_tf2_0
 python inference_mega_dataset.py --data_path DATA_PATH --dataset [coco/megadepth]
 ```
 
 For depth, run 
 ```
-cd PSPNet-fast
+cd PSPNet_tf2_0
 python inference_eager_dataset.py --data_path DATA_PATH --dataset [coco/megadepth]
 ```
 
