@@ -1,8 +1,5 @@
-<<<<<<< HEAD
 # MegaPoint
 =======
-# SuperPoint
->>>>>>> 983456ced29b798a35a11984225985db00dad67b
 
 
 ## Installation
