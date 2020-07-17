@@ -44,6 +44,7 @@ For semantics, run
 cd MegaDepth_tf2_0
 python inference_mega_dataset.py --data_path DATA_PATH --dataset [coco/megadepth]
 ```
+Weights for megadepth can be downloaded from this link [Google Driver](https://drive.google.com/file/d/1KHp-41Y50RJlv1hQ1TpLbio0uWjIwc-z/view)
 
 For depth, run 
 ```
